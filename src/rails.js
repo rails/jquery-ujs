@@ -41,7 +41,13 @@ jQuery(function ($) {
                             el.trigger('ajax:loading', xhr);
                         },
                         success: function (data, status, xhr) {
-                            el.trigger('ajax:success', [data, status, xhr]);
+                            if (el.triggerAndReturn('ajax:success', [data, status, xhr])) {
+                                var contentType = xhr.getResponseHeader('Content-Type');
+                                if (contentType && contentType.indexOf('text/javascript') !== false) {
+                                    // TODO: cleaner way of doing this without eval script tag?
+                                    eval(data);
+                                }
+                            }
                         },
                         complete: function (xhr) {
                             el.trigger('ajax:complete', xhr);
@@ -82,4 +88,3 @@ jQuery(function ($) {
         return false;
     });
 });
-$('a').triggerAndReturn('shouldfail');
