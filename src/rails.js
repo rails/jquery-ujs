@@ -7,7 +7,7 @@ jQuery.fn.extend({
      */
     triggerAndReturn: function (name, data) {
         var event = new jQuery.Event(name);
-        this.trigger(event);
+        this.trigger(event, data);
 
         return event.result !== false;
     },
