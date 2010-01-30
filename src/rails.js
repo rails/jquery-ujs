@@ -22,6 +22,10 @@ jQuery.fn.extend({
             method  = el.attr('method') || el.attr('data-method') || 'GET',
             url     = el.attr('action') || el.attr('href') || el.attr('data-url');
 
+        if (el.context.tagName.toUpperCase() === 'FORM') {
+            data = el.serializeArray();
+        }
+
         // TODO: should let the developer know no url was found
         if (url !== undefined) {
             if (el.triggerAndReturn('ajax:before')) {
