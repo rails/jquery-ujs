@@ -55,9 +55,20 @@ jQuery.fn.extend({
 });
 
 jQuery(function ($) {
+    /**
+     *  confirmation handler
+     */
+    $('a[data-confirm],input[data-confirm]').live('click', function () {
+        var el = $(this);
+        if (el.triggerAndReturn('confirm')) {
+            if (!confirm(el.attr('data-confirm'))) {
+                return false;
+            }
+        }
+    });
 
     /**
-     * data-remote handlers
+     * remote handlers
      */
     $('form[data-remote="true"]').live('submit', function () {
         $(this).callRemote();        
