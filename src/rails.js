@@ -41,13 +41,7 @@ jQuery(function ($) {
                             el.trigger('ajax:loading', xhr);
                         },
                         success: function (data, status, xhr) {
-                            if (el.triggerAndReturn('ajax:success', [data, status, xhr])) {
-                                var contentType = xhr.getResponseHeader('Content-Type');
-                                if (contentType && contentType.indexOf('text/javascript') !== false) {
-                                    // TODO: cleaner way of doing this without eval script tag?
-                                    eval(data);
-                                }
-                            }
+                            el.trigger('ajax:success', [data, status, xhr]);
                         },
                         complete: function (xhr) {
                             el.trigger('ajax:complete', xhr);
