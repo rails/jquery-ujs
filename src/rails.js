@@ -23,7 +23,7 @@ jQuery(function ($) {
             var el      = $(this),
                 data    = [],
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
-                url     = el.attr('action') || el.attr('href') || el.attr('data-url');
+                url     = el.attr('action') || el.attr('href');
 
             if (el.context.tagName.toUpperCase() === 'FORM') {
                 data = el.serializeArray();
@@ -85,36 +85,20 @@ jQuery(function ($) {
     /**
      * disable_with handlers
      */ 
-    $('input[data-disable-with], form[data-remote="true"]').live('ajax:before', function () {
-        var el = $(this);
-
-        // on form submit disable submit button
-        if (el.context.tagName.toUpperCase() === 'FORM') {
-            el.children('input[data-disable-with]').each(function (i, el) {
-                var input = $(el);
-                input.data('enable_with', input.val())
-                     .attr('value', input.attr('data-disable-with'))
-                     .attr('disabled', 'disabled');
-            });
-        } else {
-            el.data('enable_with', el.val())
-              .attr('value', el.attr('data-disable-with'))
-              .attr('disabled', 'disabled');
-        }
+    $('form[data-remote="true"]').live('ajax:before', function () {
+        $(this).children('input[data-disable-with]').each(function (i, el) {
+            var input = $(el);
+            input.data('enable_with', input.val())
+                 .attr('value', input.attr('data-disable-with'))
+                 .attr('disabled', 'disabled');
+        });
     });
 
-    $('input[data-disable-with], form[data-remote="true"]').live('ajax:after', function () {
-        var el = $(this);
-
-        if (el.context.tagName.toUpperCase() === 'FORM') {
-            el.children('input[data-disable-with]').each(function (i, el) {
-                var input = $(el);
-                input.removeAttr('disabled')
-                     .val(input.data('enable_with'));
-            });
-        } else {
-            el.removeAttr('disabled')
-              .val(el.data('enable_with'));
-        }
+    $('form[data-remote="true"]').live('ajax:after', function () {
+        $(this).children('input[data-disable-with]').each(function (i, el) {
+            var input = $(el);
+            input.removeAttr('disabled')
+                 .val(input.data('enable_with'));
+        });
     });
 });
