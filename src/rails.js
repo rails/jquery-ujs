@@ -14,7 +14,7 @@ jQuery(function ($) {
 
             return event.result !== false;
         },
-
+        
         /**
          * Handles execution of remote calls firing overridable events along the way
          *
@@ -72,14 +72,14 @@ jQuery(function ($) {
     /**
      * remote handlers
      */
-    $('form[data-remote="true"]').live('submit', function () {
+    $('form[data-remote="true"]').live('submit', function (e) {
         $(this).callRemote();        
-        return false;
+        e.preventDefault();
     });
 
-    $('a[data-remote="true"],input[data-remote="true"]').live('click', function () {
+    $('a[data-remote="true"],input[data-remote="true"]').live('click', function (e) {
         $(this).callRemote();        
-        return false;
+        e.preventDefault();
     });
 
     /**
