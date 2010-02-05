@@ -1,4 +1,6 @@
 jQuery(function ($) {
+    var csrf_token = $('meta[name=csrf-token]').attr('content');
+
     $.fn.extend({
         /**
          * Triggers a custom event on an element and returns the event result
@@ -69,6 +71,7 @@ jQuery(function ($) {
         }
     });
 
+
     /**
      * remote handlers
      */
@@ -78,8 +81,26 @@ jQuery(function ($) {
     });
 
     $('a[data-remote="true"],input[data-remote="true"]').live('click', function (e) {
-        $(this).callRemote();        
-        e.preventDefault();
+      $(this).callRemote();        
+      e.preventDefault();
+    });
+
+    $('a[data-method][data-remote!=true]').live('click',function(e){ 
+      var link = $(this),
+        href = link.attr('href'),
+        method = link.attr('data-method'),
+        form = $('<form method="post" action="'+href+'">'),
+        input = $('<input name="_method" value="'+method+'" type="hidden" />'),
+        csrf_input = $('<input name="authenticity_token" value="'+csrf_token+'" type="hidden" />');
+     
+      form.hide();
+      form.append(input);
+      form.append(csrf_input);
+     
+      $('body').append(form); // redundant?
+      
+      e.preventDefault();
+      form.submit();
     });
 
     /**
@@ -102,3 +123,4 @@ jQuery(function ($) {
         });
     });
 });
+
