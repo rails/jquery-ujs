@@ -28,7 +28,7 @@ jQuery(function ($) {
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href');
 
-            if (el.context.tagName.toUpperCase() === 'FORM') {
+            if (el.is('form')) {
                 data = el.serializeArray();
             }
 
