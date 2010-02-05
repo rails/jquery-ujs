@@ -24,13 +24,9 @@ jQuery(function ($) {
          */
         callRemote: function () {
             var el      = $(this),
-                data    = [],
+                data    = el.is('form') ? el.serializeArray() : [],
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href');
-
-            if (el.is('form')) {
-                data = el.serializeArray();
-            }
 
             // TODO: should let the developer know no url was found
             if (url !== undefined) {
