@@ -94,11 +94,10 @@ jQuery(function ($) {
             input = $('<input name="_method" value="'+method+'" type="hidden" />'),
             csrf_input = $('<input name="'+csrf-param+'" value="'+csrf-token+'" type="hidden" />');
      
-        form.hide();
-        form.append(input);
-        form.append(csrf_input);
-     
-        $('body').append(form); // redundant?
+        form.hide()
+            .append(input)
+            .append(csrf_input)
+            .appendTo('body'); // redundant?
       
         e.preventDefault();
         form.submit();
