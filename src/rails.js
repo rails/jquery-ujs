@@ -20,10 +20,9 @@ jQuery(function ($) {
         
         /**
          * Handles execution of remote calls firing overridable events along the way
-         *
          */
         callRemote: function () {
-            var el      = $(this),
+            var el      = this,
                 data    = el.is('form') ? el.serializeArray() : [],
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href');
