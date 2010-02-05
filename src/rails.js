@@ -1,5 +1,6 @@
 jQuery(function ($) {
-    var csrf_token = $('meta[name=csrf-token]').attr('content');
+    var csrf_token = $('meta[name=csrf-token]').attr('content'),
+        csrf_param = $('meta[name=csrf-param]').attr('content');
 
     $.fn.extend({
         /**
@@ -81,26 +82,26 @@ jQuery(function ($) {
     });
 
     $('a[data-remote="true"],input[data-remote="true"]').live('click', function (e) {
-      $(this).callRemote();        
-      e.preventDefault();
+        $(this).callRemote();        
+        e.preventDefault();
     });
 
     $('a[data-method][data-remote!=true]').live('click',function(e){ 
-      var link = $(this),
-        href = link.attr('href'),
-        method = link.attr('data-method'),
-        form = $('<form method="post" action="'+href+'">'),
-        input = $('<input name="_method" value="'+method+'" type="hidden" />'),
-        csrf_input = $('<input name="authenticity_token" value="'+csrf_token+'" type="hidden" />');
+        var link = $(this),
+            href = link.attr('href'),
+            method = link.attr('data-method'),
+            form = $('<form method="post" action="'+href+'">'),
+            input = $('<input name="_method" value="'+method+'" type="hidden" />'),
+            csrf_input = $('<input name="'+csrf-param+'" value="'+csrf-token+'" type="hidden" />');
      
-      form.hide();
-      form.append(input);
-      form.append(csrf_input);
+        form.hide();
+        form.append(input);
+        form.append(csrf_input);
      
-      $('body').append(form); // redundant?
+        $('body').append(form); // redundant?
       
-      e.preventDefault();
-      form.submit();
+        e.preventDefault();
+        form.submit();
     });
 
     /**
