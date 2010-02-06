@@ -17,7 +17,7 @@ jQuery(function ($) {
 
             return event.result !== false;
         },
-        
+
         /**
          * Handles execution of remote calls firing overridable events along the way
          */
@@ -72,35 +72,35 @@ jQuery(function ($) {
      * remote handlers
      */
     $('form[data-remote="true"]').live('submit', function (e) {
-        $(this).callRemote();        
+        $(this).callRemote();
         e.preventDefault();
     });
 
     $('a[data-remote="true"],input[data-remote="true"]').live('click', function (e) {
-        $(this).callRemote();        
+        $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-method][data-remote!=true]').live('click',function(e){ 
+    $('a[data-method][data-remote!=true]').live('click',function(e){
         var link = $(this),
             href = link.attr('href'),
             method = link.attr('data-method'),
             form = $('<form method="post" action="'+href+'">'),
             input = $('<input name="_method" value="'+method+'" type="hidden" />'),
             csrf_input = $('<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />');
-     
+
         form.hide()
             .append(input)
             .append(csrf_input)
             .appendTo('body'); // redundant?
-      
+
         e.preventDefault();
         form.submit();
     });
 
     /**
      * disable_with handlers
-     */ 
+     */
     $('form[data-remote="true"]').live('ajax:before', function () {
         $(this).children('input[data-disable-with]').each(function () {
             var input = $(this);
