@@ -87,7 +87,7 @@ jQuery(function ($) {
             method = link.attr('data-method'),
             form = $('<form method="post" action="'+href+'">'),
             input = $('<input name="_method" value="'+method+'" type="hidden" />'),
-            csrf_input = $('<input name="'+csrf-param+'" value="'+csrf-token+'" type="hidden" />');
+            csrf_input = $('<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />');
      
         form.hide()
             .append(input)
