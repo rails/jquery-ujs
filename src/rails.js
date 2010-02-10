@@ -72,17 +72,17 @@ jQuery(function ($) {
     /**
      * remote handlers
      */
-    $('form[data-remote="true"]').live('submit', function (e) {
+    $('form[data-remote]').live('submit', function (e) {
         $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-remote="true"],input[data-remote="true"]').live('click', function (e) {
+    $('a[data-remote],input[data-remote]').live('click', function (e) {
         $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-method]:not([data-remote="true"])').live('click',function(e){
+    $('a[data-method]:not([data-remote])').live('click',function(e){
         var link = $(this),
             href = link.attr('href'),
             method = link.attr('data-method'),
@@ -102,7 +102,7 @@ jQuery(function ($) {
     /**
      * disable_with handlers
      */
-    $('form[data-remote="true"]').live('ajax:before', function () {
+    $('form[data-remote]').live('ajax:before', function () {
         $(this).children('input[data-disable-with]').each(function () {
             var input = $(this);
             input.data('enable_with', input.val())
@@ -111,7 +111,7 @@ jQuery(function ($) {
         });
     });
 
-    $('form[data-remote="true"]').live('ajax:after', function () {
+    $('form[data-remote]').live('ajax:after', function () {
         $(this).children('input[data-disable-with]').each(function () {
             var input = $(this);
             input.removeAttr('disabled')
