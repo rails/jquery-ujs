@@ -27,8 +27,9 @@ jQuery(function ($) {
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href');
 
-            // TODO: should let the developer know no url was found
-            if (url !== undefined) {
+            if (url === undefined) {
+              throw "No URL specified for remote call (action or href must be present).";
+            } else {
                 if (el.triggerAndReturn('ajax:before')) {
                     $.ajax({
                         url: url,
