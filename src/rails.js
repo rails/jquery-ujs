@@ -87,13 +87,12 @@ jQuery(function ($) {
             href = link.attr('href'),
             method = link.attr('data-method'),
             form = $('<form method="post" action="'+href+'">'),
-            input = $('<input name="_method" value="'+method+'" type="hidden" />'),
-            csrf_input = $('<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />');
+            input = '<input name="_method" value="'+method+'" type="hidden" />',
+            csrf_input = '<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />';
 
         form.hide()
-            .append(input)
-            .append(csrf_input)
-            .appendTo('body'); // redundant?
+            .append(input + csrf_input)
+            .appendTo('body');
 
         e.preventDefault();
         form.submit();
