@@ -82,7 +82,7 @@ jQuery(function ($) {
         e.preventDefault();
     });
 
-    $('a[data-method]:not([data-remote])').live('click',function(e){
+    $('a[data-method]:not([data-remote])').live('click', function (e){
         var link = $(this),
             href = link.attr('href'),
             method = link.attr('data-method'),
