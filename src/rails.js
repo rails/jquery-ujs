@@ -34,9 +34,9 @@ jQuery(function ($) {
                     $.ajax({
                         url: url,
                         data: data,
+                        dataType: 'script',
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
-                            xhr.setRequestHeader("Accept", "text/javascript");
                             el.trigger('ajax:loading', xhr);
                         },
                         success: function (data, status, xhr) {
