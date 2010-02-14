@@ -12,7 +12,7 @@ jQuery(function ($) {
          *       own events and placing ourselves at the end of the chain.
          */
         triggerAndReturn: function (name, data) {
-            var event = new jQuery.Event(name);
+            var event = new $.Event(name);
             this.trigger(event, data);
 
             return event.result !== false;
