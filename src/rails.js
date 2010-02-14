@@ -102,12 +102,12 @@ jQuery(function ($) {
     });
 
     /**
-     * disable_with handlers
+     * disable-with handlers
      */
     $('form[data-remote]').live('ajax:before', function () {
         $(this).find('input[data-disable-with]').each(function () {
             var input = $(this);
-            input.data('enable_with', input.val())
+            input.data('enable-with', input.val())
                  .attr('value', input.attr('data-disable-with'))
                  .attr('disabled', 'disabled');
         });
@@ -117,7 +117,7 @@ jQuery(function ($) {
         $(this).find('input[data-disable-with]').each(function () {
             var input = $(this);
             input.removeAttr('disabled')
-                 .val(input.data('enable_with'));
+                 .val(input.data('enable-with'));
         });
     });
 });
