@@ -86,7 +86,7 @@ jQuery(function ($) {
         var link = $(this),
             href = link.attr('href'),
             method = link.attr('data-method'),
-            form = $('<form method="post" action="'+href+'">'),
+            form = $('<form method="post" action="'+href+'"></form>'),
             metadata_input = '<input name="_method" value="'+method+'" type="hidden" />';
 
         if (csrf_param != null && csrf_token != null) {
