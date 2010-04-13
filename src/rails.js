@@ -89,16 +89,17 @@ jQuery(function ($) {
             form = $('<form method="post" action="'+href+'"></form>'),
             metadata_input = '<input name="_method" value="'+method+'" type="hidden" />';
 
-        if (csrf_param != null && csrf_token != null) {
+        if (csrf_param && csrf_token) {
           metadata_input += '<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />';
+          form.hide()
+              .append(metadata_input)
+              .appendTo('body')
+              .submit();
+        } else {
+          throw "No CSRF token found (is csrf_meta_tag in your layout?).";
         }
 
-        form.hide()
-            .append(metadata_input)
-            .appendTo('body');
-
         e.preventDefault();
-        form.submit();
     });
 
     /**
