@@ -116,7 +116,7 @@ jQuery(function ($) {
         });
     });
 
-    $(disable_with_form_selector).live('ajax:after', function () {
+    $(disable_with_form_selector).live('ajax:complete', function () {
         $(this).find(disable_with_input_selector).each(function () {
             var input = $(this);
             input.removeAttr('disabled')
@@ -124,4 +124,3 @@ jQuery(function ($) {
         });
     });
 });
-
