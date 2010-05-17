@@ -23,7 +23,6 @@ jQuery(function ($) {
          */
         callRemote: function () {
             var el      = this,
-                data    = el.is('form') ? el.serializeArray() : [],
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href'),
                 dataType  = el.attr('data-type')  || 'script';
@@ -32,6 +31,7 @@ jQuery(function ($) {
               throw "No URL specified for remote call (action or href must be present).";
             } else {
                 if (el.triggerAndReturn('ajax:before')) {
+                    var data = el.is('form') ? el.serializeArray() : [];
                     $.ajax({
                         url: url,
                         data: data,
