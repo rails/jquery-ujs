@@ -25,7 +25,8 @@ jQuery(function ($) {
             var el      = this,
                 data    = el.is('form') ? el.serializeArray() : [],
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
-                url     = el.attr('action') || el.attr('href');
+                url     = el.attr('action') || el.attr('href'),
+                dataType  = el.attr('data-type')  || 'script';
 
             if (url === undefined) {
               throw "No URL specified for remote call (action or href must be present).";
@@ -34,7 +35,7 @@ jQuery(function ($) {
                     $.ajax({
                         url: url,
                         data: data,
-                        dataType: 'script',
+                        dataType: dataType,
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
                             el.trigger('ajax:loading', xhr);
