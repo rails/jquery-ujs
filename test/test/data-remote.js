@@ -74,7 +74,7 @@ test('clicking on Submit input tag with data-remote attribute', function() {
 });
 
 test('Sbumitting form with data-remote attribute', function() {
-	expect(4);
+	expect(3);
 
 	var ajaxArgs;
 
