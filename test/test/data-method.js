@@ -1,3 +1,4 @@
+//take into account CSRF stuff
 module('data-remote', {
 
 	teardown: function() {
