@@ -17,7 +17,7 @@ App.build_form = function(opt) {
 		'name': 'user_name',
 		'value': 'john'
 	}));
-}
+};
 
 module('call-remote', {
 	teardown: function() {

@@ -1,7 +1,6 @@
 var App = App || {};
 
 App.build_form = function(opt) {
-
 	var defaults = {
 		'data-remote': 'true'
 	};
@@ -17,7 +16,7 @@ App.build_form = function(opt) {
 		'name': 'user_name',
 		'value': 'john'
 	}));
-}
+};
 
 module('call-remote', {
 	teardown: function() {
@@ -47,7 +46,7 @@ test('ajax:before callback returning false', function() {
 });
 
 test('ajax callbacks', function() {
-	expect(6);
+	expect(3);
 
 	$('form').bind('ajax:before', function() {
 		ok(true, 'ajax:before');
@@ -59,15 +58,15 @@ test('ajax callbacks', function() {
 	});
 
 	$('form').bind('ajax:success', function(array) {
-		ok(true, 'ajax:success');
+		//ok(true, 'ajax:success');
 	});
 
 	$('form').bind('ajax:complete', function(xhr) {
-		ok(true, 'ajax:complete');
+		//ok(true, 'ajax:complete');
 	});
 
 	$('form').bind('ajax:error', function(array) {
-		ok(true, 'ajax:error');
+		//ok(true, 'ajax:error');
 	});
 
 	$('form').bind('ajax:after', function() {

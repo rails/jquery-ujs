@@ -10,7 +10,7 @@ module('data-confirm', {
 			href: 'http://example.com/address',
 			'data-confirm': 'Are you absolutely sure?',
 			'data-remote': 'true',
-			text: 'my address',
+			text: 'my address'
 		}));
 
 		$(document.body).append($('<input />', {
@@ -31,7 +31,7 @@ test('clicking on a link with data-confirm attribute. Confirm yes.', function() 
 	window.confirm = function(msg) {
 		$(document.body).data('confirmation-message', msg);
 		return true;
-	}
+	};
 
 	var ajaxArgs;
 
@@ -42,9 +42,7 @@ test('clicking on a link with data-confirm attribute. Confirm yes.', function() 
 		$('a[data-confirm]').trigger('click');
 	});
 
-	equals($(document.body).data('confirmation-message'), 
-         'Are you absolutely sure?', 
-         'confirmation message should be same');
+	equals($(document.body).data('confirmation-message'), 'Are you absolutely sure?', 'confirmation message should be same');
 
 });
 
@@ -54,7 +52,7 @@ test('clicking on a link with data-confirm attribute. Confirm No.', function() {
 	window.confirm = function(msg) {
 		$(document.body).data('confirmation-message', msg);
 		return false;
-	}
+	};
 
 	jack(function() {
 		jack.expect('$.ajax').never().mock(function(args) {
@@ -63,9 +61,7 @@ test('clicking on a link with data-confirm attribute. Confirm No.', function() {
 		$('a[data-confirm]').trigger('click');
 	});
 
-	equals($(document.body).data('confirmation-message'), 
-         'Are you absolutely sure?', 
-         'confirmation message should be same');
+	equals($(document.body).data('confirmation-message'), 'Are you absolutely sure?', 'confirmation message should be same');
 
 });
 
@@ -75,7 +71,7 @@ test('clicking on Submit input tag with data-confirm attribute. Confirm yes.', f
 	window.confirm = function(msg) {
 		$(document.body).data('confirmation-message', msg);
 		return true;
-	}
+	};
 
 	var ajaxArgs;
 
@@ -86,9 +82,7 @@ test('clicking on Submit input tag with data-confirm attribute. Confirm yes.', f
 		$('input[data-confirm]').trigger('click');
 	});
 
-	equals($(document.body).data('confirmation-message'), 
-         'Are you absolutely sure?', 
-         'confirmation message should be same');
+	equals($(document.body).data('confirmation-message'), 'Are you absolutely sure?', 'confirmation message should be same');
 
 });
 
@@ -98,7 +92,7 @@ test('clicking on Submit input tag with data-confirm attribute. Confirm no.', fu
 	window.confirm = function(msg) {
 		$(document.body).data('confirmation-message', msg);
 		return false;
-	}
+	};
 
 	var ajaxArgs;
 
@@ -109,9 +103,6 @@ test('clicking on Submit input tag with data-confirm attribute. Confirm no.', fu
 		$('input[data-confirm]').trigger('click');
 	});
 
-	equals($(document.body).data('confirmation-message'), 
-         'Are you absolutely sure?', 
-         'confirmation message should be same');
+	equals($(document.body).data('confirmation-message'), 'Are you absolutely sure?', 'confirmation message should be same');
 
 });
-
