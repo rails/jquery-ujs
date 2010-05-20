@@ -74,7 +74,7 @@ test('clicking on Submit input tag with data-remote attribute', function() {
 });
 
 test('Sbumitting form with data-remote attribute', function() {
-	expect(3);
+	expect(5);
 
 	var ajaxArgs;
 
@@ -88,7 +88,8 @@ test('Sbumitting form with data-remote attribute', function() {
 	equals(ajaxArgs.url, 'http://example.com/address', 'ajax arguments should have passed url');
 	equals(ajaxArgs.dataType, 'script', 'ajax arguments should have script as the data type');
 	equals(ajaxArgs.type, 'POST', 'ajax arguments should have GET as request type');
-	//FIXME
-	//equals(ajaxArgs.data, [ { "name": "user_name", "value": "john" } ], 'ajax arguments should have data that was submitted');
+
+  equals(ajaxArgs.data[0]['name'], "user_name", 'ajax arguments should have name key');
+  equals(ajaxArgs.data[0]['value'], "john", 'ajax arguments should have value key');
 });
 
