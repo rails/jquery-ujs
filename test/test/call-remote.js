@@ -2,19 +2,11 @@ var App = App || {};
 
 App.build_form = function(opt) {
   
-  console.log('opt is');
-  console.log(opt);
-
 	var defaults = {
-		action: 'http://example.com/address',
 		'data-remote': 'true'
 	};
 	
   var options = $.extend(defaults, opt);
-
-  
-  console.log('options is');
-  console.log(options);
 
 	$(document.body).append($('<form />', options));
 
@@ -36,7 +28,7 @@ module('call-remote', {
 test('method should be picked up from method attribute', function() {
   expect(1);
 
-  App.build_form({'method': 'put', 'data-method': 'fail'});
+  App.build_form({'method': 'put', 'data-method': 'fail', 'action':'www.example.com'});
 
   var ajaxArgs;
 
@@ -53,7 +45,7 @@ test('method should be picked up from method attribute', function() {
 test('method should be picked up from data-method attribute', function() {
 	expect(1);
 
-  App.build_form({'data-method': 'put'});
+  App.build_form({'data-method': 'put', 'action':'www.example.com'});
 
 	var ajaxArgs;
 
@@ -70,7 +62,7 @@ test('method should be picked up from data-method attribute', function() {
 test('default method should be picked up', function() {
 	expect(1);
 
-  App.build_form({});
+  App.build_form({action:'www.example.com'});
 
 	var ajaxArgs;
 
@@ -81,5 +73,58 @@ test('default method should be picked up', function() {
 		$('form[data-remote]').trigger('submit');
 	});
 
-	equals(ajaxArgs.type, 'GET', 'ajax arguments should have PUT as request type');
+	equals(ajaxArgs.type, 'GET', 'ajax arguments should have GET as request type');
 });
+
+
+test('url should be picked up from action', function() {
+	expect(1);
+
+  App.build_form({'action': 'http://example.com'});
+
+	var ajaxArgs;
+
+	jack(function() {
+		jack.expect('$.ajax').once().mock(function(args) {
+			ajaxArgs = args;
+		});
+		$('form[data-remote]').trigger('submit');
+	});
+
+	equals(ajaxArgs.url, 'http://example.com', 'ajax arguments should have valid url');
+});
+
+test('url should be picked up from action even if href is mentioned ', function() {
+	expect(1);
+
+  App.build_form({'action': 'http://example.com', 'href': 'http://example.org'});
+
+	var ajaxArgs;
+
+	jack(function() {
+		jack.expect('$.ajax').once().mock(function(args) {
+			ajaxArgs = args;
+		});
+		$('form[data-remote]').trigger('submit');
+	});
+
+	equals(ajaxArgs.url, 'http://example.com', 'ajax arguments should have valid url');
+});
+
+test('url should be picked up from href', function() {
+	expect(1);
+
+  App.build_form({'href': 'http://example.org'});
+
+	var ajaxArgs;
+
+	jack(function() {
+		jack.expect('$.ajax').once().mock(function(args) {
+			ajaxArgs = args;
+		});
+		$('form[data-remote]').trigger('submit');
+	});
+
+	equals(ajaxArgs.url, 'http://example.org', 'ajax arguments should have valid url');
+});
+

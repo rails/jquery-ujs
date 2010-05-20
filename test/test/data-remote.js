@@ -88,7 +88,6 @@ test('Sbumitting form with data-remote attribute', function() {
 	equals(ajaxArgs.url, 'http://example.com/address', 'ajax arguments should have passed url');
 	equals(ajaxArgs.dataType, 'script', 'ajax arguments should have script as the data type');
 	equals(ajaxArgs.type, 'POST', 'ajax arguments should have GET as request type');
-	console.log(ajaxArgs.data);
 	//FIXME
 	//equals(ajaxArgs.data, [ { "name": "user_name", "value": "john" } ], 'ajax arguments should have data that was submitted');
 });

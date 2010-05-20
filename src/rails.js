@@ -22,7 +22,6 @@ jQuery(function ($) {
          * Handles execution of remote calls firing overridable events along the way
          */
         callRemote: function () {
-            console.log('callRemote invoked');
             var el      = this,
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href'),
@@ -62,7 +61,6 @@ jQuery(function ($) {
      *  confirmation handler
      */
     $('a[data-confirm],input[data-confirm]').live('click', function () {
-        console.log('confirm clicked');
         var el = $(this);
         if (el.triggerAndReturn('confirm')) {
             if (!confirm(el.attr('data-confirm'))) {
