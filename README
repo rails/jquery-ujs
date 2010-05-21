@@ -1,0 +1,11 @@
+* What version of jQuery I should use?
+
+jQuery 1.4, 1.4.1 and 1.4.2 can be used. However because of http://jsbin.com/uboxu3/7/ issue it is
+recommended to use jQuery 1.4.1 .
+
+
+* How do I run tests?
+> ruby test/server.rb
+
+Visit http://localhost:4567 and all the tests should pass.
+
