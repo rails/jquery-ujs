@@ -5,7 +5,7 @@ require 'fileutils'
 
 # copy rails.js file from src to vendor directory
 source_file = File.join( File.dirname(__FILE__) ,  '..', 'src', 'rails.js')
-dest_file = File.join(File.dirname(__FILE__), 'vendor', 'rails.js')
+dest_file = File.join(File.dirname(__FILE__), 'public', 'vendor', 'rails.js')
 FileUtils.cp(source_file, dest_file)
 
 after do
