@@ -5134,7 +5134,6 @@ jQuery.extend({
 			// Set header so the called script knows that it's an XMLHttpRequest
 			// Only send the header if it's not a remote XHR
 			if ( !remote ) {
-        console.log('setting X-Requested-With header');
 				xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 			}
 

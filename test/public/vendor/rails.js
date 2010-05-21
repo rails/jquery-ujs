@@ -22,7 +22,6 @@ jQuery(function ($) {
          * Handles execution of remote calls firing overridable events along the way
          */
         callRemote: function () {
-           console.log('callRemote invoked');
             var el      = this,
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href'),
@@ -33,7 +32,6 @@ jQuery(function ($) {
             } else {
                 if (el.triggerAndReturn('ajax:before')) {
                     var data = el.is('form') ? el.serializeArray() : [];
-                     console.log('going to call invoke');
                     $.ajax({
                         url: url,
                         data: data,
@@ -43,17 +41,12 @@ jQuery(function ($) {
                             el.trigger('ajax:loading', xhr);
                         },
                         success: function (data, status, xhr) {
-                            console.log('++ success callback');
-                            console.log('++ data is');
-                            console.log(data);
                             el.trigger('ajax:success', [data, status, xhr]);
                         },
                         complete: function (xhr) {
-                            console.log('++ complete callback');
                             el.trigger('ajax:complete', xhr);
                         },
                         error: function (xhr, status, error) {
-                            console.log('++ error callback');
                             el.trigger('ajax:failure', [xhr, status, error]);
                         }
                     });
@@ -86,9 +79,7 @@ jQuery(function ($) {
     });
 
     $('a[data-remote],input[data-remote]').live('click', function (e) {
-        console.log('clicked');
         $(this).callRemote();
-        return false;
         e.preventDefault();
     });
 
