@@ -37,3 +37,6 @@ post '/update' do
   end
 end
 
+get '/iframe' do
+  erb :iframe
+end
