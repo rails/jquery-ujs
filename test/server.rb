@@ -40,3 +40,8 @@ end
 get '/iframe' do
   erb :iframe
 end
+
+delete '/delete' do
+  "/delete was invoked with delete verb"
+end
+
