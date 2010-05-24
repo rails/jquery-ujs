@@ -11,6 +11,7 @@ FileUtils.cp(source_file, dest_file)
 after do
   ctype = request.xhr? ? 'application/json' : 'text/html'
   content_type ctype, :charset => 'utf-8'
+  @app_base_url='http://localhost:4567'
 end
 
 get '/' do
