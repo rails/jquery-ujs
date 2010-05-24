@@ -41,7 +41,10 @@ get '/iframe' do
   erb :iframe
 end
 
-delete '/delete' do
-  "/delete was invoked with delete verb"
+get '/iframe-csrf' do
+  erb :iframe_csrf
 end
 
+delete '/delete' do
+  "/delete was invoked with delete verb. params is #{params.inspect}"
+end
