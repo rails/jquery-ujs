@@ -7,7 +7,7 @@ test('clicking on a link with data-method attribute', function() {
 	//Nothing to do. Just wait for iframe to load and do its thing. And then verify
 	setTimeout(function() {
 		start();
-		var data = $('#fixtures iframe').contents().find('body').text();
+		var data = $('#fixtures-iframe iframe').contents().find('body').text();
 		equals(data, '/delete was invoked with delete verb', 'data should be same');
 	},
 	App.ajax_timeout);
