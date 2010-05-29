@@ -2,10 +2,6 @@ var App = App || {};
 
 
 // ######## SETTINGS ###################################
-//App.host = $(".settings").metadata().host;
-//App.port = $(".settings").metadata().port;
-//App.ajax_timeout = $(".settings").metadata().ajax_timeout;
-
 App.host = 'http://localhost';
 App.port = 4567;
 App.ajax_timeout = 5000;

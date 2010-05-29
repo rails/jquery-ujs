@@ -1,13 +1,7 @@
-#
-# SETTINGS 
-#
-BASE_URL = 'http://localhost'
-PORT = 4567
-AJAX_TIMEOUT = 5000
-
-
-
 require 'rubygems'
+
+gem 'sinatra', '= 1.0'
+
 require 'sinatra'
 require 'json'
 require 'fileutils'
@@ -20,10 +14,6 @@ FileUtils.cp(source_file, dest_file)
 after do
   ctype = request.xhr? ? 'application/json' : 'text/html'
   content_type ctype, :charset => 'utf-8'
-  
-  @base_url = BASE_URL
-  @port = PORT
-  @ajax_timeout = AJAX_TIMEOUT
 end
 
 get '/' do
