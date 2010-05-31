@@ -18,6 +18,10 @@ App.url = function(url) {
 
 App.confirmation_message = 'Are you absolutely sure?';
 
+App.short_timeout = function(){
+  setTimeout(function() { start(); }, 100);
+};
+
 App.timeout = function(){
   setTimeout(function() { start(); }, App.ajax_timeout);
 };

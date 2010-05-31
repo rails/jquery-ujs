@@ -41,29 +41,27 @@ test('if ajax:before callback returns false then do not proceed', function() {
 
   $('form[data-remote]').trigger('submit');
 
-  App.timeout();  
+  App.short_timeout();
 });
 
 test('before, loading, success, complete and after callbacks should be called', function() {
 	expect(5);
-  stop();
+  stop(App.ajax_timeout);
 
 	$('form')
     .bind('ajax:before', function() { ok(true, 'ajax:before'); return true; })
 	  .bind('ajax:loading',  function(arg) { ok(true, 'ajax:loading'); })
 	  .bind('ajax:success',  function(arg) { ok(true, 'ajax:success'); })
 	  .bind('ajax:complete', function(arg) { ok(true, 'ajax:complete'); })
-	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); });
+	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); start(); });
 
 	$('form[data-remote]').trigger('submit');
-
-  App.timeout();  
 });
 
 test('before, loading, error, complete and after callbacks should be called in case of error', function() {
 	expect(6);
   $('form').attr('action', App.url('error'));
-  stop();
+  stop(App.ajax_timeout);
 
 	$('form')
     .bind('ajax:before', function() { ok(true, 'ajax:before'); return true; })
@@ -73,11 +71,9 @@ test('before, loading, error, complete and after callbacks should be called in c
       equals(xhr.status, 403, 'status code should be 403'); 
     })
 	  .bind('ajax:complete', function(arg) { ok(true, 'ajax:complete'); })
-	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); });
+	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); start(); });
 
 	$('form[data-remote]').trigger('submit');
-
-  App.timeout();  
 });
 
 

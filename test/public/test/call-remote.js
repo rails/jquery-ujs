@@ -30,17 +30,17 @@ test('method should be picked up from method attribute and not from data-method'
     'data-method': 'get',
     'action': App.url('update')
   });
-  stop();
+  stop(App.ajax_timeout);
 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       var request_env = $.parseJSON(data)['request_env'];
       App.assert_post_request(request_env); 
+
+      start();
     })
     .trigger('submit');
-
-  App.timeout();
 });
 
 test('method should be picked up from data-method attribute if method is missing', function() {
@@ -51,17 +51,17 @@ test('method should be picked up from data-method attribute if method is missing
     'action': App.url('update')
   });
 
-  stop();
+  stop(App.ajax_timeout);
 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       var request_env = $.parseJSON(data)['request_env'];
       App.assert_post_request(request_env); 
+
+      start();
     })
     .trigger('submit');
-
-  App.timeout();  
 });
 
 test('default method GET should be picked up if no method or data-method is supplied', function() {
@@ -71,17 +71,17 @@ test('default method GET should be picked up if no method or data-method is supp
     action: App.url('show')
   });
 
-  stop();
+  stop(App.ajax_timeout);
 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       var request_env = $.parseJSON(data)['request_env'];
       App.assert_get_request(request_env); 
+
+      start();
     })
     .trigger('submit');
-
-  App.timeout();  
 });
 
 test('url should be picked up from action', function() {
@@ -91,17 +91,17 @@ test('url should be picked up from action', function() {
     'action': App.url('show')
   });
 
-  stop();
+  stop(App.ajax_timeout);
 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       var request_env = $.parseJSON(data)['request_env'];
       App.assert_request_path(request_env, '/show');
+
+      start();
     })
     .trigger('submit');
-
-  App.timeout();  
 });
 
 test('url should be picked up from action if both action and href are mentioned ', function() {
@@ -111,17 +111,17 @@ test('url should be picked up from action if both action and href are mentioned 
     'action': App.url('show'),
     'href': 'http://example.org'
   });
-  stop();
+  stop(App.ajax_timeout);
 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       var request_env = $.parseJSON(data)['request_env'];
       App.assert_request_path(request_env, '/show');
+
+      start();
     })
     .trigger('submit');
-
-  App.timeout();  
 });
 
 test('url should be picked up from href if no action is provided', function() {
@@ -130,7 +130,7 @@ test('url should be picked up from href if no action is provided', function() {
   App.build_form({
     'href': App.url('show')
   });
-  stop();
+  stop(App.ajax_timeout);
 
 
   $('form[data-remote]')
@@ -138,10 +138,10 @@ test('url should be picked up from href if no action is provided', function() {
       App.assert_callback_invoked('ajax:success');
       var request_env = $.parseJSON(data)['request_env'];
       App.assert_request_path(request_env, '/show');
+
+      start();
     })
     .trigger('submit');
-
-  App.timeout();  
 });
 
 test('exception should be thrown if both action and url are missing', function() {
@@ -167,15 +167,15 @@ test('data should be availabe in JSON format if datat-type is json', function() 
     'data-type': 'json',
     'action': App.url('update')
   });
-  stop();
+  stop(App.ajax_timeout);
 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       var request_env = data['request_env'];
       App.assert_post_request(request_env); 
+
+      start();
     })
     .trigger('submit');
-
-  App.timeout();
 });

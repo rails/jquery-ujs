@@ -38,7 +38,7 @@ module('data-remote', {
 
 test('clicking on a link with data-remote attribute', function() {
   expect(3);
-  stop();
+  stop(App.ajax_timeout);
 
   $('a[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
@@ -46,34 +46,33 @@ test('clicking on a link with data-remote attribute', function() {
       var request_env = $.parseJSON(data)['request_env'];
       App.assert_request_path(request_env, '/show');
       App.assert_get_request(request_env); 
+
+      start();
     })
     .trigger('click');
-
-  App.timeout();
-
 });
 
 test('clicking on Submit input tag with data-remote attribute', function() {
   expect(3);
-  stop();
+  stop(App.ajax_timeout);
 
   $('input[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      
+
       var request_env = $.parseJSON(data)['request_env'];
-      
+
       App.assert_request_path(request_env, '/show');
       App.assert_get_request(request_env); 
+
+      start();
     })
     .trigger('click');
-
-  App.timeout();
 });
 
 test('Submitting form with data-remote attribute', function() {
   expect(4);
-  stop();
+  stop(App.ajax_timeout);
 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
@@ -85,12 +84,9 @@ test('Submitting form with data-remote attribute', function() {
       App.assert_request_path(request_env, '/update');
       equals(params['user_name'], 'john', 'ajax arguments shouldh ave key user_name with right value');
       App.assert_post_request(request_env); 
+
+      start();
     })
     .trigger('submit');
-
-  setTimeout(function() { 
-    start(); 
-  }, App.ajax_timeout);
-
 });
 
