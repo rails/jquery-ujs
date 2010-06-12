@@ -43,7 +43,7 @@ App.assert_post_request = function(request_env){
 };
 
 App.assert_request_path = function(request_env, path) {
-  equals(request_env['REQUEST_PATH'], path, 'request should be sent to right url');
+  equals(request_env['PATH_INFO'], path, 'request should be sent to right url');
 };
 
 App.die_live_events = function(){
