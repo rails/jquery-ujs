@@ -1,1 +1,7 @@
 test/public/vendor/rails.js
+*.swp
+*.swo
+.#*
+.bundle
+.DS_Store
+*~
