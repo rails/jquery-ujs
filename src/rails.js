@@ -105,23 +105,28 @@ jQuery(function ($) {
     /**
      * disable-with handlers
      */
-    var disable_with_input_selector = 'input[data-disable-with]';
-    var disable_with_form_selector = 'form[data-remote]:has(' + disable_with_input_selector + ')';
+    var disable_with_input_selector           = 'input[data-disable-with]';
+    var disable_with_form_remote_selector     = 'form[data-remote]:has('       + disable_with_input_selector + ')';
+    var disable_with_form_not_remote_selector = 'form:not([data-remote]):has(' + disable_with_input_selector + ')';
 
-    $(disable_with_form_selector).live('ajax:before', function () {
+    var disable_with_input_function = function () {
         $(this).find(disable_with_input_selector).each(function () {
             var input = $(this);
             input.data('enable-with', input.val())
-                 .attr('value', input.attr('data-disable-with'))
-                 .attr('disabled', 'disabled');
+                .attr('value', input.attr('data-disable-with'))
+                .attr('disabled', 'disabled');
         });
-    });
+    };
 
-    $(disable_with_form_selector).live('ajax:complete', function () {
+    $(disable_with_form_remote_selector).live('ajax:before', disable_with_input_function);
+    $(disable_with_form_not_remote_selector).live('click', disable_with_input_function);
+
+    $(disable_with_form_remote_selector).live('ajax:complete', function () {
         $(this).find(disable_with_input_selector).each(function () {
             var input = $(this);
             input.removeAttr('disabled')
                  .val(input.data('enable-with'));
         });
     });
+
 });
