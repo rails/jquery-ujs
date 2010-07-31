@@ -119,7 +119,7 @@ jQuery(function ($) {
     };
 
     $(disable_with_form_remote_selector).live('ajax:before', disable_with_input_function);
-    $(disable_with_form_not_remote_selector).live('click', disable_with_input_function);
+    $(disable_with_form_not_remote_selector).live('submit', disable_with_input_function);
 
     $(disable_with_form_remote_selector).live('ajax:complete', function () {
         $(this).find(disable_with_input_selector).each(function () {

@@ -18,6 +18,19 @@ module('data-disable', {
 			'value': 'john'
 		}));
 
+		$('#fixtures').append($('<form />', {
+			action: App.url('update'),
+			method: 'post'
+		}));
+
+		$('form:not([data-remote])').append($('<input />', {
+			id: 'submit',
+			'data-disable-with': 'submitting ...',
+			type: 'submit',
+			name: 'submit',
+			value: 'Submit'
+		}));
+
 	}
 });
 
@@ -39,3 +52,17 @@ test('triggering ajax callbacks on a form with data-disable attribute', function
 
 });
 
+test('clicking on non-ajax Submit input tag with data-disable-with attribute', function(){
+	expect(4);
+
+	equals($('input:disabled').size(), 0, 'input field should not be disabled');
+	equals($('input[type=submit]').val(), 'Submit', 'input field should have value given to it');
+
+	$('form:not([data-disable-with])').live('submit', function (e) {
+		e.preventDefault();
+	}).trigger('click');
+
+	equals($('input:disabled').size(), 1, 'input field should be disabled');
+	equals($('input:disabled').val(), 'submitting ...', 'input field should have disabled value given to it');
+
+});
