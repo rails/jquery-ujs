@@ -22,10 +22,10 @@ jQuery(function ($) {
          * Handles execution of remote calls firing overridable events along the way
          */
         callRemote: function () {
-            var el      = this,
-                method  = el.attr('method') || el.attr('data-method') || 'GET',
-                url     = el.attr('action') || el.attr('href'),
-                dataType  = el.attr('data-type')  || 'script';
+            var el        = this,
+                method    = el.attr('method')    || el.attr('data-method') || 'GET',
+                url       = el.attr('action')    || el.attr('href'),
+                dataType  = el.attr('data-type') || 'script';
 
             if (url === undefined) {
               throw "No URL specified for remote call (action or href must be present).";
@@ -83,15 +83,15 @@ jQuery(function ($) {
         e.preventDefault();
     });
 
-    $('a[data-method]:not([data-remote])').live('click', function (e){
-        var link = $(this),
-            href = link.attr('href'),
-            method = link.attr('data-method'),
-            form = $('<form method="post" action="'+href+'"></form>'),
-            metadata_input = '<input name="_method" value="'+method+'" type="hidden" />';
+    $('a[data-method]:not([data-remote])').live('click', function (e) {
+        var link           = $(this),
+            href           = link.attr('href'),
+            method         = link.attr('data-method'),
+            form           = $('<form method="post" action="' + href + '"></form>'),
+            metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
 
         if (csrf_param != null && csrf_token != null) {
-          metadata_input += '<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />';
+          metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
         }
 
         form.hide()
