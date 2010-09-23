@@ -73,10 +73,10 @@ jQuery(function ($) {
     /**
      * remote handlers
      */
-    $('form[data-remote]').live('submit', function (e) {
-        $(this).callRemote();
-        e.preventDefault();
-    });
+		$('form[data-remote]', $.browser.msie ? $('body')[0] : $(document)).live('submit', function(e) { 
+			  $(this).callRemote();
+			  e.preventDefault(); 
+		});
 
     $('a[data-remote],input[data-remote]').live('click', function (e) {
         $(this).callRemote();
