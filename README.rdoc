@@ -2,7 +2,26 @@
 
 Unobtrusive jQuery with Rails 3
 
-== Installation
+== Automated Installation
+
+=== Step 1
+
+Add this line to your Gemfile:
+
+  gem 'jquery-rails'
+
+=== Step 2
+
+Run this command:
+
+  $ rails generate jquery:install # --ui if you want jQuery UI
+
+=== Step 3
+
+There is no step three.
+
+
+== Manual installation
 
 jQuery 1.4, 1.4.1 and 1.4.2 can be used. However because of http://jsbin.com/uboxu3/7/ issue it is
 recommended to use jQuery 1.4.1.
@@ -11,12 +30,12 @@ recommended to use jQuery 1.4.1.
 
 Download jQuery from http://docs.jquery.com/Downloading_jQuery and put the file in public/javascripts - for example, the file might be:
 
-  public/javascripts/jquery-1.4.1.min.js 
-  
+  public/javascripts/jquery-1.4.1.min.js
+
 === Step 2
 
 Copy rails.js from http://github.com/rails/jquery-ujs/raw/master/src/rails.js into public/javascripts - overwriting the prototype one (you can also delete the other prototype files if you don't need them for anything else.)
-  
+
 === Step 3 (optional)
 
 Switch the javascript_include_tag :defaults to use jquery instead of the default prototype helpers.
@@ -26,7 +45,7 @@ file config/application.rb
   config.action_view.javascript_expansions[:defaults] = %w(jquery rails application)
 
 = Testing
-  
+
 == Installation
 
   $ gem install bundler
