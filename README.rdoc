@@ -23,14 +23,14 @@ There is no step three.
 
 == Manual installation
 
-jQuery 1.4, 1.4.1 and 1.4.2 can be used. However because of http://jsbin.com/uboxu3/7/ issue it is
-recommended to use jQuery 1.4.1.
+jQuery 1.4, 1.4.1, 1.4.2 and 1.4.3 can be used. However because of http://jsbin.com/uboxu3/7/ issue which is present in jQuery 1.4.2 version, it is highly
+recommended to use jQuery 1.4.3.
 
 === Step 1
 
 Download jQuery from http://docs.jquery.com/Downloading_jQuery and put the file in public/javascripts - for example, the file might be:
 
-  public/javascripts/jquery-1.4.1.min.js
+  public/javascripts/jquery-1.4.3.min.js
 
 === Step 2
 
