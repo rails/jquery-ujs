@@ -58,9 +58,9 @@ test('clicking on non-ajax Submit input tag with data-disable-with attribute', f
 	equals($('input:disabled').size(), 0, 'input field should not be disabled');
 	equals($('input[type=submit]').val(), 'Submit', 'input field should have value given to it');
 
-	$('form:not([data-disable-with])').live('submit', function (e) {
+	$('form:not([data-remote])').live('submit', function (e) {
 		e.preventDefault();
-	}).trigger('click');
+	}).trigger('submit');
 
 	equals($('input:disabled').size(), 1, 'input field should be disabled');
 	equals($('input:disabled').val(), 'submitting ...', 'input field should have disabled value given to it');
