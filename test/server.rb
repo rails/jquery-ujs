@@ -15,7 +15,23 @@ end
 
 get '/' do
   FileUtils.cp(source_file, dest_file)
+  params[:version] ||= '1.4.3'
   erb :index
+end
+
+get '/jquery/:version' do
+  FileUtils.cp(source_file, dest_file)
+  erb :index
+end
+
+helpers do
+  def jquery_link version
+    if params[:version] == version
+      "[#{version}]"
+    else
+      "<a href='/jquery/#{version}'>#{version}</a>"
+    end
+  end
 end
 
 get '/show' do
