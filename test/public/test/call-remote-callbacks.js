@@ -52,8 +52,8 @@ test('before, loading, success, complete and after callbacks should be called', 
     .bind('ajax:before', function() { ok(true, 'ajax:before'); return true; })
 	  .bind('ajax:loading',  function(arg) { ok(true, 'ajax:loading'); })
 	  .bind('ajax:success',  function(arg) { ok(true, 'ajax:success'); })
-	  .bind('ajax:complete', function(arg) { ok(true, 'ajax:complete'); })
-	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); start(); });
+	  .bind('ajax:complete', function(arg) { ok(true, 'ajax:complete'); start(); })
+	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); });
 
 	$('form[data-remote]').trigger('submit');
 });
@@ -70,8 +70,8 @@ test('before, loading, error, complete and after callbacks should be called in c
       ok(true, 'ajax:failure'); 
       equals(xhr.status, 403, 'status code should be 403'); 
     })
-	  .bind('ajax:complete', function(arg) { ok(true, 'ajax:complete'); })
-	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); start(); });
+	  .bind('ajax:complete', function(arg) { ok(true, 'ajax:complete'); start(); })
+	  .bind('ajax:after',    function() { ok(true, 'ajax:after'); });
 
 	$('form[data-remote]').trigger('submit');
 });
