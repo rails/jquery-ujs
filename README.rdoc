@@ -23,8 +23,7 @@ There is no step three.
 
 == Manual installation
 
-jQuery 1.4, 1.4.1, 1.4.2 and 1.4.3 can be used. However because of http://jsbin.com/uboxu3/7/ issue which is present in jQuery 1.4.2 version, it is highly
-recommended to use jQuery 1.4.3.
+jQuery 1.4, 1.4.1, 1.4.2 and 1.4.3 can be used. 
 
 === Step 1
 
