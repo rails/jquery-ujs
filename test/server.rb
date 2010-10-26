@@ -14,6 +14,7 @@ after do
 end
 
 get '/' do
+  FileUtils.cp(source_file, dest_file)
   erb :index
 end
 
