@@ -1,0 +1,13 @@
+GEM
+  specs:
+    json (1.4.6)
+    rack (1.2.1)
+    sinatra (1.0)
+      rack (>= 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  json
+  sinatra (= 1.0)
