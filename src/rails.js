@@ -105,9 +105,9 @@ jQuery(function ($) {
     /**
      * disable-with handlers
      */
-    var disable_with_input_selector           = 'input[data-disable-with]';
-    var disable_with_form_remote_selector     = 'form[data-remote]:has('       + disable_with_input_selector + ')';
-    var disable_with_form_not_remote_selector = 'form:not([data-remote]):has(' + disable_with_input_selector + ')';
+    var disable_with_input_selector           = 'input[data-disable-with]',
+        disable_with_form_remote_selector     = 'form[data-remote]:has('       + disable_with_input_selector + ')',
+        disable_with_form_not_remote_selector = 'form:not([data-remote]):has(' + disable_with_input_selector + ')';
 
     var disable_with_input_function = function () {
         $(this).find(disable_with_input_selector).each(function () {
