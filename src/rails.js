@@ -63,7 +63,7 @@ jQuery(function ($) {
     var jqueryVersion = $().jquery;
 
     if ( (jqueryVersion === '1.4') || (jqueryVersion === '1.4.1') || (jqueryVersion === '1.4.2')){
-      $('a[data-confirm],input[data-confirm]').live('click', function () {
+      $('a[data-confirm],input[data-confirm]').live('click.rails', function () {
           var el = $(this);
           if (el.triggerAndReturn('confirm')) {
               if (!confirm(el.attr('data-confirm'))) {
@@ -72,7 +72,7 @@ jQuery(function ($) {
           }
       });
     } else {
-      $('body').delegate('a[data-confirm],input[data-confirm]', 'click', function () {
+      $('body').delegate('a[data-confirm],input[data-confirm]', 'click.rails', function () {
           var el = $(this);
           if (el.triggerAndReturn('confirm')) {
               if (!confirm(el.attr('data-confirm'))) {
@@ -87,17 +87,17 @@ jQuery(function ($) {
     /**
      * remote handlers
      */
-    $('form[data-remote]').live('submit', function (e) {
+    $('form[data-remote]').live('submit.rails', function (e) {
         $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-remote],input[data-remote]').live('click', function (e) {
+    $('a[data-remote],input[data-remote]').live('click.rails', function (e) {
         $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-method]:not([data-remote])').live('click', function (e){
+    $('a[data-method]:not([data-remote])').live('click.rails', function (e){
         var link = $(this),
             href = link.attr('href'),
             method = link.attr('data-method'),
@@ -133,7 +133,7 @@ jQuery(function ($) {
     };
 
     $(disable_with_form_remote_selector).live('ajax:before', disable_with_input_function);
-    $(disable_with_form_not_remote_selector).live('submit', disable_with_input_function);
+    $(disable_with_form_not_remote_selector).live('submit.rails', disable_with_input_function);
 
     $(disable_with_form_remote_selector).live('ajax:complete', function () {
         $(this).find(disable_with_input_selector).each(function () {
