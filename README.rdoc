@@ -16,10 +16,6 @@ Run this command:
 
   $ rails generate jquery:install # --ui if you want jQuery UI
 
-=== Step 3
-
-There is no step three.
-
 
 == Manual installation
 
