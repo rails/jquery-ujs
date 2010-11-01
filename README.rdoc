@@ -2,6 +2,13 @@
 
 Unobtrusive jQuery with Rails 3
 
+== Following versions of jQuery are supported:
+
+* 1.4
+* 1.4.1
+* 1.4.2
+* 1.4.3
+
 == Automated Installation
 
 === Step 1
@@ -18,8 +25,6 @@ Run this command:
 
 
 == Manual installation
-
-jQuery 1.4, 1.4.1, 1.4.2 and 1.4.3 can be used. 
 
 === Step 1
 
