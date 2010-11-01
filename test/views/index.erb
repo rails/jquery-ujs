@@ -35,7 +35,7 @@
     <div id='fixtures' class='fixture'></div>
 
     <div id='fixtures-iframe' class='fixture'>
-      <iframe onload="this.loaded=true;" src="<%=@app_base_url%>/iframe" width=450 height=100>
+      <iframe onload="this.loaded=true;" src="<%=@app_base_url%>/iframe/<%= params[:version] %>" width=450 height=100>
         <div class='iframe'>
           <div id='iframe_form'></div>
         </div>  
@@ -43,7 +43,7 @@
     </div>
 
     <div id='fixtures-iframe-csrf' class='fixture'>
-      <iframe onload="this.loaded=true;" src="<%=@app_base_url%>/iframe-csrf" width=450 height=100>
+      <iframe onload="this.loaded=true;" src="<%=@app_base_url%>/iframe-csrf/<%= params[:version] %>" width=450 height=100>
         <div class='iframe'>
           <div id='iframe_form'></div>
         </div>  
