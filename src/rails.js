@@ -19,7 +19,14 @@ jQuery(function ($) {
         },
 
         /**
-         * Handles execution of remote calls firing overridable events along the way
+         * Handles execution of remote calls. Provides following callbacks:
+         *
+         * - ajax:before   - is execute before the whole thing begings
+         * - ajax:loading  - is executed before firing ajax call
+         * - ajax:success  - is executed when status is success
+         * - ajax:complete - is execute when status is complete
+         * - ajax:failure  - is execute in case of error
+         * - ajax:after    - is execute every single time at the end of ajax call 
          */
         callRemote: function () {
             var el      = this,
