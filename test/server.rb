@@ -54,11 +54,11 @@ post '/update' do
   end
 end
 
-get '/iframe' do
+get '/iframe/:version' do
   erb :iframe
 end
 
-get '/iframe-csrf' do
+get '/iframe-csrf/:version' do
   erb :iframe_csrf
 end
 
