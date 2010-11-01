@@ -36,18 +36,26 @@ jQuery(function ($) {
          * - ajax:complete - is execute when status is complete
          * - ajax:failure  - is execute in case of error
          * - ajax:after    - is execute every single time at the end of ajax call 
+         * 
+         * Optional: Accepts an event who's target will be included with the submitted data
          */
-        callRemote: function () {
+        callRemote: function (e) {
             var el      = this,
                 method  = el.attr('method') || el.attr('data-method') || 'GET',
                 url     = el.attr('action') || el.attr('href'),
                 dataType  = el.attr('data-type')  || 'script';
-
             if (url === undefined) {
                 throw "No URL specified for remote call (action or href must be present).";
             } else {
                 if (el.triggerAndReturn('ajax:before')) {
                     var data = el.is('form') ? el.serializeArray() : [];
+                    if (e && e.target) {
+                        var target = $(e.target);
+                        var name = target.attr('name');
+                        if (name) {
+                          data.push({name: name, value: target.attr('value')});
+                        }
+                    }
                     $.ajax({
                         url: url,
                         data: data,
@@ -91,8 +99,17 @@ jQuery(function ($) {
     /**
      * remote handlers
      */
+
+    //This allows a multiple button form to work properly, passing the button as a data parameter
+    $('form[data-remote] input[type=\'submit\'], form[data-remote] button').live('click', function (e) {
+        $(this).closest('form').callRemote(e);
+        e.preventDefault();
+    });
+
+    //This is the original handler. Fortunately, both will not fire, 
+    // since the event is prevented from bubbling by the click handler
     $('form[data-remote]').live('submit', function (e) {
-        $(this).callRemote();
+        $(this).callRemote(e);
         e.preventDefault();
     });
 
