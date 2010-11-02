@@ -20,6 +20,16 @@ module('data-confirm', {
 			value: 'Click me'
 		}));
 
+
+		$('#fixtures').append($('<button />', {
+			'data-confirm': App.confirmation_message,
+			'data-remote': 'true',
+			href: App.url('show'),
+			name: 'submit',
+			type: 'button',
+			value: 'Click me'
+		}));
+
 	}
 });
 
@@ -123,5 +133,37 @@ test('clicking on Submit input tag with data-confirm attribute. Confirm no.', fu
 
     start();
   }, 100);
+
+});
+
+test('clicking on button tag with data-confirm attribute. Confirm yes.', function() {
+	expect(1);
+
+	window.confirm = function(msg) {
+		$(document.body).data('confirmation-message', msg);
+		return true;
+	};
+
+	$('button[data-confirm]').trigger('click');
+
+  //clicking a button does not submit anything. Just assert that confirmation message was same.
+  equals( $(document.body).data('confirmation-message'),
+          App.confirmation_message, 
+          'confirmation message should be same');
+});
+
+test('clicking on a button tag with data-confirm attribute. Confirm no.', function() {
+	expect(1);
+
+	window.confirm = function(msg) {
+		$(document.body).data('confirmation-message', msg);
+		return false;
+	};
+
+	$('button[data-confirm]').trigger('click');
+
+  equals( $(document.body).data('confirmation-message'), 
+          App.confirmation_message, 
+          'confirmation message should be same');
 
 });
