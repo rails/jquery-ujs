@@ -1,3 +1,4 @@
+//http://github.com/rails/jquery-ujs/blob/master/src/rails.js
 jQuery(function ($) {
     var csrf_token = $('meta[name=csrf-token]').attr('content'),
         csrf_param = $('meta[name=csrf-param]').attr('content');
@@ -26,7 +27,7 @@ jQuery(function ($) {
          * - ajax:success  - is executed when status is success
          * - ajax:complete - is execute when status is complete
          * - ajax:failure  - is execute in case of error
-         * - ajax:after    - is execute every single time at the end of ajax call 
+         * - ajax:after    - is execute every single time at the end of ajax call
          */
         callRemote: function () {
             var el      = this,
@@ -67,44 +68,40 @@ jQuery(function ($) {
     /**
      *  confirmation handler
      */
-    var jqueryVersion = $().jquery;
+    var jqueryVersion = $().jquery,
+        liveSupported = (jqueryVersion === '1.4') || (jqueryVersion === '1.4.1') || (jqueryVersion === '1.4.2');
 
-    if ( (jqueryVersion === '1.4') || (jqueryVersion === '1.4.1') || (jqueryVersion === '1.4.2')){
-      $('a[data-confirm], button[data-confirm], input[data-confirm]').live('click', function () {
-          var el = $(this);
-          if (el.triggerAndReturn('confirm')) {
-              if (!confirm(el.attr('data-confirm'))) {
-                  return false;
-              }
-          }
-      });
-    } else {
-      $('body').delegate('a[data-confirm], button[data-confirm], input[data-confirm]', 'click', function () {
-          var el = $(this);
-          if (el.triggerAndReturn('confirm')) {
-              if (!confirm(el.attr('data-confirm'))) {
-                  return false;
-              }
-          }
-      });
+    function trustedBind(selector, eventType, handler) {
+        if (liveSupported){
+            $(selector).live(eventType, handler);
+        } else {
+            $('body').delegate(selector, eventType, handler);
+        }
     }
-    
 
+    trustedBind('a[data-confirm], button[data-confirm], input[data-confirm]', 'click', function () {
+        var el = $(this);
+        if (el.triggerAndReturn('confirm')) {
+            if (!confirm(el.attr('data-confirm'))) {
+                return false;
+            }
+        }
+    });
 
     /**
      * remote handlers
      */
-    $('form[data-remote]').live('submit', function (e) {
+    trustedBind('form[data-remote]', 'submit', function (e) {
         $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-remote],input[data-remote]').live('click', function (e) {
+    trustedBind('a[data-remote],input[data-remote]', 'click', function (e) {
         $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-method]:not([data-remote])').live('click', function (e){
+    trustedBind('a[data-method]:not([data-remote])', 'click', function (e){
         var link = $(this),
             href = link.attr('href'),
             method = link.attr('data-method'),
