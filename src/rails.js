@@ -1,3 +1,12 @@
+/*
+ * jquery-ujs
+ *
+ * http://github.com/rails/jquery-ujs/blob/master/src/rails.js
+ *
+ * This rails.js file supports jQuery 1.4, 1.4.1, 1.4.2 and 1.4.3 .
+ *
+ */ 
+
 jQuery(function ($) {
     var csrf_token = $('meta[name=csrf-token]').attr('content'),
         csrf_param = $('meta[name=csrf-param]').attr('content');
