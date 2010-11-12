@@ -3,7 +3,7 @@
  *
  * http://github.com/rails/jquery-ujs/blob/master/src/rails.js
  *
- * This rails.js file supports jQuery 1.4, 1.4.1, 1.4.2 and 1.4.3 .
+ * This rails.js file supports jQuery 1.4.3 and 1.4.4 .
  *
  */ 
 
@@ -78,26 +78,15 @@ jQuery(function ($) {
      */
     var jqueryVersion = $().jquery;
 
-    if ( (jqueryVersion === '1.4') || (jqueryVersion === '1.4.1') || (jqueryVersion === '1.4.2')){
-      $('a[data-confirm], button[data-confirm], input[data-confirm]').live('click', function () {
-          var el = $(this);
-          if (el.triggerAndReturn('confirm')) {
-              if (!confirm(el.attr('data-confirm'))) {
-                  return false;
-              }
-          }
-      });
-    } else {
-      $('body').delegate('a[data-confirm], button[data-confirm], input[data-confirm]', 'click', function () {
-          var el = $(this);
-          if (el.triggerAndReturn('confirm')) {
-              if (!confirm(el.attr('data-confirm'))) {
-                  return false;
-              }
-          }
-      });
-    }
-    
+    $('body').delegate('a[data-confirm], button[data-confirm], input[data-confirm]', 'click', function () {
+        var el = $(this);
+        if (el.triggerAndReturn('confirm')) {
+            if (!confirm(el.attr('data-confirm'))) {
+                return false;
+            }
+        }
+    });
+  
 
 
     /**
