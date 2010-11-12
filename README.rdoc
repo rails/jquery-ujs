@@ -13,7 +13,7 @@ Unobtrusive jQuery with Rails 3
 * 1.4.1
 * 1.4.2
 
- rails.js file from v1.4 branch can be accessed at https://github.com/rails/jquery-ujs/blob/v1.4/src/rails.js .
+rails.js file from v1.4 branch can be accessed at https://github.com/rails/jquery-ujs/blob/v1.4/src/rails.js .
 
 
 == Automated Installation
