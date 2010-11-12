@@ -15,7 +15,7 @@ end
 
 get '/' do
   FileUtils.cp(source_file, dest_file)
-  params[:version] ||= '1.4.3'
+  params[:version] ||= '1.4.4'
   erb :index
 end
 
