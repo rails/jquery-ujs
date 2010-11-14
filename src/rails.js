@@ -108,7 +108,7 @@ jQuery(function ($) {
             form = $('<form method="post" action="'+href+'"></form>'),
             metadata_input = '<input name="_method" value="'+method+'" type="hidden" />';
 
-        if (csrf_param != null && csrf_token != null) {
+        if (csrf_param !== undefined && csrf_token !== undefined) {
           metadata_input += '<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />';
         }
 
