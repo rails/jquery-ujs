@@ -96,12 +96,12 @@ jQuery(function ($) {
         e.preventDefault();
     });
 
-    $('a[data-remote],input[data-remote]').live('click', function (e) {
+    $('body').delegate('a[data-remote],input[data-remote]', 'click', function (e) {
         $(this).callRemote();
         e.preventDefault();
     });
 
-    $('a[data-method]:not([data-remote])').live('click', function (e){
+    $('body').delegate('a[data-method]:not([data-remote])', 'click', function (e){
         var link = $(this),
             href = link.attr('href'),
             method = link.attr('data-method'),
