@@ -108,6 +108,12 @@ jQuery(function ($) {
             form = $('<form method="post" action="'+href+'"></form>'),
             metadata_input = '<input name="_method" value="'+method+'" type="hidden" />';
 
+        if (link.data('rails.submiting')) {
+            e.preventDefault();
+            return;
+        }
+        link.data('rails.submiting', true);
+
         if (csrf_param !== undefined && csrf_token !== undefined) {
             metadata_input += '<input name="'+csrf_param+'" value="'+csrf_token+'" type="hidden" />';
         }

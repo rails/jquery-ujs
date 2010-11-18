@@ -13,11 +13,14 @@ module('data-remote-iframe', {
   }
 });
 
-test('clicking on a link with data-method attribute', function() {
+test('double clicking on a link with data-method attribute', function() {
   expect(0);
   stop();
 
   $('a[data-method]')
+    .trigger('click');
+  
+  $('a[data-method]').attr('href', App.url('update'))
     .trigger('click');
 
     App.timeout();
