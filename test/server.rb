@@ -9,8 +9,7 @@ dest_file = File.join(File.dirname(__FILE__), 'public', 'vendor', 'rails.js')
 FileUtils.cp(source_file, dest_file)
 
 after do
-  ctype = request.xhr? ? 'application/json' : 'text/html'
-  content_type ctype, :charset => 'utf-8'
+  content_type 'text/html', :charset => 'utf-8'
 end
 
 get '/' do
