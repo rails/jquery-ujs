@@ -31,7 +31,7 @@ jQuery(function ($) {
          * Handles execution of remote calls. Provides following callbacks:
          *
          * - ajax:before   - is execute before the whole thing begings
-         * - ajax:loading  - is executed before firing ajax call
+         * - ajax:beforeSend  - is executed before firing ajax call
          * - ajax:success  - is executed when status is success
          * - ajax:complete - is executed when the request finishes, whether in failure or success.
          * - ajax:error    - is execute in case of error
@@ -54,7 +54,7 @@ jQuery(function ($) {
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
                             xhr.setRequestHeader("Accept", "text/javascript");
-                            el.trigger('ajax:loading', xhr);
+                            el.trigger('ajax:beforeSend', xhr);
                         },
                         success: function (data, status, xhr) {
                             el.trigger('ajax:success', [data, status, xhr]);
