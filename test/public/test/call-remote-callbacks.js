@@ -18,7 +18,7 @@ App.build_form = function(opt) {
 	}));
 };
 
-module('call-remote', {
+module('call-remote-callbacks', {
 
 	teardown: App.teardown,
 
