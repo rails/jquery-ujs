@@ -34,8 +34,8 @@ jQuery(function ($) {
          * - ajax:loading  - is executed before firing ajax call
          * - ajax:success  - is executed when status is success
          * - ajax:complete - is execute when status is complete
-         * - ajax:failure  - is execute in case of error
-         * - ajax:after    - is execute every single time at the end of ajax call
+         * - ajax:error    - is execute in case of error
+         * - ajax:after    - is execute every single time at the end of ajax call 
          */
         callRemote: function () {
             var el      = this,
@@ -64,7 +64,7 @@ jQuery(function ($) {
                             el.trigger('ajax:complete', xhr);
                         },
                         error: function (xhr, status, error) {
-                            el.trigger('ajax:failure', [xhr, status, error]);
+                            el.trigger('ajax:error', [xhr, status, error]);
                         }
                     });
                 }
