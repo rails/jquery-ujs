@@ -54,6 +54,7 @@ jQuery(function ($) {
                         dataType: dataType,
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Accept", "text/javascript");
                             el.trigger('ajax:loading', xhr);
                         },
                         success: function (data, status, xhr) {
