@@ -33,7 +33,7 @@ jQuery(function ($) {
          * - ajax:before   - is execute before the whole thing begings
          * - ajax:loading  - is executed before firing ajax call
          * - ajax:success  - is executed when status is success
-         * - ajax:complete - is execute when status is complete
+         * - ajax:complete - is executed when the request finishes, whether in failure or success.
          * - ajax:error    - is execute in case of error
          * - ajax:after    - is execute every single time at the end of ajax call 
          */
