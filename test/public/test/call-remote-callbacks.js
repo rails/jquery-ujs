@@ -66,8 +66,8 @@ test('before, loading, error, complete and after callbacks should be called in c
 	$('form')
     .bind('ajax:before', function() { ok(true, 'ajax:before'); return true; })
 	  .bind('ajax:loading',  function(arg) { ok(true, 'ajax:loading'); })
-	  .bind('ajax:failure',  function(e, xhr, status, error) { 
-      ok(true, 'ajax:failure'); 
+	  .bind('ajax:error',  function(e, xhr, status, error) { 
+      ok(true, 'ajax:error'); 
       equals(xhr.status, 403, 'status code should be 403'); 
     })
 	  .bind('ajax:complete', function(arg) { ok(true, 'ajax:complete'); start(); })
