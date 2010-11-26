@@ -47,7 +47,17 @@ jQuery(function ($) {
                 throw "No URL specified for remote call (action or href must be present).";
             } else {
                 if (el.triggerAndReturn('ajax:before')) {
-                    var data = el.is('form') ? el.serializeArray() : [];
+                    var data = [];
+                    if (el.is('form')) {
+                      data = el.serializeArray();
+                      var ext_data = jQuery.data(el[0]);
+                      for (key in ext_data) {
+                        var matches = key.match(/^rails:data:(.*)/);
+                        if (matches) {
+                          data.push({ name: matches[1], value: ext_data[key]});
+                        }
+                      }
+                    }
                     $.ajax({
                         url: url,
                         data: data,
@@ -95,6 +105,10 @@ jQuery(function ($) {
     $('form[data-remote]').live('submit.rails', function (e) {
         $(this).callRemote();
         e.preventDefault();
+    });
+
+    $('form[data-remote] input[type=submit]').live('click.rails', function (e) {
+        jQuery.data($(this).parents('form')[0], 'rails:data:submit', e.target.name);
     });
 
     $('a[data-remote],input[data-remote]').live('click.rails', function (e) {
