@@ -47,7 +47,22 @@ jQuery(function ($) {
                 throw "No URL specified for remote call (action or href must be present).";
             } else {
                 if (el.triggerAndReturn('ajax:before')) {
-                    var data = el.is('form') ? el.serializeArray() : [];
+                    var data = []; 
+                    if (el.is('form')) { 
+                        disable_with_input_function(el);
+                        data = el.serializeArray();
+                        var ext_data = $.data(el[0]);
+                        var matches;
+                        for (key in ext_data) {
+                            matches = key.match(/^rails:(data|tmp-data):(.*)/);
+                            if (matches) { 
+                                data.push({ name: matches[2], value: ext_data[key]});
+                                if (matches[1] == 'tmp-data') {
+                                    jQuery.removeData(el[0], key);
+                                }   
+                            }   
+                        }   
+                    } 
                     $.ajax({
                         url: url,
                         data: data,
@@ -61,6 +76,9 @@ jQuery(function ($) {
                             el.trigger('ajax:success', [data, status, xhr]);
                         },
                         complete: function (xhr) {
+                            if (el.is('form')) { 
+                                enable_with_input_function(el);
+                            }
                             el.trigger('ajax:complete', xhr);
                         },
                         error: function (xhr, status, error) {
@@ -95,6 +113,10 @@ jQuery(function ($) {
     $('form[data-remote]').live('submit.rails', function (e) {
         $(this).callRemote();
         e.preventDefault();
+    });
+
+    $('form[data-remote] input[type=submit]').live('click.rails', function (e) {
+        jQuery.data($(this).parents('form')[0], 'rails:tmp-data:submit', e.target.name);
     });
 
     $('a[data-remote],input[data-remote]').live('click.rails', function (e) {
@@ -133,8 +155,8 @@ jQuery(function ($) {
         disable_with_form_remote_selector     = 'form[data-remote]:has('       + disable_with_input_selector + ')',
         disable_with_form_not_remote_selector = 'form:not([data-remote]):has(' + disable_with_input_selector + ')';
 
-    var disable_with_input_function = function () {
-        $(this).find(disable_with_input_selector).each(function () {
+    var disable_with_input_function = function (el) {
+        el.find(disable_with_input_selector).each(function () {
             var input = $(this);
             input.data('enable-with', input.val())
                 .attr('value', input.attr('data-disable-with'))
@@ -142,16 +164,15 @@ jQuery(function ($) {
         });
     };
 
-    $(disable_with_form_remote_selector).live('ajax:before.rails', disable_with_input_function);
-    $(disable_with_form_not_remote_selector).live('submit.rails', disable_with_input_function);
-
-    $(disable_with_form_remote_selector).live('ajax:complete.rails', function () {
-        $(this).find(disable_with_input_selector).each(function () {
+    var enable_with_input_function = function (el) {
+        el.find(disable_with_input_selector).each(function () {
             var input = $(this);
             input.removeAttr('disabled')
                  .val(input.data('enable-with'));
         });
-    });
+    };
+
+    $(disable_with_form_not_remote_selector).live('submit.rails', disable_with_input_function);
 
     var jqueryVersion = $().jquery;
 
