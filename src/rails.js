@@ -45,8 +45,8 @@ jQuery(function ($) {
             if (url === undefined) {
                 throw "No URL specified for remote call (action or href must be present).";
             } else {
-                if (el.triggerAndReturn('ajax:before')) {
-                    var data = el.is('form') ? el.serializeArray() : [];
+                    var $this = $(this), data = el.is('form') ? el.serializeArray() : [];
+
                     $.ajax({
                         url: url,
                         data: data,
@@ -54,7 +54,9 @@ jQuery(function ($) {
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
                             xhr.setRequestHeader("Accept", "text/javascript");
-                            el.trigger('ajax:beforeSend', xhr);
+                            if ($this.triggerHandler('ajax:beforeSend') === false) {
+                              return false;
+                            }
                         },
                         success: function (data, status, xhr) {
                             el.trigger('ajax:success', [data, status, xhr]);
@@ -66,7 +68,6 @@ jQuery(function ($) {
                             el.trigger('ajax:error', [xhr, status, error]);
                         }
                     });
-                }
             }
         }
     });
