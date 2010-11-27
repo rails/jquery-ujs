@@ -102,6 +102,11 @@ jQuery(function ($) {
         e.preventDefault();
     });
 
+    /**
+     * <%= link_to "Delete", user_path(@user), :method => :delete, :confirm => "Are you sure?" %>
+     *
+     * <a href="/users/5" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Delete</a>
+     */
     $('a[data-method]:not([data-remote])').live('click.rails', function (e){
         var link = $(this),
             href = link.attr('href'),
