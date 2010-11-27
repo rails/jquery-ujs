@@ -13,7 +13,7 @@ test('clicking on a link with data-method attribute', function() {
 		start();
 	};
 
-	//Nothing to do. Just wait for iframe to load and do its thing. And then verify
+	//index.erb loads iframe.erb . Just wait for iframe to load and do its thing and then verify.
   if(iframe[0].loaded) {
     iframeCallback();
   } else {
@@ -36,7 +36,7 @@ test('clicking on a link with data-method attribute and csrf', function() {
 		start();
   };
 
-	//Nothing to do. Just wait for iframe to load and do its thing. And then verify
+	//index.erb load iframe-csrf.eb . Just wait for iframe to load and do its thing and then verify .
   if(iframe[0].loaded) {
     iframeCallback();
   } else {
