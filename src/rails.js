@@ -30,7 +30,6 @@ jQuery(function ($) {
         /**
          * Handles execution of remote calls. Provides following callbacks:
          *
-         * - ajax:before   - is execute before the whole thing begings
          * - ajax:beforeSend  - is executed before firing ajax call
          * - ajax:success  - is executed when status is success
          * - ajax:complete - is executed when the request finishes, whether in failure or success.
