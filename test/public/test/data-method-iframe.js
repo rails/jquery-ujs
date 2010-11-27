@@ -1,4 +1,4 @@
-module('data-remote-iframe', {
+module('data-method-iframe', {
 
   teardown: App.teardown,
 

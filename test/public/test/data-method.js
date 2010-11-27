@@ -1,4 +1,4 @@
-module('data-remote');
+module('data-method');
 
 test('clicking on a link with data-method attribute', function() {
 	expect(1);
