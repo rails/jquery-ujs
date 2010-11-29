@@ -5,7 +5,7 @@
  *
  * This rails.js file supports jQuery 1.4.3 and 1.4.4 .
  *
- */ 
+ */
 
 jQuery(function ($) {
     var csrf_token = $('meta[name=csrf-token]').attr('content'),
@@ -35,7 +35,7 @@ jQuery(function ($) {
          * - ajax:success  - is executed when status is success
          * - ajax:complete - is execute when status is complete
          * - ajax:failure  - is execute in case of error
-         * - ajax:after    - is execute every single time at the end of ajax call 
+         * - ajax:after    - is execute every single time at the end of ajax call
          */
         callRemote: function () {
             var el      = this,
@@ -86,7 +86,7 @@ jQuery(function ($) {
             }
         }
     });
-  
+
 
 
     /**
@@ -155,8 +155,9 @@ jQuery(function ($) {
 
     var jqueryVersion = $().jquery;
 
-    if ( (jqueryVersion === '1.4') || (jqueryVersion === '1.4.1') || (jqueryVersion === '1.4.2') ){
-        alert('This rails.js does not support the jQuery version you are using. Please read documentation.');
-    }
+	if (!( (jqueryVersion === '1.4.3') || (jqueryVersion === '1.4.4'))){
+		alert('This rails.js does not support the jQuery version you are using. Please read documentation.');
+	}
+
 
 });
