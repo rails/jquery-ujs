@@ -45,9 +45,11 @@ Copy rails.js from http://github.com/rails/jquery-ujs/raw/master/src/rails.js in
 
 === Step 3 (optional)
 
-Switch the <tt>javascript_include_tag :defaults</tt> to use jquery instead of the default prototype helpers. Uncomment following line from file <tt>config/application.rb</tt>
+Uncomment following line from file <tt>config/application.rb</tt>
 
   config.action_view.javascript_expansions[:defaults] = %w(jquery rails application)
+
+Alternatively, in <tt>app/views/layouts/application.html.erb</tt>, switch the <tt>javascript_include_tag :defaults</tt> to use jquery <tt>javascript_include_tag 'jquery'</tt> instead of the default prototype helpers.
 
 = Testing
 
