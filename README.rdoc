@@ -53,7 +53,7 @@ To load jQuery from a CDN such as Google, just specify the full path. Change the
 
   config.action_view.javascript_expansions[:defaults] = %w(https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js rails application)
 
-Alternatively, in <tt>app/views/layouts/application.html.erb</tt>, switch the <tt>javascript_include_tag :defaults</tt> to use jquery 
+Alternatively, you can specify the exact files to load in <tt>app/views/layouts/application.html.erb</tt>. Change <tt>javascript_include_tag :defaults</tt> to use jQuery
   <%= javascript_include_tag 'jquery' %>
   or
   <%= javascript_include_tag 'https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js' %>
