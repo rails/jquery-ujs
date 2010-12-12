@@ -52,7 +52,7 @@ jQuery(function ($) {
                         dataType: dataType,
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
-                            xhr.setRequestHeader("Accept", "text/javascript");
+                            xhr.setRequestHeader("Accept", dataType);
                             if (!$this.triggerAndReturn('ajax:beforeSend')) {
                               return false;
                             }
