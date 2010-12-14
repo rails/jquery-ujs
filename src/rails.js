@@ -53,7 +53,7 @@ jQuery(function ($) {
                         type: method.toUpperCase(),
                         beforeSend: function (xhr) {
                             xhr.setRequestHeader("Accept", "text/javascript");
-                            if ($this.triggerHandler('ajax:beforeSend') === false) {
+                            if (el.triggerAndReturn('ajax:beforeSend') === false) {
                               return false;
                             }
                         },
@@ -139,7 +139,7 @@ jQuery(function ($) {
         });
     };
 
-    $(disable_with_form_remote_selector).live('ajax:before.rails', disable_with_input_function);
+    $(disable_with_form_remote_selector).live('ajax:beforeSend.rails', disable_with_input_function);
     $(disable_with_form_not_remote_selector).live('submit.rails', disable_with_input_function);
 
     $(disable_with_form_remote_selector).live('ajax:complete.rails', function () {
