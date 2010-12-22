@@ -27,10 +27,10 @@ jQuery(function ($) {
         /**
          * Handles execution of remote calls. Provides following callbacks:
          *
-         * - ajax:beforeSend  - is executed before firing ajax call
-         * - ajax:success  - is executed when status is success
-         * - ajax:complete - is executed when the request finishes, whether in failure or success.
-         * - ajax:error    - is execute in case of error
+         * - ajax:beforeSend - is executed before firing ajax call
+         * - ajax:success	 - is executed when status is success
+         * - ajax:complete   - is executed when the request finishes, whether in failure or success
+         * - ajax:error      - is execute in case of error
          */
         callRemote: function () {
             var el      = this,
@@ -69,9 +69,8 @@ jQuery(function ($) {
     });
 
     /**
-     *  confirmation handler
+     * confirmation handler
      */
-
     $('body').delegate('a[data-confirm], button[data-confirm], input[data-confirm]', 'click.rails', function () {
         var el = $(this);
         if (el.triggerAndReturn('confirm')) {
@@ -152,6 +151,5 @@ jQuery(function ($) {
 	if (!( (jqueryVersion === '1.4.3') || (jqueryVersion === '1.4.4'))){
 		alert('This rails.js does not support the jQuery version you are using. Please read documentation.');
 	}
-
 
 });
