@@ -52,6 +52,11 @@ jQuery(function ($) {
                             if ($this.triggerHandler('ajax:beforeSend') === false) {
                               return false;
                             }
+                           // if user has used jQuery.ajaxSetup then call beforeSend callback
+                            var beforeSendGlobalCallback =  $.ajaxSettings && $.ajaxSettings.beforeSend;
+                            if (beforeSendGlobalCallback !== undefined) {
+                                beforeSendGlobalCallback(xhr);
+                            }
                         },
                         success: function (data, status, xhr) {
                             el.trigger('ajax:success', [data, status, xhr]);
