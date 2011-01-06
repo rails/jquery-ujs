@@ -1,5 +1,6 @@
 source 'http://rubygems.org'
 
-gem "json"
-
-gem "sinatra", "= 1.0"
+gem 'sinatra', '~> 1.0'
+gem 'shotgun', :group => :reloadable
+gem 'thin', :group => :reloadable
+gem 'json'
