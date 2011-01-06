@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html id="html">
-  <head>
-    <title>jquery-ujs iframe</title>
-    <script src="http://code.jquery.com/jquery-<%= params[:version] %>.js" type="text/javascript"></script>
-    <script src="/vendor/qunit.js" type="text/javascript"></script>
-    <script src="/vendor/rails.js" type="text/javascript"></script>
-    <script src="/test/settings.js" type="text/javascript"></script>
-    <script src="/test/data-method-iframe.js" type="text/javascript"></script>
-  </head>
+<% @title = "jquery-ujs iframe" %>
 
-  <body id="body">
+<%= test 'data-method-iframe' %>
 
-    <!-- 
-      Following gets added to the div through data-method-iframe.js
-      <a data-method='delete' href='/delete'>Destroy</a> 
-    -->  
-    <div id='fixtures-iframe'></div>
-
-  </body>
-
-</html>
+<!-- 
+  Following gets added to the div through data-method-iframe.js
+  <a data-method='delete' href='/delete'>Destroy</a> 
+-->  
+<div id='fixtures-iframe'></div>

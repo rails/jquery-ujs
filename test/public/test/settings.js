@@ -1,19 +1,11 @@
 var App = App || {};
 
-
-// ######## SETTINGS ###################################
 App.host = 'http://localhost';
 App.port = 4567;
-App.ajax_timeout = 5000;
-
-
-//
-// ######## helper methods ###########################
-//
-App.base_url = App.host + ':' + App.port;
+App.ajax_timeout = 1000;
 
 App.url = function(url) {
-  return App.base_url + '/' + url;
+  return App.host + ':' + App.port + '/' + url;
 };
 
 App.confirmation_message = 'Are you absolutely sure?';

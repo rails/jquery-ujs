@@ -35,7 +35,7 @@ test('method should be picked up from method attribute and not from data-method'
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_post_request(request_env); 
 
       start();
@@ -56,7 +56,7 @@ test('method should be picked up from data-method attribute if method is missing
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_post_request(request_env); 
 
       start();
@@ -76,7 +76,7 @@ test('default method GET should be picked up if no method or data-method is supp
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_get_request(request_env); 
 
       start();
@@ -96,7 +96,7 @@ test('url should be picked up from action', function() {
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_request_path(request_env, '/show');
 
       start();
@@ -116,7 +116,7 @@ test('url should be picked up from action if both action and href are mentioned 
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_request_path(request_env, '/show');
 
       start();
@@ -136,7 +136,7 @@ test('url should be picked up from href if no action is provided', function() {
   $('form[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_request_path(request_env, '/show');
 
       start();

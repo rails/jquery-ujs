@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html id="html">
+  <head>
+    <title><%= @title %></title>
+    <link href="/vendor/qunit.css" media="screen" rel="stylesheet" type="text/css" media="screen, projection" />
+    <style>
+      .fixture { text-indent: -9000em; }
+      #qunit-header a { color: inherit; }
+    </style>
+    
+    <% if params[:csrf] %>
+    <meta name="csrf-param" content="authenticity_token"/>
+    <meta name="csrf-token" content="cf50faa3fe97702ca1ae"/>
+    <% end %>
+    
+    <%= script_tag jquery_src %>
+    <%= script_tag "/src/rails.js" %>
+  </head>
+
+  <body id="body">
+    <%= yield %>
+  </body>
+</html>

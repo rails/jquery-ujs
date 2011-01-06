@@ -46,7 +46,7 @@ test('clicking on a link with data-confirm attribute. Confirm yes.', function() 
 	$('a[data-confirm]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_request_path(request_env, '/show');
       App.assert_get_request(request_env); 
 
@@ -98,7 +98,7 @@ test('clicking on Submit input tag with data-confirm attribute. Confirm yes.', f
 	$('input[data-confirm]')
     .live('ajax:success', function(e, data, status, xhr) {
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_request_path(request_env, '/show');
       App.assert_get_request(request_env); 
 

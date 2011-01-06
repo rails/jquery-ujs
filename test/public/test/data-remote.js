@@ -43,7 +43,7 @@ test('clicking on a link with data-remote attribute', function() {
   $('a[data-remote]')
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
       App.assert_request_path(request_env, '/show');
       App.assert_get_request(request_env); 
 
@@ -60,7 +60,7 @@ test('clicking on Submit input tag with data-remote attribute', function() {
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
 
-      var request_env = $.parseJSON(data)['request_env'];
+      var request_env = data.request_env;
 
       App.assert_request_path(request_env, '/show');
       App.assert_get_request(request_env); 
@@ -78,7 +78,7 @@ test('Submitting form with data-remote attribute', function() {
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
 
-      var request_env = $.parseJSON(data)['request_env'],
+      var request_env = data.request_env,
           params = request_env['rack.request.query_hash'];
 
       App.assert_request_path(request_env, '/update');
