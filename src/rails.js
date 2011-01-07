@@ -1,81 +1,57 @@
-/*
- * jquery-ujs
+/**
+ * Unobtrusive scripting adapter for jQuery
  *
- * http://github.com/rails/jquery-ujs/blob/master/src/rails.js
- *
- * This rails.js file supports jQuery 1.4.3 and 1.4.4 .
- *
+ * Requires jQuery 1.4.3 or later.
+ * https://github.com/rails/jquery-ujs
  */
 
 (function($) {
-	$.fn.extend({
-		/**
-		 * Triggers a custom event on an element and returns the event result
-		 * this is used to get around not being able to ensure callbacks are placed
-		 * at the end of the chain.
-		 */
-		triggerAndReturn: function(name, data) {
-			var event = new $.Event(name);
-			this.trigger(event, data);
+	// Triggers an event on an element and returns the event result
+	function fire(obj, name, data) {
+		var event = new $.Event(name);
+		obj.trigger(event, data);
+		return event.result !== false;
+	}
 
-			return event.result !== false;
-		},
+	// Submits "remote" forms and links with ajax
+	function handleRemote(element) {
+		var method, url, data,
+			dataType = element.attr('data-type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
-		/**
-		 * Handles execution of remote calls. Provides following callbacks:
-		 *
-		 * - ajax:beforeSend - is executed before firing ajax call
-		 * - ajax:success    - is executed when status is success
-		 * - ajax:complete   - is executed when the request finishes, whether in failure or success
-		 * - ajax:error      - is execute in case of error
-		 */
-		callRemote: function() {
-			var el = this,
-				method = el.attr('method') || el.attr('data-method') || 'GET',
-				url = el.attr('action') || el.attr('href'),
-				dataType = el.attr('data-type') || ($.ajaxSettings && $.ajaxSettings.dataType);
-
-			if (url === undefined) {
-				throw "No URL specified for remote call (action or href must be present).";
-			} else {
-				var $this = $(this), data = el.is('form') ? el.serializeArray() : [];
-
-				$.ajax({
-					url: url,
-					data: data,
-					dataType: dataType,
-					type: method.toUpperCase(),
-					beforeSend: function(xhr) {
-						if ($this.triggerHandler('ajax:beforeSend') === false) {
-							return false;
-						}
-
-						// if user has used jQuery.ajaxSetup then call beforeSend callback
-						var beforeSendGlobalCallback = $.ajaxSettings && $.ajaxSettings.beforeSend;
-						if (beforeSendGlobalCallback !== undefined) {
-							beforeSendGlobalCallback(xhr);
-						}
-					},
-					success: function(data, status, xhr) {
-						el.trigger('ajax:success', [data, status, xhr]);
-					},
-					complete: function(xhr) {
-						el.trigger('ajax:complete', xhr);
-					},
-					error: function(xhr, status, error) {
-						el.trigger('ajax:error', [xhr, status, error]);
-					}
-				});
-			}
+		if (element.is('form')) {
+			method = element.attr('method') || 'POST';
+			url = element.attr('action');
+			data = element.serializeArray();
+		} else {
+			method = element.attr('data-method') || 'GET';
+			url = element.attr('href');
+			data = null;
 		}
-	});
+
+		$.ajax({
+			url: url, type: method, data: data, dataType: dataType,
+			// stopping the "ajax:beforeSend" event will cancel the ajax request
+			beforeSend: function(xhr) {
+				return fire(element, 'ajax:beforeSend', xhr);
+			},
+			success: function(data, status, xhr) {
+				element.trigger('ajax:success', [data, status, xhr]);
+			},
+			complete: function(xhr) {
+				element.trigger('ajax:complete', xhr);
+			},
+			error: function(xhr, status, error) {
+				element.trigger('ajax:error', [xhr, status, error]);
+			}
+		});
+	}
 
 	/**
 	 * confirmation handler
 	 */
 	$('a[data-confirm], button[data-confirm], input[data-confirm]').live('click.rails', function() {
 		var el = $(this);
-		if (el.triggerAndReturn('confirm')) {
+		if (fire(el, 'confirm')) {
 			if (!confirm(el.attr('data-confirm'))) {
 				return false;
 			}
@@ -86,12 +62,12 @@
 	 * remote handlers
 	 */
 	$('form[data-remote]').live('submit.rails', function(e) {
-		$(this).callRemote();
+		handleRemote($(this));
 		e.preventDefault();
 	});
 
 	$('a[data-remote],input[data-remote]').live('click.rails', function(e) {
-		$(this).callRemote();
+		handleRemote($(this));
 		e.preventDefault();
 	});
 
