@@ -46,39 +46,10 @@
 		});
 	}
 
-	/**
-	 * confirmation handler
-	 */
-	$('a[data-confirm], button[data-confirm], input[data-confirm]').live('click.rails', function() {
-		var el = $(this);
-		if (fire(el, 'confirm')) {
-			if (!confirm(el.attr('data-confirm'))) {
-				return false;
-			}
-		}
-	});
-
-	/**
-	 * remote handlers
-	 */
-	$('form[data-remote]').live('submit.rails', function(e) {
-		handleRemote($(this));
-		e.preventDefault();
-	});
-
-	$('a[data-remote],input[data-remote]').live('click.rails', function(e) {
-		handleRemote($(this));
-		e.preventDefault();
-	});
-
-	/**
-	 * <%= link_to "Delete", user_path(@user), :method => :delete, :confirm => "Are you sure?" %>
-	 *
-	 * <a href="/users/5" data-confirm="Are you sure?" data-method="delete" rel="nofollow">Delete</a>
-	 */
-	$('a[data-method]:not([data-remote])').live('click.rails', function(e) {
-		var link = $(this),
-			href = link.attr('href'),
+	// Handles "data-method" on links such as:
+	// <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
+	function handleMethod(link) {
+		var href = link.attr('href'),
 			method = link.attr('data-method'),
 			csrf_token = $('meta[name=csrf-token]').attr('content'),
 			csrf_param = $('meta[name=csrf-param]').attr('content'),
@@ -90,9 +61,35 @@
 		}
 
 		form.hide().append(metadata_input).appendTo('body');
-
-		e.preventDefault();
 		form.submit();
+	}
+
+	function allowAction(element) {
+		var message = element.attr('data-confirm');
+		return !message || (fire(element, 'confirm') && confirm(message));
+	}
+
+	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
+		var link = $(this);
+		if (!allowAction(link)) return false;
+
+		if (link.attr('data-remote')) {
+			handleRemote(link);
+			return false;
+		} else if (link.attr('data-method')) {
+			handleMethod(link);
+			return false;
+		}
+	});
+
+	$('form').live('submit.rails', function(e) {
+		var form = $(this);
+		if (!allowAction(form)) return false;
+
+		if (form.attr('data-remote')) {
+			handleRemote(form);
+			return false;
+		}
 	});
 
 	/**

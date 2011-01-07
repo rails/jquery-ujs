@@ -8,14 +8,6 @@ module('data-remote', {
       'data-remote': 'true',
       text: 'my address'
     }));
-
-    $('#fixtures').append($('<input />', {
-      href: '/echo',
-      'data-remote': 'true',
-      name: 'submit',
-      type: 'submit',
-      value: 'Click me'
-    }));
     
     var form = $('<form />', {
       action: '/echo',
@@ -44,24 +36,6 @@ test('clicking on a link with data-remote attribute', function() {
     .live('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       var request_env = data.request_env;
-      App.assert_request_path(request_env, '/echo');
-      App.assert_get_request(request_env); 
-
-      start();
-    })
-    .trigger('click');
-});
-
-test('clicking on Submit input tag with data-remote attribute', function() {
-  expect(3);
-  stop(App.ajax_timeout);
-
-  $('input[data-remote]')
-    .live('ajax:success', function(e, data, status, xhr) { 
-      App.assert_callback_invoked('ajax:success');
-
-      var request_env = data.request_env;
-
       App.assert_request_path(request_env, '/echo');
       App.assert_get_request(request_env); 
 
