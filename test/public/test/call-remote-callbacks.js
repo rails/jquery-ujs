@@ -44,6 +44,24 @@ test('ajax:beforeSend returns false do not proceed', function() {
   App.short_timeout();
 });
 
+test('jQuery.ajaxSettings beforeSend returns false do not proceed', function() {
+  expect(0);
+  stop();
+  $.ajaxSetup({
+    beforeSend : function(xhr) {
+      return false;
+    }
+  })
+  $('form')
+    .bind('ajax:complete', function(){
+      ok(false, 'ajax call should not have been made since ajax:beforeSend callback returns false');
+    });
+
+  $('form[data-remote]').trigger('submit');
+
+  App.short_timeout();
+});
+
 test('beforeSend, success and complete callbacks should be called', function() {
 	expect(3);
   stop(App.ajax_timeout);

@@ -41,21 +41,21 @@ jQuery(function ($) {
             if (url === undefined) {
                 throw "No URL specified for remote call (action or href must be present).";
             } else {
-                    var $this = $(this), data = el.is('form') ? el.serializeArray() : [];
+                    var data = el.is('form') ? el.serializeArray() : [];
 
                     $.ajax({
                         url: url,
                         data: data,
                         dataType: dataType,
                         type: method.toUpperCase(),
-                        beforeSend: function (xhr) {
-                            if ($this.triggerHandler('ajax:beforeSend') === false) {
+                        beforeSend: function (xhr, settings) {
+                            if (el.triggerHandler('ajax:beforeSend') === false) {
                               return false;
                             }
                            // if user has used jQuery.ajaxSetup then call beforeSend callback
                             var beforeSendGlobalCallback =  $.ajaxSettings && $.ajaxSettings.beforeSend;
                             if (beforeSendGlobalCallback !== undefined) {
-                                beforeSendGlobalCallback(xhr);
+                                return beforeSendGlobalCallback.call(this, xhr, settings, el);
                             }
                         },
                         success: function (data, status, xhr) {
