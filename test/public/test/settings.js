@@ -1,18 +1,7 @@
 var App = App || {};
 
-App.host = 'http://localhost';
-App.port = 4567;
 App.ajax_timeout = 1000;
-
-App.url = function(url) {
-  return App.host + ':' + App.port + '/' + url;
-};
-
 App.confirmation_message = 'Are you absolutely sure?';
-
-App.short_timeout = function(){
-  setTimeout(function() { start(); }, 100);
-};
 
 App.timeout = function(){
   setTimeout(function() { start(); }, App.ajax_timeout);

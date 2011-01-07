@@ -46,20 +46,16 @@ get '/' do
   erb :index
 end
 
+[:get, :post, :put, :delete].each do |method|
+  send(method, '/echo') {
+    ajax_json_or_error do
+      { :request_env => request.env }
+    end
+  }
+end
+
 get '/iframe' do
   erb :iframe
-end
-
-get '/show' do
-  ajax_json_or_error do
-    { :hello => :sexy, :request_env => request.env }
-  end
-end
-
-post '/update' do
-  ajax_json_or_error do
-    { :hello => :sexy, :request_env => request.env }
-  end
 end
 
 delete '/delete' do

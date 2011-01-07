@@ -5,7 +5,7 @@ module('data-method-iframe', {
   setup: function() {
 
     $('#fixtures-iframe').append($('<a />', {
-      href: App.url('delete'),
+      href: '/delete',
       'data-method': 'delete',
       text: 'Destroy'
     }));
