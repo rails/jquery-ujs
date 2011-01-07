@@ -4,9 +4,11 @@
 
 <h1 id="qunit-header">
   jquery-ujs test
-  <%= jquery_link '1.4.3' %>
-  <%= jquery_link '1.4.4' %>
+  <span>—
+  <%= jquery_link '1.4.3' %> •
+  <%= jquery_link '1.4.4' %> •
   <%= jquery_link 'edge' if File.exist?(settings.root + '/public/vendor/jquery.js') %>
+  </span>
 </h1>
 <h2 id="qunit-banner"></h2>
 <h2 id="qunit-userAgent"></h2>
