@@ -30,7 +30,7 @@ App.assert_request_path = function(request_env, path) {
 App.die_live_events = function(){
   $('a[data-remote]').die();
   $('input[data-remote]').die();
-  $('form[data-remote]').die('ajax:success'); 
+  $('form[data-remote]').die('ajax:success').die('ajax:beforeSend');
   $('a[data-confirm]').die();
   $('input[data-confirm]').die();
 };

@@ -33,6 +33,21 @@ test('stopping the "ajax:beforeSend" event aborts the request', function() {
   setTimeout(function(){ start() }, 200);
 });
 
+test('"ajax:beforeSend" can be observed and stopped with event delegation', function() {
+  expect(1);
+  $('form[data-remote]').live('ajax:beforeSend', function() {
+    ok(true, 'ajax:beforeSend observed with event delegation');
+    return false;
+  });
+  
+  submit(function(form) {
+    form.unbind('ajax:complete').bind('ajax:complete', function() {
+      ok(false, 'ajax:complete should not run');
+    });
+  });
+  setTimeout(function(){ start() }, 200);
+});
+
 test('"ajax:beforeSend", "ajax:success" and "ajax:complete" are triggered', function() {
   expect(3);
   submit(function(form) {
