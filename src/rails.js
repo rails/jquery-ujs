@@ -145,11 +145,4 @@ jQuery(function($) {
 			input.removeAttr('disabled').val(input.data('enable-with'));
 		});
 	});
-
-	var jqueryVersion = $().jquery;
-
-	if (!( (jqueryVersion === '1.4.3') || (jqueryVersion === '1.4.4'))){
-		alert('This rails.js does not support the jQuery version you are using. Please read documentation.');
-	}
-
 });
