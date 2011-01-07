@@ -7,10 +7,7 @@
  *
  */
 
-jQuery(function($) {
-	var csrf_token = $('meta[name=csrf-token]').attr('content'),
-		csrf_param = $('meta[name=csrf-param]').attr('content');
-
+(function($) {
 	$.fn.extend({
 		/**
 		 * Triggers a custom event on an element and returns the event result
@@ -76,7 +73,7 @@ jQuery(function($) {
 	/**
 	 * confirmation handler
 	 */
-	$('body').delegate('a[data-confirm], button[data-confirm], input[data-confirm]', 'click.rails', function() {
+	$('a[data-confirm], button[data-confirm], input[data-confirm]').live('click.rails', function() {
 		var el = $(this);
 		if (el.triggerAndReturn('confirm')) {
 			if (!confirm(el.attr('data-confirm'))) {
@@ -107,6 +104,8 @@ jQuery(function($) {
 		var link = $(this),
 			href = link.attr('href'),
 			method = link.attr('data-method'),
+			csrf_token = $('meta[name=csrf-token]').attr('content'),
+			csrf_param = $('meta[name=csrf-param]').attr('content'),
 			form = $('<form method="post" action="' + href + '"></form>'),
 			metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
 
@@ -145,4 +144,4 @@ jQuery(function($) {
 			input.removeAttr('disabled').val(input.data('enable-with'));
 		});
 	});
-});
+})( jQuery );
