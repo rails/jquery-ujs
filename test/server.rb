@@ -13,7 +13,9 @@ helpers do
   end
   
   def jquery_src
-    "http://code.jquery.com/jquery-#{params[:version]}.js"
+    if params[:version] == 'edge' then "/vendor/jquery.js"
+    else "http://code.jquery.com/jquery-#{params[:version]}.js"
+    end
   end
   
   def test *names

@@ -1,4 +1,4 @@
-test/public/vendor/rails.js
+test/public/vendor/jquery.js
 *.swp
 *.swo
 .#*
