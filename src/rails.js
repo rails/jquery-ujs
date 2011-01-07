@@ -22,6 +22,9 @@
 			method = element.attr('method') || 'POST';
 			url = element.attr('action');
 			data = element.serializeArray();
+			// memoized value from clicked submit button
+			var button = element.data('ujs:submit-button');
+			if (button) data.push(button);
 		} else {
 			method = element.attr('data-method') || 'GET';
 			url = element.attr('href');
@@ -90,6 +93,14 @@
 			handleRemote(form);
 			return false;
 		}
+	});
+
+	$('form input[type=submit], form button[type=submit], form button:not([type])').live('click', function() {
+		var button = $(this);
+		if (!allowAction(button)) return false;
+		// register the pressed submit button
+		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
+		button.closest('form').data('ujs:submit-button', data);
 	});
 
 	/**
