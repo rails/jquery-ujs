@@ -34,14 +34,14 @@
 		$.ajax({
 			url: url, type: method, data: data, dataType: dataType,
 			// stopping the "ajax:beforeSend" event will cancel the ajax request
-			beforeSend: function(xhr) {
-				return fire(element, 'ajax:beforeSend', xhr);
+			beforeSend: function(xhr, settings) {
+				return fire(element, 'ajax:beforeSend', [xhr, settings]);
 			},
 			success: function(data, status, xhr) {
 				element.trigger('ajax:success', [data, status, xhr]);
 			},
-			complete: function(xhr) {
-				element.trigger('ajax:complete', xhr);
+			complete: function(xhr, status) {
+				element.trigger('ajax:complete', [xhr, status]);
 			},
 			error: function(xhr, status, error) {
 				element.trigger('ajax:error', [xhr, status, error]);
