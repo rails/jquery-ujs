@@ -34,7 +34,10 @@
 		$.ajax({
 			url: url, type: method, data: data, dataType: dataType,
 			// stopping the "ajax:beforeSend" event will cancel the ajax request
-			beforeSend: function(xhr) {
+			beforeSend: function(xhr, settings) {
+				if ( settings.dataType == undefined ) {
+					xhr.setRequestHeader("Accept", settings.accepts.script + ", */*; q=0.5");
+				}
 				return fire(element, 'ajax:beforeSend', xhr);
 			},
 			success: function(data, status, xhr) {
