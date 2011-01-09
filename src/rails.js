@@ -35,8 +35,8 @@
 			url: url, type: method, data: data, dataType: dataType,
 			// stopping the "ajax:beforeSend" event will cancel the ajax request
 			beforeSend: function(xhr, settings) {
-				if (settings.dataType == undefined) {
-					xhr.setRequestHeader("Accept", settings.accepts.script + ", */*; q=0.5");
+				if (settings.dataType === undefined) {
+					xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
 				}
 				return fire(element, 'ajax:beforeSend', [xhr, settings]);
 			},

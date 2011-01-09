@@ -72,6 +72,18 @@ test('form url is read from "action" not "href"', function() {
   });
 });
 
+test('prefer JS, but accept any format', function() {
+  expect(1);
+  build_form({ method: 'post' });
+
+  submit(function(e, data, status, xhr) {
+    var accept = data.request_env['HTTP_ACCEPT'];
+    // HACK to normalize header sent by jQuery 1.4.4 and below:
+    accept = accept.replace('*/*, */*', '*/*');
+    equals(accept, '*/*;q=0.5, text/javascript, application/javascript');
+  });
+});
+
 test('accept application/json if "data-type" is json', function() {
   expect(1);
   build_form({ method: 'post', 'data-type': 'json' });
