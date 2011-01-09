@@ -63,7 +63,8 @@ test('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on error
     form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
     form.bind('ajax:error', function(e, xhr, status, error) { 
       ok(true, 'ajax:error'); 
-      equals(xhr.status, 403, 'status code should be 403'); 
+      // Opera returns "0" for HTTP code
+      equals(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
     });
   });
 });
