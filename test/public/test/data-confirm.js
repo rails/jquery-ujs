@@ -3,30 +3,12 @@ module('data-confirm', {
   teardown: App.teardown,
 
   setup: function() {
-
     $('#fixtures').append($('<a />', {
       href: '/echo',
       'data-remote': 'true',
       'data-confirm': 'Are you absolutely sure?',
       text: 'my social security number'
     }));
-
-    $('#fixtures').append($('<form />', { action: '/echo', 'data-remote': 'true' }));
-
-    $('#fixtures form').append($('<input />', {
-      'data-confirm': App.confirmation_message,
-      name: 'submit',
-      type: 'submit',
-      value: 'Click me'
-    }));
-
-    $('#fixtures form').append($('<button />', {
-      'data-confirm': App.confirmation_message,
-      name: 'submit',
-      type: 'button',
-      value: 'Press me'
-    }));
-
   }
 });
 
