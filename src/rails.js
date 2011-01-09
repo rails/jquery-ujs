@@ -70,6 +70,22 @@
 		form.submit();
 	}
 
+	function disableFormElements(form) {
+		form.find('input[data-disable-with]').each(function() {
+			var input = $(this);
+			input.data('ujs:enable-with', input.val())
+				.val(input.attr('data-disable-with'))
+				.attr('disabled', 'disabled');
+		});
+	}
+
+	function enableFormElements(form) {
+		form.find('input[data-disable-with]').each(function() {
+			var input = $(this);
+			input.val(input.data('ujs:enable-with')).removeAttr('disabled');
+		});
+	}
+
 	function allowAction(element) {
 		var message = element.attr('data-confirm');
 		return !message || (fire(element, 'confirm') && confirm(message));
@@ -95,6 +111,8 @@
 		if (form.attr('data-remote')) {
 			handleRemote(form);
 			return false;
+		} else {
+			disableFormElements(form);
 		}
 	});
 
@@ -105,30 +123,12 @@
 		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
 		button.closest('form').data('ujs:submit-button', data);
 	});
+	
+	$('form').live('ajax:beforeSend.rails', function(event) {
+		if (this == event.target) disableFormElements($(this));
+	});
 
-	/**
-	 * disable-with handlers
-	 */
-	var disable_with_input_selector = 'input[data-disable-with]',
-		disable_with_form_remote_selector = 'form[data-remote]:has(' + disable_with_input_selector + ')',
-		disable_with_form_not_remote_selector = 'form:not([data-remote]):has(' + disable_with_input_selector + ')';
-
-	var disable_with_input_function = function() {
-		$(this).find(disable_with_input_selector).each(function() {
-			var input = $(this);
-			input.data('enable-with', input.val())
-				.attr('value', input.attr('data-disable-with'))
-				.attr('disabled', 'disabled');
-		});
-	};
-
-	$(disable_with_form_remote_selector).live('ajax:beforeSend.rails', disable_with_input_function);
-	$(disable_with_form_not_remote_selector).live('submit.rails', disable_with_input_function);
-
-	$(disable_with_form_remote_selector).live('ajax:complete.rails', function() {
-		$(this).find(disable_with_input_selector).each(function() {
-			var input = $(this);
-			input.removeAttr('disabled').val(input.data('enable-with'));
-		});
+	$('form').live('ajax:complete.rails', function(event) {
+		if (this == event.target) enableFormElements($(this));
 	});
 })( jQuery );
