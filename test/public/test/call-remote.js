@@ -41,16 +41,16 @@ test('form method is not read from "data-method" attribute in case of missing "m
   build_form({ 'data-method': 'put' });
 
   submit(function(e, data, status, xhr) {
-    App.assert_post_request(data.request_env);
+    App.assert_get_request(data.request_env);
   });
 });
 
-test('form default method is POST', function() {
+test('form default method is GET', function() {
   expect(1);
   build_form();
 
   submit(function(e, data, status, xhr) {
-    App.assert_post_request(data.request_env);
+    App.assert_get_request(data.request_env);
   });
 });
 
