@@ -36,33 +36,34 @@ module('data-disable', {
 
 test('triggering ajax callbacks on a form with data-disable attribute', function() {
   expect(6);
+  var form = $('form[data-remote]'), input = form.find('input[type=text]');
 
-  equals($('input:disabled').size(), 0, 'input field should not be disabled');
-  equals($('input').val(), 'john', 'input field should have value given to it');
+  ok(!input.is(':disabled'), 'input field should not be disabled');
+  equals(input.val(), 'john', 'input field should have value given to it');
 
-  $('form').trigger('ajax:before');
+  form.trigger('ajax:beforeSend');
 
-  equals($('input:disabled').size(), 1, 'input field should be disabled');
-  equals($('input:disabled').val(), 'processing ...', 'input field should have disabled value given to it');
+  ok(input.is(':disabled'), 'input field should be disabled');
+  equals(input.val(), 'processing ...', 'input field should have disabled value given to it');
 
-  $('form').trigger('ajax:complete');
+  form.trigger('ajax:complete');
 
-  equals($('input:disabled').size(), 0, 'input field should not be disabled');
-  equals($('input').val(), 'john', 'input field should have value given to it');
-
+  ok(!input.is(':disabled'), 'input field should not be disabled');
+  equals(input.val(), 'john', 'input field should have value given to it');
 });
 
 test('clicking on non-ajax Submit input tag with data-disable-with attribute', function(){
   expect(4);
+  var form = $('form:not([data-remote])'), input = form.find('input[type=submit]');
 
-  equals($('input:disabled').size(), 0, 'input field should not be disabled');
-  equals($('input[type=submit]').val(), 'Submit', 'input field should have value given to it');
+  ok(!input.is(':disabled'), 'input field should not be disabled');
+  equals(input.val(), 'Submit', 'input field should have value given to it');
 
-  $('form:not([data-remote])').live('submit', function (e) {
+  $('form:not([data-remote])').live('submit', function(e) {
+    // prevent the submit navigating away from the test suite
     e.preventDefault();
   }).trigger('submit');
 
-  equals($('input:disabled').size(), 1, 'input field should be disabled');
-  equals($('input:disabled').val(), 'submitting ...', 'input field should have disabled value given to it');
-
+  ok(input.is(':disabled'), 'input field should not be disabled');
+  equals(input.val(), 'submitting ...', 'input field should have disabled value given to it');
 });

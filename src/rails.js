@@ -98,7 +98,7 @@
 		}
 	});
 
-	$('form input[type=submit], form button[type=submit], form button:not([type])').live('click', function() {
+	$('form input[type=submit], form button[type=submit], form button:not([type])').live('click.rails', function() {
 		var button = $(this);
 		if (!allowAction(button)) return false;
 		// register the pressed submit button
@@ -122,7 +122,7 @@
 		});
 	};
 
-	$(disable_with_form_remote_selector).live('ajax:before.rails', disable_with_input_function);
+	$(disable_with_form_remote_selector).live('ajax:beforeSend.rails', disable_with_input_function);
 	$(disable_with_form_not_remote_selector).live('submit.rails', disable_with_input_function);
 
 	$(disable_with_form_remote_selector).live('ajax:complete.rails', function() {
