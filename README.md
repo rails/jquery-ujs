@@ -54,7 +54,7 @@ This will remove the Prototype.js library from Rails, add latest jQuery library 
 
 Configure the following in your application startup file:
 
-    config.action_view.javascript_expansions[:defaults] = %w(jquery rails application)
+    config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
 
 Now the template helper `javascript_include_tag :defaults` will generate SCRIPT tags to load jQuery and rails.js.
 
