@@ -24,7 +24,10 @@
 			data = element.serializeArray();
 			// memoized value from clicked submit button
 			var button = element.data('ujs:submit-button');
-			if (button) data.push(button);
+			if (button) {
+				data.push(button);
+				element.data('ujs:submit-button', null);
+			}
 		} else {
 			method = element.attr('data-method');
 			url = element.attr('href');
