@@ -27,18 +27,6 @@ helpers do
     src = "/test/#{src}.js" unless src.index('/')
     %(<script src="#{src}" type="text/javascript"></script>)
   end
-  
-  def ajax_json_or_error
-    if request.xhr?
-      content_type 'application/json'
-      data = yield
-      String === data ? data : data.to_json
-    else
-      content_type 'text/plain'
-      status 400
-      "#{request.path} requested without ajax"
-    end
-  end
 end
 
 get '/' do
@@ -48,18 +36,21 @@ end
 
 [:get, :post, :put, :delete].each do |method|
   send(method, '/echo') {
-    ajax_json_or_error do
-      { :request_env => request.env }
+    data = { :params => params }.update(request.env)
+    
+    if request.xhr?
+      content_type 'application/json'
+      data.to_json
+    elsif params[:iframe]
+      <<-HTML
+        <script>window.top.jQuery.event.trigger('iframe:loaded', #{data.to_json})</script>
+      HTML
+    else
+      content_type 'text/plain'
+      status 400
+      "ERROR: #{request.path} requested without ajax"
     end
   }
-end
-
-get '/iframe' do
-  erb :iframe
-end
-
-delete '/delete' do
-  "/delete was invoked with delete verb. params is #{params.inspect}"
 end
 
 get '/error' do

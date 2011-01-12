@@ -2,27 +2,15 @@
 
 <%= test 'data-confirm', 'data-remote', 'data-disable', 'call-remote', 'call-remote-callbacks', 'data-method' %>
 
-<h1 id="qunit-header">
-  jquery-ujs test
-  <span>—
+<h1 id="qunit-header"><%= @title %></h1>
+<div id="jquery-version">
+  jQuery version:
   <%= jquery_link '1.4.3' %> •
   <%= jquery_link '1.4.4' %> •
   <%= jquery_link 'edge' if File.exist?(settings.root + '/public/vendor/jquery.js') %>
-  </span>
-</h1>
+</div>
 <h2 id="qunit-banner"></h2>
 <h2 id="qunit-userAgent"></h2>
-
 <ol id="qunit-tests"></ol>
 
-<div id='fixtures' class='fixture'></div>
-
-<div id='fixtures-iframe' class='fixture'>
-  <iframe onload="this.loaded=true;" src="/iframe?version=<%= params[:version] %>" width=450 height=100>
-  </iframe>
-</div>
-
-<div id='fixtures-iframe-csrf' class='fixture'>
-  <iframe onload="this.loaded=true;" src="/iframe?csrf=true&amp;version=<%= params[:version] %>" width=450 height=100>
-  </iframe>
-</div>
+<div id="qunit-fixture"></div>

@@ -1,45 +1,35 @@
-module('data-method');
+(function(){
 
-test('clicking on a link with data-method attribute', function() {
-  expect(1);
-  stop(App.ajax_timeout);
-
-  var iframe = $('#fixtures-iframe iframe');
-
-  iframeCallback = function() {
-    var data = iframe.contents().find('body').text();
-    equals(data, "/delete was invoked with delete verb. params is {\"_method\"=>\"delete\"}", 'iframe should have proper response message');
-
-    start();
-  };
-
-  //index.erb loads iframe.erb . Just wait for iframe to load and do its thing and then verify.
-  if(iframe[0].loaded) {
-    iframeCallback();
-  } else {
-    iframe.live("load", iframeCallback);
-  }
+module('data-method', {
+  teardown: function() { $(document).unbind('iframe:loaded') }
 });
 
-
-test('clicking on a link with data-method attribute and csrf', function() {
-  expect(1);
-  stop(App.ajax_timeout);
-
-  var iframe = $('#fixtures-iframe-csrf iframe');
-
-  var iframeCallback = function() {
-    var data = iframe.contents().find('body').text();
-    equals(data, "/delete was invoked with delete verb. params is {\"_method\"=>\"delete\", \"authenticity_token\"=>\"cf50faa3fe97702ca1ae\"}", 
-                 'iframe should be proper response message');
-
+function submit(fn) {
+  $(document).bind('iframe:loaded', function(e, data) {
+    fn(data);
     start();
-  };
+  });
+  
+  $('#qunit-fixture').
+    append($('<a />', { href: '/echo', 'data-method': 'delete', text: 'destroy!' }))
+    .find('a').trigger('click');
+}
 
-  //index.erb load iframe-csrf.eb . Just wait for iframe to load and do its thing and then verify .
-  if(iframe[0].loaded) {
-    iframeCallback();
-  } else {
-    iframe.live("load", iframeCallback);
-  }
+asyncTest('link with "data-method" set to "delete"', 2, function() {
+  submit(function(data) {
+    equal(data.REQUEST_METHOD, 'DELETE');
+    strictEqual(data.params.authenticity_token, undefined);
+  });
 });
+
+asyncTest('link with "data-method" and CSRF', 1, function() {
+  $('#qunit-fixture')
+    .append('<meta name="csrf-param" content="authenticity_token"/>')
+    .append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae"/>');
+  
+  submit(function(data) {
+    equal(data.params.authenticity_token, 'cf50faa3fe97702ca1ae');
+  });
+});
+
+})();
