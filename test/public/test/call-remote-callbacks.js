@@ -33,6 +33,23 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
   setTimeout(function(){ start() }, 200);
 });
 
+asyncTest('blank required form input field should abort request', 2, function() {
+	var form = $('form[data-remote]'), input = form.append($('<input type="text" name="user_name" required="required">')).find('input[required]');
+
+	equal(input.val(), '', 'input field should be blank');
+	
+	form.unbind('ajax:complete').bind('ajax:complete', function() {
+		ok(false, 'ajax:complete should not run');
+	}).trigger('submit');
+
+	input.val('tyler durden');
+	form.unbind('ajax:complete').bind('ajax:complete', function(){
+		ok(true, 'ajax:complete should now run');
+	}).trigger('submit');
+	
+	setTimeout(function(){ start() }, 200)
+});
+
 asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation', 1, function() {
   $('form[data-remote]').live('ajax:beforeSend', function() {
     ok(true, 'ajax:beforeSend observed with event delegation');

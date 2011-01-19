@@ -23,7 +23,21 @@
 			url = element.attr('action');
 			data = element.serializeArray();
 			// memoized value from clicked submit button
-			var button = element.data('ujs:submit-button');
+			var button = element.data('ujs:submit-button'),
+			    requiredInputs = element.find('input[required]'),
+			    blankRequiredInputs = false;
+
+			$.each(requiredInputs, function(){
+				if( ! $(this).val() ) {
+					blankRequiredInputs = true;
+					return false;
+				}
+			});
+			if (blankRequiredInputs) {
+				element.bind('ajax:beforeSend.required', false);
+			} else {
+				element.unbind('ajax:beforeSend.required');
+			}
 			if (button) {
 				data.push(button);
 				element.data('ujs:submit-button', null);
