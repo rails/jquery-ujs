@@ -94,7 +94,7 @@
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
-	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
+	$('a[data-confirm], a[data-method], a[data-remote], area[data-remote]').live('click.rails', function(e) {
 		var link = $(this);
 		if (!allowAction(link)) return false;
 
