@@ -94,6 +94,14 @@
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
+	function requiredValuesMissing(form) {
+		var missing = false;
+		form.find('input[name][required]').each(function() {
+			if (!$(this).val()) missing = true;
+		});
+		return missing;
+	}
+
 	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
 		var link = $(this);
 		if (!allowAction(link)) return false;
@@ -110,6 +118,9 @@
 	$('form').live('submit.rails', function(e) {
 		var form = $(this);
 		if (!allowAction(form)) return false;
+
+		// skip other logic when required values are missing, but don't cancel the event
+		if (requiredValuesMissing(form)) return;
 
 		if (form.attr('data-remote')) {
 			handleRemote(form);
