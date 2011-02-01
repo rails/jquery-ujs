@@ -27,15 +27,6 @@ App.assert_request_path = function(request_env, path) {
   equal(request_env['PATH_INFO'], path, 'request should be sent to right url');
 };
 
-App.teardown = function(){
-  // undelegate all live handlers except ones namespaced with "rails"
-  var data = $.data(document);
-  if (data.events && data.events.live)
-    $.each(data.events.live.slice(0), function() {
-      if (this.origType.split('.').indexOf('rails') < 0) $(this.selector).die();
-    })
-};
-
 $(document).bind('submit', function(e) {
   if (!e.isDefaultPrevented()) {
     var form = $(e.target), action = form.attr('action'),

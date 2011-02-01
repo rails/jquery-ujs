@@ -7,14 +7,12 @@ function build_form(attrs) {
     .find('form').append($('<input type="text" name="user_name" value="john">'));
 };
 
-module('call-remote', {
-  teardown: App.teardown
-});
+module('call-remote');
 
 function submit(fn) {
   $('form[data-remote]')
-    .live('ajax:success', fn)
-    .live('ajax:complete', function() { start() })
+    .bind('ajax:success', fn)
+    .bind('ajax:complete', function() { start() })
     .trigger('submit');
 }
 

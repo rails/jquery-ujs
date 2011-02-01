@@ -6,7 +6,9 @@ module('call-remote-callbacks', {
       action: '/echo', method: 'get', 'data-remote': 'true'
     }));
   },
-  teardown: App.teardown
+  teardown: function() {
+    $('form[data-remote]').die('ajax:beforeSend');
+  }
 });
 
 function submit(fn) {
@@ -29,8 +31,13 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
     form.unbind('ajax:complete').bind('ajax:complete', function() {
       ok(false, 'ajax:complete should not run');
     });
+    form.bind('ajax:error', function(e, xhr, status, error) {
+      ok(false, 'ajax:error should not run');
+    });
+    form.bind('ajaxStop', function() {
+      start();
+    });
   });
-  setTimeout(function(){ start() }, 200);
 });
 
 asyncTest('blank required form input field should abort request', 1, function() {
@@ -42,9 +49,10 @@ asyncTest('blank required form input field should abort request', 1, function() 
     .trigger('submit');
 
   setTimeout(function() {
-    form.unbind('ajax:beforeSend').find('input[required]').val('Tyler');
+    form.find('input[required]').val('Tyler');
+    form.unbind('ajax:beforeSend');
     submit();
-  }, 100);
+  }, 13);
 });
 
 asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation', 1, function() {
@@ -57,8 +65,10 @@ asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation',
     form.unbind('ajax:complete').bind('ajax:complete', function() {
       ok(false, 'ajax:complete should not run');
     });
+    form.bind('ajaxStop', function() {
+      start();
+    });
   });
-  setTimeout(function(){ start() }, 200);
 });
 
 asyncTest('"ajax:beforeSend", "ajax:success" and "ajax:complete" are triggered', 3, function() {

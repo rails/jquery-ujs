@@ -1,7 +1,4 @@
 module('data-remote', {
-
-  teardown: App.teardown,
-
   setup: function() {
     $('#qunit-fixture')
       .append($('<a />', {
@@ -20,27 +17,23 @@ module('data-remote', {
 
 asyncTest('clicking on a link with data-remote attribute', 3, function() {
   $('a[data-remote]')
-    .live('ajax:success', function(e, data, status, xhr) { 
+    .bind('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
       App.assert_get_request(data); 
-
-      start();
     })
+    .bind('ajax:complete', function() { start() })
     .trigger('click');
 });
 
-asyncTest('Submitting form with data-remote attribute', 4, function() {
+asyncTest('submitting form with data-remote attribute', 4, function() {
   $('form[data-remote]')
-    .live('ajax:success', function(e, data, status, xhr) { 
+    .bind('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
-
       App.assert_request_path(data, '/echo');
       equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
       App.assert_post_request(data); 
-
-      start();
     })
+    .bind('ajax:complete', function() { start() })
     .trigger('submit');
 });
-

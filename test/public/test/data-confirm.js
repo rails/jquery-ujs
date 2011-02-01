@@ -6,8 +6,7 @@ module('data-confirm', {
       'data-confirm': 'Are you absolutely sure?',
       text: 'my social security number'
     }));
-  },
-  teardown: App.teardown
+  }
 });
 
 asyncTest('clicking on a link with data-confirm attribute. Confirm yes.', 4, function() {
@@ -17,7 +16,7 @@ asyncTest('clicking on a link with data-confirm attribute. Confirm yes.', 4, fun
   };
 
   $('a[data-confirm]')
-    .live('ajax:success', function(e, data, status, xhr) { 
+    .bind('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
       App.assert_get_request(data); 
@@ -38,7 +37,7 @@ asyncTest('clicking on a link with data-confirm attribute. Confirm No.', 1, func
   };
 
   $('a[data-confirm]')
-    .live('ajax:before', function(e, data, status, xhr) {
+    .bind('ajax:before', function(e, data, status, xhr) {
       App.assert_callback_not_invoked('ajax:before');
     })
     .trigger('click');
