@@ -77,15 +77,14 @@
 		form.find('input[data-disable-with]').each(function() {
 			var input = $(this);
 			input.data('ujs:enable-with', input.val())
-				.val(input.attr('data-disable-with'))
-				.attr('disabled', 'disabled');
+				.val(input.attr('data-disable-with'));
 		});
 	}
 
 	function enableFormElements(form) {
 		form.find('input[data-disable-with]').each(function() {
 			var input = $(this);
-			input.val(input.data('ujs:enable-with')).removeAttr('disabled');
+		  input.val(input.data('ujs:enable-with'));
 		});
 	}
 
@@ -117,6 +116,11 @@
 
 	$('form').live('submit.rails', function(e) {
 		var form = $(this), remote = form.attr('data-remote') != undefined;
+		if (form.data('submitted')) {
+      return false;
+    } else {
+      form.data('submitted', true);
+    }
 		if (!allowAction(form)) return false;
 
 		// skip other logic when required values are missing
