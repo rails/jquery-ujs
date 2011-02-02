@@ -22,6 +22,28 @@ function submit(fn) {
   form.trigger('submit');
 }
 
+asyncTest('modifying form fields with "ajax:before" sends modified data in request', 4, function(){
+  $('form[data-remote]')
+		.append($('<input type="text" name="user_name" value="john">'))
+		.append($('<input type="text" name="removed_user_name" value="john">'))
+		.live('ajax:before', function() {
+			var form = $(this);
+    	form
+				.append($('<input />',{name: 'other_user_name',value: 'jonathan'}))
+				.find('input[name="removed_user_name"]').remove();
+			form
+				.find('input[name="user_name"]').val('steve');
+  	});
+  
+  submit(function(form) {
+    form.bind('ajax:success', function(e, data, status, xhr) { 
+			equal(data.params.user_name, 'steve', 'modified field value should have been submitted');
+			equal(data.params.other_user_name, 'jonathan', 'added field value should have been submitted');
+			equal(data.params.removed_user_name, undefined, 'removed field value should be undefined');
+		});
+  });
+});
+
 asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function() {
   submit(function(form) {
     form.bind('ajax:beforeSend', function() {
