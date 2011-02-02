@@ -74,19 +74,32 @@ asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation',
   });
 });
 
-asyncTest('"ajax:beforeSend", "ajax:success" and "ajax:complete" are triggered', 3, function() {
+asyncTest('"ajax:beforeSend", "ajax:success" and "ajax:complete" are triggered', 8, function() {
   submit(function(form) {
-    form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
-    form.bind('ajax:success', function(arg) { ok(true, 'ajax:success') });
+    form.bind('ajax:beforeSend', function(e, xhr, settings) {
+      equal(typeof xhr.getResponseHeader, 'function', 'first argument to "ajax:beforeSend" should be an XHR object');
+      equal(settings.url, '/echo', 'second argument to "ajax:beforeSend" should be a settings object');
+    });
+    form.bind('ajax:success', function(e, data, status, xhr) {
+      ok(data.REQUEST_METHOD, 'first argument to ajax:success should be a data object');
+      equal(status, 'success', 'second argument to ajax:success should be a status string');
+      equal(typeof xhr.getResponseHeader, 'function', 'third argument to "ajax:success" should be an XHR object');
+    });
+    form.bind('ajax:complete', function(e, xhr, status) {
+      equal(typeof xhr.getResponseHeader, 'function', 'first argument to "ajax:complete" should be an XHR object');
+      equal(status, 'success', 'second argument to ajax:complete should be a status string');
+    });
   });
 });
 
-asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on error', 4, function() {
+asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on error', 6, function() {
   submit(function(form) {
     form.attr('action', '/error');
     form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
     form.bind('ajax:error', function(e, xhr, status, error) { 
-      ok(true, 'ajax:error'); 
+      equal(typeof xhr.getResponseHeader, 'function', 'first argument to "ajax:error" should be an XHR object');
+      equal(status, 'error', 'second argument to ajax:error should be a status string');
+      equal(error, 'Forbidden', 'third argument to ajax:error should be an HTTP status response');
       // Opera returns "0" for HTTP code
       equal(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
     });
