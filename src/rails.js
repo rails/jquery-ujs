@@ -124,7 +124,9 @@
 		if (!allowAction(form)) return false;
 
 		// skip other logic when required values are missing
-		if (requiredValuesMissing(form)) return !remote;
+		if (form.attr('data-validate') != undefined) {
+		  if (requiredValuesMissing(form)) return !remote;
+		}
 
 		if (remote) {
 			handleRemote(form);
