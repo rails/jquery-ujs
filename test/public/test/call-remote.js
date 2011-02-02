@@ -75,4 +75,12 @@ asyncTest('accept application/json if "data-type" is json', 1, function() {
   });
 });
 
+asyncTest('allow empty "data-remote" attribute', 1, function() {
+  var form = $('#qunit-fixture').append($('<form action="/echo" data-remote />')).find('form');
+  
+  submit(function() {
+    ok(true, 'form with empty "data-remote" attribute is also allowed');
+  });
+});
+
 })();
