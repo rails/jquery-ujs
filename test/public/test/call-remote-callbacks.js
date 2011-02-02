@@ -46,6 +46,9 @@ asyncTest('blank required form input field should abort request', 1, function() 
     .bind('ajax:beforeSend', function() {
       ok(false, 'ajax:beforeSend should not run');
     })
+    .bind('iframe:loading', function() {
+      ok(false, 'form should not get submitted');
+    })
     .trigger('submit');
 
   setTimeout(function() {

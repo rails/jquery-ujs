@@ -27,6 +27,8 @@ App.assert_request_path = function(request_env, path) {
   equal(request_env['PATH_INFO'], path, 'request should be sent to right url');
 };
 
+// hijacks normal form submit; lets it submit to an iframe to prevent
+// navigating away from the test suite
 $(document).bind('submit', function(e) {
   if (!e.isDefaultPrevented()) {
     var form = $(e.target), action = form.attr('action'),
@@ -36,5 +38,6 @@ $(document).bind('submit', function(e) {
     if (action.indexOf('iframe') < 0) form.attr('action', action + '?iframe=true')
     form.attr('target', name);
     $('#qunit-fixture').append(iframe);
+    $.event.trigger('iframe:loading', { form: form });
   }
-})
+});

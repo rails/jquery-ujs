@@ -119,8 +119,8 @@
 		var form = $(this), remote = form.attr('data-remote') != undefined;
 		if (!allowAction(form)) return false;
 
-		// skip other logic when required values are missing, but don't cancel the event
-		if (requiredValuesMissing(form)) return;
+		// skip other logic when required values are missing
+		if (requiredValuesMissing(form)) return !remote;
 
 		if (remote) {
 			handleRemote(form);
