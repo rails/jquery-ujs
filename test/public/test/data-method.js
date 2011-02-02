@@ -1,18 +1,16 @@
 (function(){
 
-module('data-method', {
-  teardown: function() { $(document).unbind('iframe:loaded') }
-});
+module('data-method');
 
 function submit(fn) {
-  $(document).bind('iframe:loaded', function(e, data) {
-    fn(data);
-    start();
-  });
-  
   $('#qunit-fixture').
     append($('<a />', { href: '/echo', 'data-method': 'delete', text: 'destroy!' }))
-    .find('a').trigger('click');
+    .find('a')
+      .bind('iframe:loaded', function(e, data) {
+        fn(data);
+        start();
+      })
+      .trigger('click');
 }
 
 asyncTest('link with "data-method" set to "delete"', 2, function() {
