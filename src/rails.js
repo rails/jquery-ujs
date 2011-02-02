@@ -26,6 +26,7 @@
 		var method, url, data,
 			dataType = element.attr('data-type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
+	if (fire(element, 'ajax:before')) {
 		if (element.is('form')) {
 			method = element.attr('method');
 			url = element.attr('action');
@@ -41,26 +42,26 @@
 			url = element.attr('href');
 			data = null;
 		}
-
-		$.ajax({
-			url: url, type: method || 'GET', data: data, dataType: dataType,
-			// stopping the "ajax:beforeSend" event will cancel the ajax request
-			beforeSend: function(xhr, settings) {
-				if (settings.dataType === undefined) {
-					xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
+			$.ajax({
+				url: url, type: method || 'GET', data: data, dataType: dataType,
+				// stopping the "ajax:beforeSend" event will cancel the ajax request
+				beforeSend: function(xhr, settings) {
+					if (settings.dataType === undefined) {
+						xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
+					}
+					return fire(element, 'ajax:beforeSend', [xhr, settings]);
+				},
+				success: function(data, status, xhr) {
+					element.trigger('ajax:success', [data, status, xhr]);
+				},
+				complete: function(xhr, status) {
+					element.trigger('ajax:complete', [xhr, status]);
+				},
+				error: function(xhr, status, error) {
+					element.trigger('ajax:error', [xhr, status, error]);
 				}
-				return fire(element, 'ajax:beforeSend', [xhr, settings]);
-			},
-			success: function(data, status, xhr) {
-				element.trigger('ajax:success', [data, status, xhr]);
-			},
-			complete: function(xhr, status) {
-				element.trigger('ajax:complete', [xhr, status]);
-			},
-			error: function(xhr, status, error) {
-				element.trigger('ajax:error', [xhr, status, error]);
-			}
-		});
+			});
+		}
 	}
 
 	// Handles "data-method" on links such as:
