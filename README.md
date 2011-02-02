@@ -41,7 +41,7 @@ For automated installation, use the "jquery-rails" generator:
     # Gemfile
     gem 'jquery-rails', '>= 0.2.6'
 
-And run this command (add `-ui` if you want jQuery UI):
+And run this command (add `--ui` if you want jQuery UI):
 
     $ bundle install
     $ rails generate jquery:install
