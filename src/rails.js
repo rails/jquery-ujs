@@ -136,6 +136,16 @@
 		}
 	});
 
+	// Implement this for ie, because if you press enter on a submit it has a weird execution order
+	if ($.browser.msie) {
+    	$('input').live('keydown', function(e){
+      if (e.keyCode == 13) {
+          $(this).parents('form').submit();
+          return false;
+      }
+    });
+  }
+
 	$('form input[type=submit], form button[type=submit], form button:not([type])').live('click.rails', function() {
 		var button = $(this);
 		if (!allowAction(button)) return false;
@@ -143,7 +153,7 @@
 		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
 		button.closest('form').data('ujs:submit-button', data);
 	});
-	
+
 	$('form').live('ajax:beforeSend.rails', function(event) {
 		if (this == event.target) disableFormElements($(this));
 	});
