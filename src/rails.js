@@ -94,28 +94,28 @@
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
-	$('a[data-confirm], a[data-method], a[data-remote], area[data-remote]').live('click.rails', function(e) {
-		var link = $(this);
-		if (!allowAction(link)) return false;
+	$('*[data-confirm][href], *[data-method][href], *[data-remote][href]').live('click.rails', function(e) {
+		var someElem = $(this);
+    var formElem = someElem.filter('form');
+    var otherElem = someElem.not('form');
 
-		if (link.attr('data-remote')) {
-			handleRemote(link);
+		if (!allowAction(otherElem)) return false;
+
+		if (otherElem.attr('data-remote')) {
+			handleRemote(otherElem);
 			return false;
-		} else if (link.attr('data-method')) {
-			handleMethod(link);
+		} else if (otherElem.attr('data-method')) {
+			handleMethod(otherElem);
 			return false;
 		}
-	});
 
-	$('form').live('submit.rails', function(e) {
-		var form = $(this);
-		if (!allowAction(form)) return false;
+    if (!allowAction(formElem)) return false;
 
-		if (form.attr('data-remote')) {
-			handleRemote(form);
+		if (formElem.attr('data-remote')) {
+			handleRemote(form.Elem);
 			return false;
 		} else {
-			disableFormElements(form);
+			disableFormElements(formElem);
 		}
 	});
 
