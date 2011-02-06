@@ -16,9 +16,11 @@
 	// Submits "remote" forms and links with ajax
 	function handleRemote(element) {
 		var method, url, data,
+      isMultipart = false,
 			dataType = element.attr('data-type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
 		if (element.is('form')) {
+              isMultipart = element.attr('enctype') === 'multipart/form-data';
 			method = element.attr('method');
 			url = element.attr('action');
 			data = element.serializeArray();
@@ -34,25 +36,49 @@
 			data = null;
 		}
 
-		$.ajax({
-			url: url, type: method || 'GET', data: data, dataType: dataType,
-			// stopping the "ajax:beforeSend" event will cancel the ajax request
-			beforeSend: function(xhr, settings) {
-				if (settings.dataType === undefined) {
-					xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
-				}
-				return fire(element, 'ajax:beforeSend', [xhr, settings]);
-			},
-			success: function(data, status, xhr) {
-				element.trigger('ajax:success', [data, status, xhr]);
-			},
-			complete: function(xhr, status) {
-				element.trigger('ajax:complete', [xhr, status]);
-			},
-			error: function(xhr, status, error) {
-				element.trigger('ajax:error', [xhr, status, error]);
-			}
-		});
+    if (isMultipart) {
+      var iframe = $('#iframe-upload');
+
+      if (iframe.length === 0)
+        iframe = $('<iframe name="iframe-upload" style="display:none;"></iframe>').appendTo('form');
+
+      element.attr('target', 'iframe-upload');
+
+      iframe.load(function () {
+        var response = iframe.contents().find('body').html();
+        element.trigger('ajax:success', [response])
+        iframe.unbind('load');
+        setTimeout(function () {
+          iframe.remove();
+        }, 0)
+      });
+
+      return true;
+
+    } else {
+
+      $.ajax({
+        url: url, type: method || 'GET', data: data, dataType: dataType,
+        // stopping the "ajax:beforeSend" event will cancel the ajax request
+        beforeSend: function(xhr, settings) {
+          if (settings.dataType === undefined) {
+            xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
+          }
+          return fire(element, 'ajax:beforeSend', [xhr, settings]);
+        },
+        success: function(data, status, xhr) {
+          element.trigger('ajax:success', [data, status, xhr]);
+        },
+        complete: function(xhr, status) {
+          element.trigger('ajax:complete', [xhr, status]);
+        },
+        error: function(xhr, status, error) {
+          element.trigger('ajax:error', [xhr, status, error]);
+        }
+      });
+
+      return false;
+    }
 	}
 
 	// Handles "data-method" on links such as:
@@ -123,8 +149,7 @@
 		if (requiredValuesMissing(form)) return !remote;
 
 		if (remote) {
-			handleRemote(form);
-			return false;
+			if (!handleRemote(form)) return false;
 		} else {
 			disableFormElements(form);
 		}
@@ -137,7 +162,7 @@
 		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
 		button.closest('form').data('ujs:submit-button', data);
 	});
-	
+
 	$('form').live('ajax:beforeSend.rails', function(event) {
 		if (this == event.target) disableFormElements($(this));
 	});
