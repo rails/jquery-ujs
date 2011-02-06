@@ -91,7 +91,7 @@
 
 	function allowAction(element) {
 		var message = element.attr('data-confirm');
-		return !message || (fire(element, 'confirm') && confirm(message));
+		return !message || (fire(element, 'confirm') && confirm(message) && fire(element, 'confirmed'));
 	}
 
 	function requiredValuesMissing(form) {
