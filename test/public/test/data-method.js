@@ -13,10 +13,11 @@ function submit(fn) {
       .trigger('click');
 }
 
-asyncTest('link with "data-method" set to "delete"', 2, function() {
+asyncTest('link with "data-method" set to "delete"', 3, function() {
   submit(function(data) {
     equal(data.REQUEST_METHOD, 'DELETE');
     strictEqual(data.params.authenticity_token, undefined);
+    strictEqual(data.HTTP_X_CSRF_TOKEN, undefined);
   });
 });
 

@@ -83,4 +83,13 @@ asyncTest('allow empty "data-remote" attribute', 1, function() {
   });
 });
 
+asyncTest('sends CSRF token in custom header', 1, function() {
+  build_form({ method: 'post' });
+  $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
+
+  submit(function(e, data, status, xhr) {
+    equal(data.HTTP_X_CSRF_TOKEN, 'cf50faa3fe97702ca1ae', 'X-CSRF-Token header should be sent');
+  });
+});
+
 })();
