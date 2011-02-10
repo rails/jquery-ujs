@@ -36,6 +36,9 @@
 
 		$.ajax({
 			url: url, type: method || 'GET', data: data, dataType: dataType,
+			headers: {
+				"X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
+			},
 			// stopping the "ajax:beforeSend" event will cancel the ajax request
 			beforeSend: function(xhr, settings) {
 				if (settings.dataType === undefined) {
