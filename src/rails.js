@@ -146,9 +146,16 @@
 		if (this == event.target) enableFormElements($(this));
 	});
 
-	$.ajaxSetup({
-	  headers: {
-	    "X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
-	  }
-	});
+	if ($().jquery >= '1.5') {
+		$.ajaxSetup({
+			headers: {
+				"X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
+			}
+		});
+	} else {
+		$(document).ajaxSend(function(e, xhr, options) {
+			var token = $("meta[name='csrf-token']").attr("content");
+			xhr.setRequestHeader("X-CSRF-Token", token);
+		});
+	}
 })( jQuery );
