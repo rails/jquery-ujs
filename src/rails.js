@@ -137,7 +137,7 @@
 		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
 		button.closest('form').data('ujs:submit-button', data);
 	});
-	
+
 	$('form').live('ajax:beforeSend.rails', function(event) {
 		if (this == event.target) disableFormElements($(this));
 	});
@@ -145,4 +145,17 @@
 	$('form').live('ajax:complete.rails', function(event) {
 		if (this == event.target) enableFormElements($(this));
 	});
+
+	if ($().jquery >= '1.5') {
+		$.ajaxSetup({
+			headers: {
+				"X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
+			}
+		});
+	} else {
+		$(document).ajaxSend(function(e, xhr, options) {
+			var token = $("meta[name='csrf-token']").attr("content");
+			xhr.setRequestHeader("X-CSRF-Token", token);
+		});
+	}
 })( jQuery );
