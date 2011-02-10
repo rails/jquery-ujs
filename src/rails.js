@@ -3,6 +3,27 @@
  *
  * Requires jQuery 1.4.3 or later.
  * https://github.com/rails/jquery-ujs
+ 
+ * Uploading file using rails.js
+ * 
+ * By default, browsers do not allow files to be uploaded via AJAX. As a result, when this rails.js adapter submits remote forms,
+ * any file input fields are excluded from the request parameters sent to the server. You may cancel the whole form submission by 
+ * binding a handler function that returns false to the `ajax:aborted:file` hook.
+ *
+ * Ex:
+ *     $('form').live('ajax:aborted:file', function(){
+ *       alert("File detected. Form submission canceled.");
+ *       return false;
+ *     });
+ *
+ * The `ajax:aborted:file` event is fired when a form is submitted and both conditions are met:
+ *   a) file-type input field is detected, and
+ *   b) the value of the input:file field is not blank. 
+ * 
+ * Third party tools can use this hook to detect when an AJAX file upload is attempted, and then use techniques like the iframe method to upload the file instead.
+ *
+ * Similarly, rails.js aborts AJAX form submissions if any non-blank input[required] fields are detected, providing the `ajax:aborted:required` hook.
+ * Unlike file uploads, however, blank required input fields cancel the whole form submission by default.
  */
 
 (function($) {
@@ -104,12 +125,22 @@
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
-	function requiredValuesMissing(form) {
-		var missing = false;
-		form.find('input[name][required]').each(function() {
-			if (!$(this).val()) missing = true;
+	function blankInputs(form, specifiedSelector) {
+		var blankExists = false,
+				selector = specifiedSelector || 'input';
+		form.find(selector).each(function() {
+			if (!$(this).val()) blankExists = true;
 		});
-		return missing;
+		return blankExists;
+	}
+	
+	function nonBlankInputs(form, specifiedSelector) {
+		var nonBlankExists = false,
+				selector = specifiedSelector || 'input';
+		form.find(selector).each(function() {
+			if ($(this).val()) nonBlankExists = true;
+		});
+		return nonBlankExists;
 	}
 
 	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
@@ -129,8 +160,14 @@
 		var form = $(this), remote = form.data('remote') != undefined;
 		if (!allowAction(form)) return false;
 
-		// skip other logic when required values are missing
-		if (requiredValuesMissing(form)) return !remote;
+		// skip other logic when required values are missing or file upload is present
+		if (blankInputs(form, 'input[name][required]')) {
+			form.trigger('ajax:aborted:required');
+			return !remote;
+		}
+		if (nonBlankInputs(form, 'input:file')) {
+			return fire(form, 'ajax:aborted:file');
+		}
 
 		if (remote) {
 			handleRemote(form);
