@@ -40,7 +40,7 @@ asyncTest('form input field with "data-disable-with" attribute', 7, function() {
   equal(input.val(), 'processing ...', 'input field should have disabled value given to it');
 });
 
-asyncTest('form submit button with "data-disable-with" attribute', 7, function(){
+asyncTest('form submit button with "data-disable-with" attribute', 6, function(){
   var form = $('form:not([data-remote])'), input = form.find('input[type=submit]');
 
   ok(!input.is(':disabled'), 'input field should not be disabled');
@@ -51,11 +51,15 @@ asyncTest('form submit button with "data-disable-with" attribute', 7, function()
     equal(input.val(), 'submitting ...');
   }
 
+  // WEEIRDD: attaching this handler makes the test work in IE7
+  form.bind('iframe:loading', function(e, form) {});
+
   form.bind('iframe:loaded', function(e, data) {
-    checkDisabledState();
-    strictEqual(data.params.submit2, undefined);
-    start();
+    setTimeout(function() {
+      checkDisabledState();
+      start();
+    }, 30);
   }).trigger('submit');
 
-  checkDisabledState();
+  setTimeout(checkDisabledState, 30);
 });

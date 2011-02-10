@@ -146,7 +146,8 @@
 			handleRemote(form);
 			return false;
 		} else {
-			disableFormElements(form);
+			// slight timeout so that the submit button gets properly serialized
+			setTimeout(function(){ disableFormElements(form) }, 13);
 		}
 	});
 

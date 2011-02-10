@@ -31,6 +31,6 @@ $(document).bind('submit', function(e) {
     if (action.indexOf('iframe') < 0) form.attr('action', action + '?iframe=true')
     form.attr('target', name);
     $('#qunit-fixture').append(iframe);
-    $.event.trigger('iframe:loading', { form: form });
+    $.event.trigger('iframe:loading', form);
   }
 });
