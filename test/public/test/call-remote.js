@@ -67,6 +67,19 @@ asyncTest('prefer JS, but accept any format', 1, function() {
   });
 });
 
+asyncTest('passes in csrf token', 1, function(){
+  build_form({ method: 'post', action: '/header' })
+  
+  $("form").append($("<input>").attr("name", "key").val("X-CSRF-Token"));
+  $('#qunit-fixture')
+    .append('<meta name="csrf-param" content="authenticity_token"/>')
+    .append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae"/>');
+    
+  submit(function(e, data, status, xhr){
+    equal(data, $('meta[name=csrf-token]').attr('content'));
+  })
+})
+
 asyncTest('accept application/json if "data-type" is json', 1, function() {
   build_form({ method: 'post', 'data-type': 'json' });
 

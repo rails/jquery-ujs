@@ -56,3 +56,13 @@ end
 get '/error' do
   status 403
 end
+
+post '/header' do
+  status 200
+  header_key = "HTTP_#{params[:key].upcase.gsub("-", "_")}"
+  if env[header_key]
+    env[header_key]
+  else
+   ""
+  end
+end

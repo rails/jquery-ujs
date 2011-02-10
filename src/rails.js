@@ -41,6 +41,7 @@
 				if (settings.dataType === undefined) {
 					xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
 				}
+				xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
 				return fire(element, 'ajax:beforeSend', [xhr, settings]);
 			},
 			success: function(data, status, xhr) {
@@ -145,17 +146,4 @@
 	$('form').live('ajax:complete.rails', function(event) {
 		if (this == event.target) enableFormElements($(this));
 	});
-
-	if ($().jquery >= '1.5') {
-		$.ajaxSetup({
-			headers: {
-				"X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
-			}
-		});
-	} else {
-		$(document).ajaxSend(function(e, xhr, options) {
-			var token = $("meta[name='csrf-token']").attr("content");
-			xhr.setRequestHeader("X-CSRF-Token", token);
-		});
-	}
 })( jQuery );

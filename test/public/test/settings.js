@@ -27,6 +27,10 @@ App.assert_request_path = function(request_env, path) {
   equal(request_env['PATH_INFO'], path, 'request should be sent to right url');
 };
 
+App.assert_header_value = function(body, expected_value) {
+  equal(body, expected_value)
+}
+
 // hijacks normal form submit; lets it submit to an iframe to prevent
 // navigating away from the test suite
 $(document).bind('submit', function(e) {
