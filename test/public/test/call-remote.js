@@ -63,7 +63,7 @@ asyncTest('prefer JS, but accept any format', 1, function() {
     var accept = data.HTTP_ACCEPT;
     // HACK to normalize header sent by jQuery 1.4.4 and below:
     accept = accept.replace('*/*, */*', '*/*');
-    equal(accept, '*/*;q=0.5, text/javascript, application/javascript');
+    ok(accept.indexOf('*/*;q=0.5, text/javascript, application/javascript') === 0, 'Accept: ' + accept);
   });
 });
 
