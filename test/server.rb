@@ -42,8 +42,13 @@ end
       content_type 'application/json'
       data.to_json
     elsif params[:iframe]
+      payload = data.to_json.gsub('<', '&lt;').gsub('>', '&gt;')
       <<-HTML
-        <script>window.top.jQuery.event.trigger('iframe:loaded', #{data.to_json})</script>
+        <script>
+          if (window.top && window.top !== window)
+            window.top.jQuery.event.trigger('iframe:loaded', #{payload})
+        </script>
+        <p>You shouldn't be seeing this. <a href="#{request.env['HTTP_REFERER']}">Go back</a></p>
       HTML
     else
       content_type 'text/plain'
