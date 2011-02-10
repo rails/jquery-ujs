@@ -137,12 +137,18 @@
 		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
 		button.closest('form').data('ujs:submit-button', data);
 	});
-	
+
 	$('form').live('ajax:beforeSend.rails', function(event) {
 		if (this == event.target) disableFormElements($(this));
 	});
 
 	$('form').live('ajax:complete.rails', function(event) {
 		if (this == event.target) enableFormElements($(this));
+	});
+
+	$.ajaxSetup({
+	  headers: {
+	    "X-CSRF-Token": $("meta[name='csrf-token']").attr('content')
+	  }
 	});
 })( jQuery );
