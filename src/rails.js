@@ -12,6 +12,10 @@
 		obj.trigger(event, data);
 		return event.result !== false;
 	}
+	
+	function appendCsrfToken(xhr){
+	  xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+	}
 
 	// Submits "remote" forms and links with ajax
 	function handleRemote(element) {
@@ -41,7 +45,7 @@
 				if (settings.dataType === undefined) {
 					xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
 				}
-				xhr.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+				appendCsrfToken(xhr);
 				return fire(element, 'ajax:beforeSend', [xhr, settings]);
 			},
 			success: function(data, status, xhr) {
@@ -146,4 +150,11 @@
 	$('form').live('ajax:complete.rails', function(event) {
 		if (this == event.target) enableFormElements($(this));
 	});
+	
+	$.ajaxSetup({ 
+	  beforeSend: function(xhr){ 
+      appendCsrfToken(xhr);
+    }
+  });
 })( jQuery );
+
