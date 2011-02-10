@@ -1,12 +1,5 @@
 var App = App || {};
 
-App.ajax_timeout = 1000;
-App.confirmation_message = 'Are you absolutely sure?';
-
-App.timeout = function(){
-  setTimeout(function() { start(); }, App.ajax_timeout);
-};
-
 App.assert_callback_invoked = function(callback_name) {
   ok(true, callback_name + ' callback should have been invoked');
 };
