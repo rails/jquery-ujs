@@ -94,12 +94,22 @@
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
-	function requiredValuesMissing(form) {
-		var missing = false;
-		form.find('input[name][required]').each(function() {
-			if (!$(this).val()) missing = true;
+	function blankInputs(form, specifiedSelector) {
+		var blankExists = false,
+				selector = specifiedSelector || 'input';
+		form.find(selector).each(function() {
+			if (!$(this).val()) blankExists = true;
 		});
-		return missing;
+		return blankExists;
+	}
+	
+	function nonBlankInputs(form, specifiedSelector) {
+		var nonBlankExists = false,
+				selector = specifiedSelector || 'input';
+		form.find(selector).each(function() {
+			if ($(this).val()) nonBlankExists = true;
+		});
+		return nonBlankExists;
 	}
 
 	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
@@ -119,8 +129,8 @@
 		var form = $(this), remote = form.attr('data-remote') != undefined;
 		if (!allowAction(form)) return false;
 
-		// skip other logic when required values are missing
-		if (requiredValuesMissing(form)) return !remote;
+		// skip other logic when required values are missing or file upload is present
+		if (blankInputs(form, 'input[name][required]') || nonBlankInputs(form, 'input:file')) return !remote;
 
 		if (remote) {
 			handleRemote(form);
