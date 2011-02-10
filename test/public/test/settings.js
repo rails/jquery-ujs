@@ -33,7 +33,7 @@ $(document).bind('submit', function(e) {
   if (!e.isDefaultPrevented()) {
     var form = $(e.target), action = form.attr('action'),
         name = 'form-frame' + jQuery.guid++,
-        iframe = $('<iframe />', {id: name, name: name});
+        iframe = $('<iframe name="' + name + '" />');
 
     if (action.indexOf('iframe') < 0) form.attr('action', action + '?iframe=true')
     form.attr('target', name);

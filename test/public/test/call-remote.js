@@ -10,7 +10,7 @@ function build_form(attrs) {
 module('call-remote');
 
 function submit(fn) {
-  $('form[data-remote]')
+  $('form')
     .bind('ajax:success', fn)
     .bind('ajax:complete', function() { start() })
     .trigger('submit');
