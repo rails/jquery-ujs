@@ -94,18 +94,26 @@
 	}
 
 	function disableFormElements(form) {
-		form.find('input[data-disable-with]').each(function() {
+		form.find('input[data-disable-with], button[data-disable-with]').each(function() {
 			var input = $(this);
-			input.data('ujs:enable-with', input.val())
-				.val(input.attr('data-disable-with'))
-				.attr('disabled', 'disabled');
+			if (input.is('input'))
+				input.data('ujs:enable-with', input.val())
+					.val(input.attr('data-disable-with'));
+			else
+				input.data('ujs:enable-with', input.text())
+					.text(input.attr('data-disable-with'));
+			input.attr('disabled', 'disabled');
 		});
 	}
 
 	function enableFormElements(form) {
-		form.find('input[data-disable-with]').each(function() {
+		form.find('input[data-disable-with], button[data-disable-with]').each(function() {
 			var input = $(this);
-			input.val(input.data('ujs:enable-with')).removeAttr('disabled');
+			if (input.is('input'))
+				input.val(input.data('ujs:enable-with'));
+			else
+				input.text(input.data('ujs:enable-with'));
+			input.removeAttr('disabled');
 		});
 	}
 

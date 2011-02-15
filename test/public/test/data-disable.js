@@ -10,11 +10,20 @@ module('data-disable', {
 
     $('#qunit-fixture').append($('<form />', {
       action: '/echo',
-      method: 'post'
+      method: 'post',
+      id: 'submit-tag'
     }))
       .find('form:last')
       // WEEIRDD: the form won't submit to an iframe if the button is name="submit" (??!)
       .append($('<input type="submit" data-disable-with="submitting ..." name="submit2" value="Submit" />'));
+
+    $('#qunit-fixture').append($('<form />', {
+      action: '/echo',
+      method: 'post',
+      id: 'submit-button'
+    }))
+      .find('form:last')
+      .append($('<button data-disable-with="submitting ..." name="submit2">Submit</button>'));
   }
 });
 
@@ -41,7 +50,7 @@ asyncTest('form input field with "data-disable-with" attribute', 7, function() {
 });
 
 asyncTest('form submit button with "data-disable-with" attribute', 6, function(){
-  var form = $('form:not([data-remote])'), input = form.find('input[type=submit]');
+  var form = $('#submit-tag'), input = form.find('input[type=submit]');
 
   ok(!input.is(':disabled'), 'input field should not be disabled');
   equal(input.val(), 'Submit', 'input field should have value given to it');
@@ -49,6 +58,30 @@ asyncTest('form submit button with "data-disable-with" attribute', 6, function()
   function checkDisabledState() {
     ok(input.is(':disabled'), 'input field should be disabled');
     equal(input.val(), 'submitting ...');
+  }
+
+  // WEEIRDD: attaching this handler makes the test work in IE7
+  form.bind('iframe:loading', function(e, form) {});
+
+  form.bind('iframe:loaded', function(e, data) {
+    setTimeout(function() {
+      checkDisabledState();
+      start();
+    }, 30);
+  }).trigger('submit');
+
+  setTimeout(checkDisabledState, 30);
+});
+
+asyncTest('form submit button as a button with "data-disable-with" attribute', 6, function(){
+  var form = $('#submit-button'), input = form.find('button');
+
+  ok(!input.is(':disabled'), 'input field should not be disabled');
+  equal(input.text(), 'Submit', 'input field should have value given to it');
+
+  function checkDisabledState() {
+    ok(input.is(':disabled'), 'input field should be disabled');
+    equal(input.text(), 'submitting ...');
   }
 
   // WEEIRDD: attaching this handler makes the test work in IE7
