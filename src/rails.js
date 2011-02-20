@@ -33,48 +33,44 @@
 		return event.result !== false;
 	}
 
-	// Submits "remote" forms and links with ajax
-	function handleRemote(element, event) {
-		var method, url, data,
-			dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
-
-		if (element.is('form')) {
-			method = element.attr('method');
-			url = element.attr('action');
-			data = element.serializeArray();
-			// memoized value from clicked submit button
-			var button = element.data('ujs:submit-button');
-			if (button) {
-				data.push(button);
-				element.data('ujs:submit-button', null);
-			}
-		} else {
-			method = element.data('method');
-			url = element.attr('href');
-			data = null;
-		}
-
-		$.ajax({
-			url: url, type: method || 'GET', data: data, dataType: dataType,
-			// stopping the "ajax:beforeSend" event will cancel the ajax request
-			beforeSend: function(xhr, settings) {
-				if (settings.dataType === undefined) {
-					xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
-				}
-				return fire(element, 'ajax:beforeSend', [xhr, settings]);
-			},
-			success: function(data, status, xhr) {
-				element.trigger('ajax:success', [data, status, xhr]);
-			},
-			complete: function(xhr, status) {
-				element.trigger('ajax:complete', [xhr, status]);
-			},
-			error: function(xhr, status, error) {
-				element.trigger('ajax:error', [xhr, status, error]);
-			}
-		});
-                event.preventDefault();
+	function handleRemoteLink(link, event) {
+          ajax(link, link.attr('href'), link.data('method'), null, event);
 	}
+
+        function handleRemoteForm(form, event) {
+          var data = form.serializeArray();
+          // memoized value from clicked submit button
+          var button = form.data('ujs:submit-button');
+          if (button) {
+            data.push(button);
+            form.data('ujs:submit-button', null);
+          }
+          ajax(form, form.attr('action'), form.attr('method'), data, event);
+        }
+
+        function ajax(element, url, method, data, event) {
+          var dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
+          $.ajax({
+            url: url, type: method || 'GET', data: data, dataType: dataType,
+            // stopping the "ajax:beforeSend" event will cancel the ajax request
+            beforeSend: function(xhr, settings) {
+              if (settings.dataType === undefined) {
+                      xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
+              }
+              return fire(element, 'ajax:beforeSend', [xhr, settings]);
+            },
+            success: function(data, status, xhr) {
+                    element.trigger('ajax:success', [data, status, xhr]);
+            },
+            complete: function(xhr, status) {
+                    element.trigger('ajax:complete', [xhr, status]);
+            },
+            error: function(xhr, status, error) {
+                    element.trigger('ajax:error', [xhr, status, error]);
+            }
+          });
+          event.preventDefault();
+        }
 
 	// Handles "data-method" on links such as:
 	// <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
@@ -138,11 +134,11 @@
           });
         }
 
-	$('a[data-remote]').ifAllowedOn('click', handleRemote);
+	$('a[data-remote]').ifAllowedOn('click', handleRemoteLink);
 	$('a[data-method]:not([data-remote])').ifAllowedOn('click', handleMethod);
 
 	$('form[data-remote]').ifAllowedOn('submit', function(form, event) {
-          form.find('input[required]').filter(isMissing).length > 0 ? event.preventDefault() : handleRemote(form, event);
+          form.find('input[required]').filter(isMissing).length > 0 ? event.preventDefault() : handleRemoteForm(form, event);
 	});
 
 	$('form:not([data-remote])').ifAllowedOn('submit', function(form, event) {
