@@ -134,7 +134,7 @@
         }
 
         $.fn.ifTargetOn = function(name, fn) {
-          $(this).on(name, function(event) {
+          $(this).on('ajax:' + name, function(event) {
             if (this == event.target) fn($(this));
           });
         }
@@ -164,6 +164,6 @@
 	});
 
 	$('form input[type=submit], form button[type=submit], form button:not([type])').ifAllowedOn('click', register)
-	$('form').ifTargetOn('ajax:beforeSend', disableFormElements);
-	$('form').ifTargetOn('ajax:complete', enableFormElements);
+	$('form').ifTargetOn('beforeSend', disableFormElements);
+	$('form').ifTargetOn('complete', enableFormElements);
 })( jQuery );
