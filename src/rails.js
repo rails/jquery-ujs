@@ -127,7 +127,11 @@
                 button.closest('form').data('ujs:submit-button', data);
         }
 
-	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
+        $.fn.on = function(name, fn) {
+          $(this).live(name + '.rails', fn);
+        }
+
+	$('a[data-confirm], a[data-method], a[data-remote]').on('click', function(e) {
 		var link = $(this);
 		if (!allowAction(link)) return false;
 
@@ -140,7 +144,7 @@
 		}
 	});
 
-	$('form').live('submit.rails', function(e) {
+	$('form').on('submit', function(e) {
 		var form = $(this), remote = form.data('remote') != undefined;
 		if (!allowAction(form)) return false;
 
@@ -156,18 +160,18 @@
 		}
 	});
 
-	$('form input[type=submit], form button[type=submit], form button:not([type])').live('click.rails', function() {
+	$('form input[type=submit], form button[type=submit], form button:not([type])').on('click', function() {
 		var button = $(this);
 		if (!allowAction(button)) return false;
 		// register the pressed submit button
                 register(button);
 	});
 
-	$('form').live('ajax:beforeSend.rails', function(event) {
+	$('form').on('ajax:beforeSend', function(event) {
 		if (this == event.target) disableFormElements($(this));
 	});
 
-	$('form').live('ajax:complete.rails', function(event) {
+	$('form').on('ajax:complete', function(event) {
 		if (this == event.target) enableFormElements($(this));
 	});
 })( jQuery );
