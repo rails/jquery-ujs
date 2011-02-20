@@ -51,6 +51,10 @@
           event.preventDefault();
         }
 
+        function trigger(element, name) {
+          return function() element.trigger('ajax:' + name, arguments);
+        }
+
         function ajax(element, url, method, data, event) {
           var dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
           $.ajax({
@@ -62,15 +66,9 @@
               }
               return fire(element, 'ajax:beforeSend', [xhr, settings]);
             },
-            success: function(data, status, xhr) {
-                    element.trigger('ajax:success', [data, status, xhr]);
-            },
-            complete: function(xhr, status) {
-                    element.trigger('ajax:complete', [xhr, status]);
-            },
-            error: function(xhr, status, error) {
-                    element.trigger('ajax:error', [xhr, status, error]);
-            }
+            success: trigger(element, 'success'),
+            complete: trigger(element, 'complete'),
+            error: trigger(element, 'error')
           });
           event.preventDefault();
         }
