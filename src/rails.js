@@ -112,17 +112,13 @@
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
-	function requiredValuesMissing(form) {
-		var missing = false;
-		form.find('input[name][required]').each(function() {
-			if (!$(this).val()) missing = true;
-		});
-		return missing;
-	}
-
         function register(button) {
                 var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
                 button.closest('form').data('ujs:submit-button', data);
+        }
+
+        function isMissing() {
+          return !$(this).val();
         }
 
         $.fn.on = function(name, fn) {
@@ -146,12 +142,7 @@
 	$('a[data-method]:not([data-remote])').ifAllowedOn('click', handleMethod);
 
 	$('form[data-remote]').ifAllowedOn('submit', function(form, event) {
-                // skip other logic when required values are missing
-                if (requiredValuesMissing(form)) {
-                  event.preventDefault();
-                } else {
-                  handleRemote(form, event);
-                }
+          form.find('input[required]').filter(isMissing).length > 0 ? event.preventDefault() : handleRemote(form, event);
 	});
 
 	$('form:not([data-remote])').ifAllowedOn('submit', function(form, event) {
