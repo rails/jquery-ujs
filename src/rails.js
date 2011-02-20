@@ -28,7 +28,7 @@
 
 	// Triggers an event on an element and returns the event result
 	function fire(obj, name, data) {
-		var event = new $.Event(name);
+		var event = $.Event(name);
 		obj.trigger(event, data);
 		return event.result !== false;
 	}
