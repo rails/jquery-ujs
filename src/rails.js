@@ -126,11 +126,11 @@
         }
 
         $.fn.on = function(name, fn) {
-          $(this).live(name + '.rails', fn);
+          return $(this).live(name + '.rails', fn);
         }
 
         $.fn.ifTargetOn = function(name, fn) {
-          $(this).on('ajax:' + name, function(event) {
+          return $(this).on('ajax:' + name, function(event) {
             if (this == event.target) fn($(this));
           });
         }
@@ -160,6 +160,5 @@
 	});
 
 	$('form input[type=submit], form button[type=submit], form button:not([type])').ifAllowedOn('click', register)
-	$('form').ifTargetOn('beforeSend', disableFormElements);
-	$('form').ifTargetOn('complete', enableFormElements);
+	$('form').ifTargetOn('beforeSend', disableFormElements).ifTargetOn('complete', enableFormElements);
 })( jQuery );
