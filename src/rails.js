@@ -36,7 +36,7 @@
 	// Submits "remote" forms and links with ajax
 	function handleRemote(element) {
 		var method, url, data,
-			dataType = element.attr('data-type') || ($.ajaxSettings && $.ajaxSettings.dataType);
+			dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
 		if (element.is('form')) {
 			method = element.attr('method');
@@ -49,7 +49,7 @@
 				element.data('ujs:submit-button', null);
 			}
 		} else {
-			method = element.attr('data-method');
+			method = element.data('method');
 			url = element.attr('href');
 			data = null;
 		}
@@ -79,7 +79,7 @@
 	// <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
 	function handleMethod(link) {
 		var href = link.attr('href'),
-			method = link.attr('data-method'),
+			method = link.data('method'),
 			csrf_token = $('meta[name=csrf-token]').attr('content'),
 			csrf_param = $('meta[name=csrf-param]').attr('content'),
 			form = $('<form method="post" action="' + href + '"></form>'),
@@ -97,7 +97,7 @@
 		form.find('input[data-disable-with]').each(function() {
 			var input = $(this);
 			input.data('ujs:enable-with', input.val())
-				.val(input.attr('data-disable-with'))
+				.val(input.data('disable-with'))
 				.attr('disabled', 'disabled');
 		});
 	}
@@ -110,7 +110,7 @@
 	}
 
 	function allowAction(element) {
-		var message = element.attr('data-confirm');
+		var message = element.data('confirm');
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
@@ -126,17 +126,17 @@
 		var link = $(this);
 		if (!allowAction(link)) return false;
 
-		if (link.attr('data-remote') != undefined) {
+		if (link.data('remote') != undefined) {
 			handleRemote(link);
 			return false;
-		} else if (link.attr('data-method')) {
+		} else if (link.data('method')) {
 			handleMethod(link);
 			return false;
 		}
 	});
 
 	$('form').live('submit.rails', function(e) {
-		var form = $(this), remote = form.attr('data-remote') != undefined;
+		var form = $(this), remote = form.data('remote') != undefined;
 		if (!allowAction(form)) return false;
 
 		// skip other logic when required values are missing
@@ -158,7 +158,7 @@
 		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
 		button.closest('form').data('ujs:submit-button', data);
 	});
-	
+
 	$('form').live('ajax:beforeSend.rails', function(event) {
 		if (this == event.target) disableFormElements($(this));
 	});
