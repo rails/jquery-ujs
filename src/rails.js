@@ -144,29 +144,29 @@
           });
         }
 
-	$('a[data-confirm], a[data-method], a[data-remote]').ifAllowedOn('click', function(link, event) {
-                if (link.data('remote') != undefined) {
-                        handleRemote(link);
-                        event.preventDefault();
-                } else if (link.data('method')) {
-                        handleMethod(link);
-                        event.preventDefault();
+	$('a[data-remote]').ifAllowedOn('click', function(link, event) {
+                handleRemote(link);
+                event.preventDefault();
+	});
+
+	$('a[data-method]:not([data-remote])').ifAllowedOn('click', function(link, event) {
+                handleMethod(link);
+                event.preventDefault();
+	});
+
+	$('form[data-remote]').ifAllowedOn('submit', function(form, event) {
+                // skip other logic when required values are missing
+                if (requiredValuesMissing(form)) {
+                  event.preventDefault();
+                } else {
+                  handleRemote(form);
+                  event.preventDefault();
                 }
 	});
 
-	$('form').ifAllowedOn('submit', function(form, event) {
-                if (form.data('remote') != undefined) {
-                        // skip other logic when required values are missing
-                        if (requiredValuesMissing(form)) {
-                          event.preventDefault();
-                        } else {
-                          handleRemote(form);
-                          event.preventDefault();
-                        }
-                } else {
-                        // slight timeout so that the submit button gets properly serialized
-                        setTimeout(function(){ disableFormElements(form) }, 13);
-                }
+	$('form:not([data-remote])').ifAllowedOn('submit', function(form, event) {
+                // slight timeout so that the submit button gets properly serialized
+                setTimeout(function(){ disableFormElements(form) }, 13);
 	});
 
 	$('form input[type=submit], form button[type=submit], form button:not([type])').ifAllowedOn('click', register)
