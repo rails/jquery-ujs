@@ -34,7 +34,7 @@
 	}
 
 	// Submits "remote" forms and links with ajax
-	function handleRemote(element) {
+	function handleRemote(element, event) {
 		var method, url, data,
 			dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
@@ -73,11 +73,12 @@
 				element.trigger('ajax:error', [xhr, status, error]);
 			}
 		});
+                event.preventDefault();
 	}
 
 	// Handles "data-method" on links such as:
 	// <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
-	function handleMethod(link) {
+	function handleMethod(link, event) {
 		var href = link.attr('href'),
 			method = link.data('method'),
 			csrf_token = $('meta[name=csrf-token]').attr('content'),
@@ -91,6 +92,7 @@
 
 		form.hide().append(metadata_input).appendTo('body');
 		form.submit();
+                event.preventDefault();
 	}
 
 	function disableFormElements(form) {
@@ -144,23 +146,15 @@
           });
         }
 
-	$('a[data-remote]').ifAllowedOn('click', function(link, event) {
-                handleRemote(link);
-                event.preventDefault();
-	});
-
-	$('a[data-method]:not([data-remote])').ifAllowedOn('click', function(link, event) {
-                handleMethod(link);
-                event.preventDefault();
-	});
+	$('a[data-remote]').ifAllowedOn('click', handleRemote);
+	$('a[data-method]:not([data-remote])').ifAllowedOn('click', handleMethod);
 
 	$('form[data-remote]').ifAllowedOn('submit', function(form, event) {
                 // skip other logic when required values are missing
                 if (requiredValuesMissing(form)) {
                   event.preventDefault();
                 } else {
-                  handleRemote(form);
-                  event.preventDefault();
+                  handleRemote(form, event);
                 }
 	});
 
