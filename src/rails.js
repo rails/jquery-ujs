@@ -122,6 +122,11 @@
 		return missing;
 	}
 
+        function register(button) {
+                var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
+                button.closest('form').data('ujs:submit-button', data);
+        }
+
 	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
 		var link = $(this);
 		if (!allowAction(link)) return false;
@@ -155,8 +160,7 @@
 		var button = $(this);
 		if (!allowAction(button)) return false;
 		// register the pressed submit button
-		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
-		button.closest('form').data('ujs:submit-button', data);
+                register(button);
 	});
 
 	$('form').live('ajax:beforeSend.rails', function(event) {
