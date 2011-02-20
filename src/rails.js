@@ -96,19 +96,15 @@
 	}
 
 	function disableFormElements(form) {
-		form.find('input[data-disable-with]').each(function() {
-			var input = $(this);
-			input.data('ujs:enable-with', input.val())
-				.val(input.data('disable-with'))
-				.attr('disabled', 'disabled');
-		});
+          form.find('input[data-disable-with]').attr('disabled', 'disabled').val(function(index, value) {
+            return $(this).data('ujs:enable-with', value).data('disable-with');
+          });
 	}
 
 	function enableFormElements(form) {
-		form.find('input[data-disable-with]').each(function() {
-			var input = $(this);
-			input.val(input.data('ujs:enable-with')).removeAttr('disabled');
-		});
+          form.find('input[data-disable-with]').removeAttr('disabled').val(function() {
+            return $(this).data('ujs:enable-with');
+          });
 	}
 
 	function allowAction(element) {
