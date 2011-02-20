@@ -137,44 +137,39 @@
           });
         }
 
-	$('a[data-confirm], a[data-method], a[data-remote]').on('click', function(e) {
-		var link = $(this);
-                if (allowAction(link)) {
-                  if (link.data('remote') != undefined) {
-                          handleRemote(link);
-                          e.preventDefault();
-                  } else if (link.data('method')) {
-                          handleMethod(link);
-                          e.preventDefault();
-                  }
-                } else {
-                  e.preventDefault();
+        $.fn.ifAllowedOn = function(name, fn) {
+          $(this).on(name, function(event) {
+            var element = $(this);
+            allowAction(element) ? fn(element, event) : event.preventDefault();
+          });
+        }
+
+	$('a[data-confirm], a[data-method], a[data-remote]').ifAllowedOn('click', function(link, event) {
+                if (link.data('remote') != undefined) {
+                        handleRemote(link);
+                        event.preventDefault();
+                } else if (link.data('method')) {
+                        handleMethod(link);
+                        event.preventDefault();
                 }
 	});
 
-	$('form').on('submit', function(e) {
-		var form = $(this), remote = form.data('remote') != undefined;
-                if (allowAction(form)) {
-                  // skip other logic when required values are missing
-                  if (requiredValuesMissing(form)) return !remote;
-
-                  if (remote) {
+	$('form').ifAllowedOn('submit', function(form, event) {
+                if (form.data('remote') != undefined) {
+                        // skip other logic when required values are missing
+                        if (requiredValuesMissing(form)) {
+                          event.preventDefault();
+                        } else {
                           handleRemote(form);
-                          e.preventDefault();
-                  } else {
-                          // slight timeout so that the submit button gets properly serialized
-                          setTimeout(function(){ disableFormElements(form) }, 13);
-                  }
+                          event.preventDefault();
+                        }
                 } else {
-                  e.preventDefault();
+                        // slight timeout so that the submit button gets properly serialized
+                        setTimeout(function(){ disableFormElements(form) }, 13);
                 }
 	});
 
-	$('form input[type=submit], form button[type=submit], form button:not([type])').on('click', function(event) {
-		var button = $(this);
-                allowAction(button) ? register(button) : event.preventDefault();
-	});
-
+	$('form input[type=submit], form button[type=submit], form button:not([type])').ifAllowedOn('click', register)
 	$('form').ifTargetOn('ajax:beforeSend', disableFormElements);
 	$('form').ifTargetOn('ajax:complete', enableFormElements);
 })( jQuery );
