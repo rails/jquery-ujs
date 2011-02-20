@@ -131,6 +131,12 @@
           $(this).live(name + '.rails', fn);
         }
 
+        $.fn.ifTargetOn = function(name, fn) {
+          $(this).on(name, function(event) {
+            if (this == event.target) fn($(this));
+          });
+        }
+
 	$('a[data-confirm], a[data-method], a[data-remote]').on('click', function(e) {
 		var link = $(this);
 		if (!allowAction(link)) return false;
@@ -167,11 +173,6 @@
                 register(button);
 	});
 
-	$('form').on('ajax:beforeSend', function(event) {
-		if (this == event.target) disableFormElements($(this));
-	});
-
-	$('form').on('ajax:complete', function(event) {
-		if (this == event.target) enableFormElements($(this));
-	});
+	$('form').ifTargetOn('ajax:beforeSend', disableFormElements);
+	$('form').ifTargetOn('ajax:complete', enableFormElements);
 })( jQuery );
