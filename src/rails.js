@@ -139,37 +139,40 @@
 
 	$('a[data-confirm], a[data-method], a[data-remote]').on('click', function(e) {
 		var link = $(this);
-		if (!allowAction(link)) return false;
-
-		if (link.data('remote') != undefined) {
-			handleRemote(link);
-			return false;
-		} else if (link.data('method')) {
-			handleMethod(link);
-			return false;
-		}
+                if (allowAction(link)) {
+                  if (link.data('remote') != undefined) {
+                          handleRemote(link);
+                          e.preventDefault();
+                  } else if (link.data('method')) {
+                          handleMethod(link);
+                          e.preventDefault();
+                  }
+                } else {
+                  e.preventDefault();
+                }
 	});
 
 	$('form').on('submit', function(e) {
 		var form = $(this), remote = form.data('remote') != undefined;
-		if (!allowAction(form)) return false;
+                if (allowAction(form)) {
+                  // skip other logic when required values are missing
+                  if (requiredValuesMissing(form)) return !remote;
 
-		// skip other logic when required values are missing
-		if (requiredValuesMissing(form)) return !remote;
-
-		if (remote) {
-			handleRemote(form);
-			return false;
-		} else {
-			// slight timeout so that the submit button gets properly serialized
-			setTimeout(function(){ disableFormElements(form) }, 13);
-		}
+                  if (remote) {
+                          handleRemote(form);
+                          e.preventDefault();
+                  } else {
+                          // slight timeout so that the submit button gets properly serialized
+                          setTimeout(function(){ disableFormElements(form) }, 13);
+                  }
+                } else {
+                  e.preventDefault();
+                }
 	});
 
-	$('form input[type=submit], form button[type=submit], form button:not([type])').on('click', function() {
+	$('form input[type=submit], form button[type=submit], form button:not([type])').on('click', function(event) {
 		var button = $(this);
-		if (!allowAction(button)) return false;
-                register(button);
+                allowAction(button) ? register(button) : event.preventDefault();
 	});
 
 	$('form').ifTargetOn('ajax:beforeSend', disableFormElements);
