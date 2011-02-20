@@ -169,7 +169,6 @@
 	$('form input[type=submit], form button[type=submit], form button:not([type])').on('click', function() {
 		var button = $(this);
 		if (!allowAction(button)) return false;
-		// register the pressed submit button
                 register(button);
 	});
 
