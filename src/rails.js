@@ -38,14 +38,17 @@
 	}
 
         function handleRemoteForm(form, event) {
-          var data = form.serializeArray();
-          // memoized value from clicked submit button
-          var button = form.data('ujs:submit-button');
-          if (button) {
-            data.push(button);
-            form.data('ujs:submit-button', null);
+          if (form.find('input[required]').filter(isMissing).length == 0) {
+            var data = form.serializeArray();
+            // memoized value from clicked submit button
+            var button = form.data('ujs:submit-button');
+            if (button) {
+              data.push(button);
+              form.data('ujs:submit-button', null);
+            }
+            ajax(form, form.attr('action'), form.attr('method'), data, event);
           }
-          ajax(form, form.attr('action'), form.attr('method'), data, event);
+          event.preventDefault();
         }
 
         function ajax(element, url, method, data, event) {
@@ -136,10 +139,7 @@
 
 	$('a[data-remote]').ifAllowedOn('click', handleRemoteLink);
 	$('a[data-method]:not([data-remote])').ifAllowedOn('click', handleMethod);
-
-	$('form[data-remote]').ifAllowedOn('submit', function(form, event) {
-          form.find('input[required]').filter(isMissing).length > 0 ? event.preventDefault() : handleRemoteForm(form, event);
-	});
+	$('form[data-remote]').ifAllowedOn('submit', handleRemoteForm);
 
 	$('form:not([data-remote])').ifAllowedOn('submit', function(form, event) {
                 // slight timeout so that the submit button gets properly serialized
