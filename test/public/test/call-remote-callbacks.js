@@ -53,9 +53,33 @@ asyncTest('blank required form input field should abort request', 1, function() 
 
   setTimeout(function() {
     form.find('input[required]').val('Tyler');
+    form.bind('ujs:requiredField', function(){
+      ok(false, 'form should not trigger ujs:requiredField custom event');
+    }));
     form.unbind('ajax:beforeSend');
     submit();
   }, 13);
+});
+
+asyncTest("blank required form input should trigger ujs:requiredField event", 3, function(){
+  var form = $('form[data-remote]')
+    .append($('<input type="text" name="user_name" required="required">'))
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax:beforeSend should not run');
+    })
+    .bind('ujs:requiredField', function(){
+      ok(true, 'form should trigger ujs:requiredField custom event');
+    })
+    .trigger('submit');
+
+    setTimeout(function() {
+      form.unbind('ajax:beforeSend ujs:requiredField');
+      form.bind('ujs:requiredField', function(){
+        ok(true, 'bypasses required valditaion when the event is stopped');
+        return false;
+      });
+      submit();
+    }, 13);
 });
 
 asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation', 1, function() {

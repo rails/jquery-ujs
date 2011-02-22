@@ -119,7 +119,7 @@
 		form.find('input[name][required]').each(function() {
 			if (!$(this).val()) missing = true;
 		});
-		return missing;
+		return missing && fire(form, 'ujs:requiredField');
 	}
 
 	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
