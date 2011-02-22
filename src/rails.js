@@ -6,6 +6,8 @@
  */
 
 (function($) {
+	var $document = $(document);
+
 	// Make sure that every Ajax request sends the CSRF token
 	function CSRFProtection(fn) {
 		var token = $('meta[name="csrf-token"]').attr('content');
@@ -22,7 +24,7 @@
 			return xhr;
 		};
 	}
-	else $(document).ajaxSend(function(e, xhr) {
+	else $document.ajaxSend(function(e, xhr) {
 		CSRFProtection(function(setHeader) { setHeader(xhr) });
 	});
 
@@ -122,7 +124,7 @@
 		return missing && fire(form, 'ujs:requiredField');
 	}
 
-	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
+	$document.delegate('a[data-confirm], a[data-method], a[data-remote]', 'click.rails', function(e) {
 		var link = $(this);
 		if (!allowAction(link)) return false;
 
@@ -135,7 +137,7 @@
 		}
 	});
 
-	$('form').live('submit.rails', function(e) {
+	$document.delegate('form', 'submit.rails', function(e) {
 		var form = $(this), remote = form.attr('data-remote') != undefined;
 		if (!allowAction(form)) return false;
 
@@ -151,7 +153,7 @@
 		}
 	});
 
-	$('form input[type=submit], form button[type=submit], form button:not([type])').live('click.rails', function() {
+	$document.delegate('form input[type=submit], form button[type=submit], form button:not([type])', 'click.rails', function() {
 		var button = $(this);
 		if (!allowAction(button)) return false;
 		// register the pressed submit button
@@ -159,11 +161,11 @@
 		button.closest('form').data('ujs:submit-button', data);
 	});
 	
-	$('form').live('ajax:beforeSend.rails', function(event) {
+	$document.delegate('form', 'ajax:beforeSend.rails', function(event) {
 		if (this == event.target) disableFormElements($(this));
 	});
 
-	$('form').live('ajax:complete.rails', function(event) {
+	$document.delegate('form', 'ajax:complete.rails', function(event) {
 		if (this == event.target) enableFormElements($(this));
 	});
 })( jQuery );
