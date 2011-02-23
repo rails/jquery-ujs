@@ -7,21 +7,18 @@
 
 (function($) {
 	// Make sure that every Ajax request sends the CSRF token
-	var getCSRFToken = (function(){
-		var token = null;
-		return function(){
-			return token || (token = $('meta[name="csrf-token"]').attr('content'));
-		};
-	})();
+	function CSRFProtection(xhr) {
+		var token = $('meta[name="csrf-token"]').attr('content');
+		if (token) xhr.setRequestHeader('X-CSRF-Token', token);
+	}
 
 	if ('ajaxPrefilter' in $) {
-		$.ajaxPrefilter(function(options) {
-			options.headers = options.headers || {};
-			options.headers['X-CSRF-Token'] = getCSRFToken();
+		$.ajaxPrefilter(function(options, originalOptions, xhr) {
+			CSRFProtection(xhr);
 		});
 	} else {
 		$(document).ajaxSend(function(e, xhr) {
-			xhr.setRequestHeader('X-CSRF-Token', getCSRFToken());
+			CSRFProtection(xhr);
 		});
 	}
 
