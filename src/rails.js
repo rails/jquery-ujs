@@ -7,24 +7,23 @@
 
 (function($) {
 	// Make sure that every Ajax request sends the CSRF token
-	function CSRFProtection(fn) {
-		var token = $('meta[name="csrf-token"]').attr('content');
-		if (token) fn(function(xhr) { xhr.setRequestHeader('X-CSRF-Token', token) });
-	}
-	if ($().jquery == '1.5') { // gruesome hack
-		var factory = $.ajaxSettings.xhr;
-		$.ajaxSettings.xhr = function() {
-			var xhr = factory();
-			CSRFProtection(function(setHeader) {
-				var open = xhr.open;
-				xhr.open = function() { open.apply(this, arguments); setHeader(this) };
-			});
-			return xhr;
+	var getCSRFToken = (function(){
+		var token = null;
+		return function(){
+			return token || (token = $('meta[name="csrf-token"]').attr('content'));
 		};
+	})();
+
+	if ('ajaxPrefilter' in $) {
+		$.ajaxPrefilter(function(options) {
+			options.headers = options.headers || {};
+			options.headers['X-CSRF-Token'] = getCSRFToken();
+		});
+	} else {
+		$(document).ajaxSend(function(e, xhr) {
+			xhr.setRequestHeader('X-CSRF-Token', getCSRFToken());
+		});
 	}
-	else $(document).ajaxSend(function(e, xhr) {
-		CSRFProtection(function(setHeader) { setHeader(xhr) });
-	});
 
 	// Triggers an event on an element and returns the event result
 	function fire(obj, name, data) {
