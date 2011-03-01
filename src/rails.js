@@ -99,6 +99,10 @@
 
 	function allowAction(element) {
 		var message = element.attr('data-confirm');
+		// Account for Haml indenting other lines than the first one.
+		if (message) {
+			message = message.replace(/\n */g, "\n");
+		}
 		return !message || (fire(element, 'confirm') && confirm(message));
 	}
 
