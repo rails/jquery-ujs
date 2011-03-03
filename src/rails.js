@@ -51,8 +51,8 @@
 				}
 				return fire(element, 'ajax:beforeSend', [xhr, settings]);
 			},
-			success: function(data, status, xhr) {
-				element.trigger('ajax:success', [data, status, xhr]);
+			success: function(xhr, data, status) {
+				element.trigger('ajax:success', [xhr, data, status]);
 			},
 			complete: function(xhr, status) {
 				element.trigger('ajax:complete', [xhr, status]);
