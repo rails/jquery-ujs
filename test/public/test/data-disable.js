@@ -63,3 +63,35 @@ asyncTest('form submit button with "data-disable-with" attribute', 6, function()
 
   setTimeout(checkDisabledState, 30);
 });
+
+asyncTest('form with input[type=submit][data-disable-with] is replaced in ajax callback', 2, function(){
+  var form = $('form:not([data-remote])').attr('data-remote', 'true'), origFormContents = form.html();
+
+  form.bind('ajax:success', function(){
+    form.html(origFormContents);
+
+    setTimeout(function(){
+      var input = form.find('input[type=submit]');
+      ok(!input.is(':disabled'), 'new input field should not be disabled');
+      equal(input.val(), 'Submit', 'new input field should not have value replaced by "enable" function');
+
+      start();
+    }, 30);
+  }).trigger('submit');
+});
+
+asyncTest('form with input[data-disable-with] is replaced with disabled field in ajax callback', 2, function(){
+  var form = $('form:not([data-remote])').attr('data-remote', 'true'), input = form.find('input[type=submit]'),
+      newDisabledInput = input.clone().attr('disabled', 'disabled');
+
+  form.bind('ajax:success', function(){
+    input.replaceWith(newDisabledInput);
+
+    setTimeout(function(){
+      ok(!newDisabledInput.is(':disabled'), 'new input field should not be disabled');
+      equal(newDisabledInput.val(), 'Submit', 'new input field should not have value replaced if "ujs:enable-with" is blank');
+
+      start();
+    }, 30);
+  }).trigger('submit');
+});
