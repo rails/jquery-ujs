@@ -91,7 +91,7 @@
 	}
 
 	function enableFormElements(form) {
-		form.find('input[data-disable-with]').each(function() {
+		form.find('input[data-disable-with]:disabled').each(function() {
 			var input = $(this);
 			input.val(input.data('ujs:enable-with')).removeAttr('disabled');
 		});
