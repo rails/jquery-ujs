@@ -82,3 +82,22 @@ asyncTest('form with input[type=submit][data-disable-with] is replaced in ajax c
   }).trigger('submit');
 
 });
+
+asyncTest('form with input[data-disable-with] is replaced with disabled field in ajax callback', 2, function(){
+  var form = $('form:not([data-remote])').attr('data-remote', 'true'), input = form.find('input[type=submit]'),
+      newDisabledInput = input.clone().attr('disabled', 'disabled');
+
+  function checkNewState() {
+    ok(!newDisabledInput.is(':disabled'), 'new input field should not be disabled');
+    equal(newDisabledInput.val(), 'Submit', 'new input field should have value replaced if "ujs:enable-with" is blank');
+  }
+
+  form.bind('ajax:success', function(){
+    input.replaceWith(newDisabledInput);
+    setTimeout(function(){
+      checkNewState();
+      start();
+    }, 30);
+  }).trigger('submit');
+
+});
