@@ -49,7 +49,15 @@
 				if (settings.dataType === undefined) {
 					xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
 				}
-				return fire(element, 'ajax:beforeSend', [xhr, settings]);
+
+				if( fire(element, 'ajax:beforeSend', [xhr, settings]) === false ) {
+					return false;
+				}
+
+				// Set the correct content-type if data was provided in the beforeSend event
+				if ( settings.data && settings.hasContent && settings.contentType !== false ) {
+					xhr.setRequestHeader("Content-Type", settings.contentType);
+				}
 			},
 			success: function(data, status, xhr) {
 				element.trigger('ajax:success', [data, status, xhr]);
