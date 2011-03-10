@@ -155,9 +155,14 @@
 		return nonBlankExists;
 	}
 
+  function stopEverything(e) {
+    e.stopImmediatePropagation();
+    return false;
+  }
+
 	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
 		var link = $(this);
-		if (!allowAction(link)) return false;
+		if (!allowAction(link)) return stopEverything(e);
 
 		if (link.data('remote') != undefined) {
 			handleRemote(link);
@@ -170,7 +175,7 @@
 
 	$('form').live('submit.rails', function(e) {
 		var form = $(this), remote = form.data('remote') != undefined;
-		if (!allowAction(form)) return false;
+		if (!allowAction(form)) return stopEverything(e);
 
 		// skip other logic when required values are missing or file upload is present
 		if (blankInputs(form, 'input[name][required]') && fire(form, 'ajax:aborted:required')) {
@@ -191,7 +196,7 @@
 
 	$('form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])').live('click.rails', function() {
 		var button = $(this);
-		if (!allowAction(button)) return false;
+		if (!allowAction(button)) return stopEverything(e);
 		// register the pressed submit button
 		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
 		button.closest('form').data('ujs:submit-button', data);
