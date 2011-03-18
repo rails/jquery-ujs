@@ -21,13 +21,31 @@
 		return event.result !== false;
 	}
 
+	function buildMethodForm(link) {
+		var href = link.attr('href'),
+			method = link.data('method'),
+			csrf_token = $('meta[name=csrf-token]').attr('content'),
+			csrf_param = $('meta[name=csrf-param]').attr('content'),
+			form = $('<form method="post" action="' + href + '"></form>'),
+			metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
+
+		if (csrf_param !== undefined && csrf_token !== undefined) {
+			metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
+		}
+
+		form.hide().append(metadata_input);
+		return form;
+	}
+
 	// Submits "remote" forms and links with ajax
 	function handleRemote(element) {
 		var method, url, data,
 			dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
-	if (fire(element, 'ajax:before')) {
-		if (element.is('form')) {
+		if (fire(element, 'ajax:before')) {
+			if (!element.is('form'))
+				element = buildMethodForm(element);
+
 			method = element.attr('method');
 			url = element.attr('action');
 			data = element.serializeArray();
@@ -37,11 +55,7 @@
 				data.push(button);
 				element.data('ujs:submit-button', null);
 			}
-		} else {
-			method = element.data('method');
-			url = element.attr('href');
-			data = null;
-		}
+
 			$.ajax({
 				url: url, type: method || 'GET', data: data, dataType: dataType,
 				// stopping the "ajax:beforeSend" event will cancel the ajax request
@@ -67,18 +81,8 @@
 	// Handles "data-method" on links such as:
 	// <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
 	function handleMethod(link) {
-		var href = link.attr('href'),
-			method = link.data('method'),
-			csrf_token = $('meta[name=csrf-token]').attr('content'),
-			csrf_param = $('meta[name=csrf-param]').attr('content'),
-			form = $('<form method="post" action="' + href + '"></form>'),
-			metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
-
-		if (csrf_param !== undefined && csrf_token !== undefined) {
-			metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
-		}
-
-		form.hide().append(metadata_input).appendTo('body');
+		var form = buildMethodForm(link);
+		form.appendTo('body');
 		form.submit();
 	}
 
