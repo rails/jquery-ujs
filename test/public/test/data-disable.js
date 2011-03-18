@@ -40,6 +40,28 @@ asyncTest('form input field with "data-disable-with" attribute', 7, function() {
   equal(input.val(), 'processing ...', 'input field should have disabled value given to it');
 });
 
+asyncTest('form button with "data-disable-with" attribute', 6, function() {
+  var form = $('form[data-remote]'), button = $('<button data-disable-with="submitting ..." name="submit2">Submit</button>');
+  form.append(button);
+
+  function checkOriginalState() {
+    ok(!button.is(':disabled'), 'button should not be disabled');
+    equal(button.text(), 'Submit', 'button should have original value');
+  }
+  checkOriginalState();
+
+  form.bind('ajax:success', function(e, data) {
+    setTimeout(function() {
+      checkOriginalState();
+      start();
+    }, 13)
+  })
+  form.trigger('submit');
+
+  ok(button.is(':disabled'), 'button should be disabled');
+  equal(button.text(), 'submitting ...', 'button should have disabled value');
+});
+
 asyncTest('form submit button with "data-disable-with" attribute', 6, function(){
   var form = $('form:not([data-remote])'), input = form.find('input[type=submit]');
 
