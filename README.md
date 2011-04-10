@@ -1,68 +1,155 @@
 Unobtrusive scripting adapter for jQuery
 ========================================
 
-This unobtrusive scripting support file is developed for the Ruby on Rails framework, but is not strictly tied to any specific backend. You can drop this into any application to:
+See the [original docs][orig_docs] for basic features, requirements, and installation.
 
-- force confirmation dialogs for various actions;
-- make non-GET requests from hyperlinks;
-- make forms or hyperlinks submit data asynchronously with Ajax;
-- have submit buttons become automatically disabled on form submit to prevent double-clicking.
+Changes described here build on existing unobtrusive footwork to dry and empower dynamic functionality.
 
-These features are achieved by adding certain ["data" attributes][data] to your HTML markup. In Rails, they are added by the framework's template helpers.
+Widgets
+-------
 
-Full [documentation is on the wiki][wiki], including the [list of published Ajax events][events].
+The data- attributes are used to give default functionality to an element.  That functionality is described in a jQuery plugin, and connected to the element through naming convention.  This is useful in connecting code and functionality to otherwise static code.
 
-Requirements
-------------
+    $.fn.samplewidget = function(value){
+    	console.log('widget is called on dom ready and dom modify')
+    	console.log('the value is:', value); // value will be '123';
+    }
+    
+    $("#feature").append($('<div />', {
+    	'data-sampleWidget': '123'
+    }));
 
-- [jQuery 1.4.3][jquery] or later;
-- for Ruby on Rails only: `<%= csrf_meta_tag %>` in the HEAD of your HTML layout;
-- HTML5 doctype (optional).
+Callbacks
+---------
 
-If you don't use HTML5, adding "data" attributes to your HTML4 or XHTML pages might make them fail [W3C markup validation][validator]. However, this shouldn't create any issues for web browsers or other user agents.
+Ajax calls have already been made easy and unobtrusive (see original docs).  These changes make ajax callbacks easily so.
 
-In Ruby on Rails 3, the `csrf_meta_tag` helper generates two meta tags containing values necessary for [cross-site request forgery protection][csrf] built into Rails. If you're using Rails 2, here is how to implement that helper:
+    $("#feature").append($('<a />', { //this is the link
+    	'data-remote': true,
+    	'data-action': 'refresh'
+    }));
+    
+    $(document).appoint('refresh', function(){	//this is the handler
+    	console.log('ajax successful');
+    	$('#section').html(this.xhr.responseText);
+    });
 
-    # app/helpers/application_helper.rb
-    def csrf_meta_tag
-      if protect_against_forgery?
-        out = %(<meta name="csrf-param" content="%s"/>\n)
-        out << %(<meta name="csrf-token" content="%s"/>)
-        out % [ Rack::Utils.escape_html(request_forgery_protection_token),
-                Rack::Utils.escape_html(form_authenticity_token) ]
-      end
-    end
+The appoint function applies to all matching actions within the scope.
 
-Installation
-------------
+Several things are contained by the callback object:
+- the typical e, data, status, and xhr
+- the closest data-feature as $feature
+- the closest data-widget as $widget
 
-For automated installation, use the "jquery-rails" generator:
+Framework
+---------
 
-    # Gemfile
-    gem 'jquery-rails', '>= 0.2.6'
+It is realized that CRUD ajax links and links which modify nearby content are comon.  Given that, the structure is assumed to be of features with actions:
 
-And run this command (add `--ui` if you want jQuery UI):
+    <div data-feature="todos">
+    	<div data-feature="todo">
+    		<a data-action='delete'>Delete</a>
+    	</div>
+    	<form data-action='create' data-remote="true" ...>
+    		<input type="text" name="title"/>
+    		<input type="submit"/>
+    	</form>
+    </div>
+    
+    $(document).appoint('delete', function(){	
+    	this.$feature.remove();
+    });
+    
+    $(document).appoint('create', function(){
+    	this.find('textarea, input:text, input:file').val("");
+        this.find('.errors').empty();
+    
+    	$(this.xhr.responseText).prependTo(this.$feature);	
+    });
 
-    $ bundle install
-    $ rails generate jquery:install
+Create, Update, and Delete are handled by default, and can be removed with: 
+dismiss(action, [ajaxEvent], [fn]);
 
-This will remove the Prototype.js library from Rails, add latest jQuery library and fetch the adapter. Be sure to choose to overwrite the "rails.js" file.
+Selectors
+---------
 
-### Manual installation
+Custom selectors are added: 
+- $(':action') and $(':action(update)') match data-action=* and data-action=update
+- $(':feature') and $(':feature(todos)') match data-feature=* and data-feature=todos
+- $(':widget') and $(':widget(cycle)') match data-\*=\* (excepting jquery-ujs reserved *data-* keywords) and data-cycle=*
 
-[Download jQuery][jquery] and ["rails.js"][adapter] and place them in your "javascripts" directory.
+Details
+-------
 
-Configure the following in your application startup file:
+There is a fair amount of customizability.
 
-    config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
+The idea of an object with a series of states is fairly simple, and included by default.  External plugins with the same name need simply to be included after this file.
+    
+    $.fn.cycle = function(selected) {
+    	console.log('now showing the link with this action:', selected );
+        this.children().hide().filter(':action(' + selected + ')').show();
+    };
 
-Now the template helper `javascript_include_tag :defaults` will generate SCRIPT tags to load jQuery and rails.js.
+    <div data-cycle='finish'>
+    	<a data-action='finish'>Mark Complete</a>
+    	<a data-action='unfinish'>Mark Incomplete</a>
+    </div>
 
 
-[data]: http://dev.w3.org/html5/spec/elements.html#embedding-custom-non-visible-data-with-the-data-attributes "Embedding custom non-visible data with the data-* attributes"
-[wiki]: https://github.com/rails/jquery-ujs/wiki
-[events]: https://github.com/rails/jquery-ujs/wiki/ajax
-[jquery]: http://docs.jquery.com/Downloading_jQuery
-[validator]: http://validator.w3.org/
-[csrf]: http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html
-[adapter]: https://github.com/rails/jquery-ujs/raw/master/src/rails.js
+Widgets are actuated on page load (or dom modify), showing the finish link by default.  It is a pleasant approach, as it allows complicated links to be generated all together by rails methods.
+<br/>**$.fn.actuate = function([args]);**
+
+Any arguments will be passed to the widget call, overriding the default value specified in the tag.
+Widget names are determined from the tag.
+<br/>**$.fn.appoint = function(action, [ajaxEvent], [handlerOrWidgetArgs])**
+
+action: the data-actions to search for
+ajaxEvent: One of: beforeSend, success, error, complete. [Their wiki][ajax_events] has details on them.
+handlerOrWidgetArgs: A callback function, or arguments for the nearest (ancestral) widget.
+
+Handling can be appointed to either a callback you provide, or by the associated widget.  With this feature, this code is reduced:
+
+    // wordy
+    $(':feature(todos)').appoint('finish', function(){
+	  //this widget shows either a checked box or an unchecked one
+      this.$widget.actuate('unfinish'); 
+    });
+    
+    // handy alternative:
+    $(':feature(todos)').appoint('finish', 'unfinish');
+
+
+By default, the target with be the element with data-action specified.  However, if the element has the target attribute set, that instead will be used as the context for the callback.  The method searches for a feature of the same name, and if none found, one with matching id.  It falls back to itself without matching id. 
+<br/>**$.fn.dismiss = function(action, [ajaxEvent], [fn]) {**
+
+As usual, the default ajax event is success.  
+If no function is given, the default capability is removed.
+To remove a custom handler, pass in your function.  Note that passing your function to other jquery unbinding methods would not work, as there's an appointee wrapper method.
+
+
+Test code exists for jQuery extensions, appointments, and wigets.
+
+
+Bugs & Areas of Activity
+------------------------
+Links generated with the rails button-to cannot be actuated with jquery-ujs.  This is because data-remote and data-action must be on the form, but can only be added to the button.  This cold be accomodated for here or from rails core.
+
+Targets could be used to silently implement ajax history.  Only links with differing targets -- like the framesets of yore -- would change history.
+
+Data-remote may be now optional or obsolete.  Any example with data-action must be remote, so is could be made unnesessary.
+
+Widget names with capital letters are not currently possible.  This is because attibute names downcase.  Updates here are just a matter of finding the best approach.
+
+Current default handlers could be given some more capability.  Specifically, json datatype as well as raw html.  The proper behavior of create is not obvious -- should new content be added on top or bottom? Or decided on a call-by-call basis, or set somewhere?
+
+
+- - -
+
+
+Contact: Peter Ehrlich &mdash; [@ehrlicp][@ehrlicp]
+Further Reading: http://blog.pehrlich.com/the-missing-handlers-of-rails-jquery-ujs
+
+
+[orig_docs]: http://github.com/rails/jquery-ujs
+[ajax_events]: https://github.com/rails/jquery-ujs/wiki/ajax
+[@ehrlicp]: http://www.twitter.com/#!/ehrlicp
