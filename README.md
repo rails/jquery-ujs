@@ -37,6 +37,7 @@ Ajax calls have already been made easy and unobtrusive (see original docs).  The
 The appoint function applies to all matching actions within the scope.
 
 Several things are contained by the callback object:
+
 - the typical e, data, status, and xhr
 - the closest data-feature as $feature
 - the closest data-widget as $widget
@@ -67,13 +68,14 @@ It is realized that CRUD ajax links and links which modify nearby content are co
     	$(this.xhr.responseText).prependTo(this.$feature);	
     });
 
-Create, Update, and Delete are handled by default, and can be removed with: 
-dismiss(action, [ajaxEvent], [fn]);
+Create, Update, and Delete are handled by default, and can be removed with:  
+*dismiss(action, [ajaxEvent], [fn]);*
 
 Selectors
 ---------
 
 Custom selectors are added: 
+
 - $(':action') and $(':action(update)') match data-action=* and data-action=update
 - $(':feature') and $(':feature(todos)') match data-feature=* and data-feature=todos
 - $(':widget') and $(':widget(cycle)') match data-\*=\* (excepting jquery-ujs reserved *data-* keywords) and data-cycle=*
@@ -96,12 +98,15 @@ The idea of an object with a series of states is fairly simple, and included by 
     </div>
 
 
-Widgets are actuated on page load (or dom modify), showing the finish link by default.  It is a pleasant approach, as it allows complicated links to be generated all together by rails methods.
-<br/>**$.fn.actuate = function([args]);**
+Widgets are actuated on page load (or dom modify), showing the finish link by default.  It is a pleasant approach, as it allows complicated links to be generated all together by rails methods.  
 
-Any arguments will be passed to the widget call, overriding the default value specified in the tag.
-Widget names are determined from the tag.
-<br/>**$.fn.appoint = function(action, [ajaxEvent], [handlerOrWidgetArgs])**
+**$.fn.actuate = function([args]);**
+
+Any arguments will be passed to the widget call, overriding the default value specified in the tag.  
+Widget names are determined from the tag.  
+
+
+**$.fn.appoint = function(action, [ajaxEvent], [handlerOrWidgetArgs])**
 
 action: the data-actions to search for
 ajaxEvent: One of: beforeSend, success, error, complete. [Their wiki][ajax_events] has details on them.
@@ -119,11 +124,12 @@ Handling can be appointed to either a callback you provide, or by the associated
     $(':feature(todos)').appoint('finish', 'unfinish');
 
 
-By default, the target with be the element with data-action specified.  However, if the element has the target attribute set, that instead will be used as the context for the callback.  The method searches for a feature of the same name, and if none found, one with matching id.  It falls back to itself without matching id. 
-<br/>**$.fn.dismiss = function(action, [ajaxEvent], [fn]) {**
+By default, the target with be the element with data-action specified.  However, if the element has the target attribute set, that instead will be used as the context for the callback.  The method searches for a feature of the same name, and if none found, one with matching id.  It falls back to itself without matching id.  
+
+**$.fn.dismiss = function(action, [ajaxEvent], [fn]) {**
 
 As usual, the default ajax event is success.  
-If no function is given, the default capability is removed.
+If no function is given, the default capability is removed.  
 To remove a custom handler, pass in your function.  Note that passing your function to other jquery unbinding methods would not work, as there's an appointee wrapper method.
 
 
@@ -140,16 +146,17 @@ Data-remote may be now optional or obsolete.  Any example with data-action must 
 
 Widget names with capital letters are not currently possible.  This is because attibute names downcase.  Updates here are just a matter of finding the best approach.
 
-Current default handlers could be given some more capability.  Specifically, json datatype as well as raw html.  The proper behavior of create is not obvious -- should new content be added on top or bottom? Or decided on a call-by-call basis, or set somewhere?
+Current default handlers could be given some more capability.  Specifically, json datatype as well as raw html.  The proper behavior of create is not obvious -- should new content be added on top or bottom? Or decided on a call-by-call basis, or set somewhere?  
 
 
 - - -
 
 
-Contact: Peter Ehrlich &mdash; [@ehrlicp][@ehrlicp]
-Further Reading: http://blog.pehrlich.com/the-missing-handlers-of-rails-jquery-ujs
+Contact: Peter Ehrlich &mdash; [@ehrlicp]  
+Further Reading: [http://blog.pehrlich.com/the-missing-handlers-of-rails-jquery-ujs][blog]
 
 
 [orig_docs]: http://github.com/rails/jquery-ujs
 [ajax_events]: https://github.com/rails/jquery-ujs/wiki/ajax
 [@ehrlicp]: http://www.twitter.com/#!/ehrlicp
+[blog]: [http://blog.pehrlich.com/the-missing-handlers-of-rails-jquery-ujs]
