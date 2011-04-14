@@ -84,6 +84,22 @@ asyncTest('blank required form input field should abort request and trigger "aja
   }, 13);
 });
 
+asyncTest('form should be submitted with blank required fields if handler is bound to "ajax:aborted:required" event that returns false', 1, function(){
+  var form = $('form[data-remote]')
+    .append($('<input type="text" name="user_name" required="required">'))
+    .bind('ajax:beforeSend', function() {
+      ok(true, 'ajax:beforeSend should run');
+    })
+    .bind('ajax:aborted:required', function() {
+      return false;
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
 function skipIt() {
 	// This test cannot work due to the security feature in browsers which makes the value
 	// attribute of file input fields readonly, so it cannot be set with default value.
