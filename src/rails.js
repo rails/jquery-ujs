@@ -24,6 +24,14 @@
  *
  * Similarly, rails.js aborts AJAX form submissions if any non-blank input[required] fields are detected, providing the `ajax:aborted:required` hook.
  * Unlike file uploads, however, blank required input fields cancel the whole form submission by default.
+ *
+ * The default behavior for aborting the remote form submission when required inputs are missing may be canceled (thereby submitting the form via AJAX anyway)
+ * by binding a handler function that returns false to the `ajax:aborted:required` hook.
+ *
+ * Ex:
+ *     $('form').live('ajax:aborted:required', function(){
+ *       return ! confirm("Would you like to submit the form with missing info?");
+ *     });
  */
 
 (function($) {
