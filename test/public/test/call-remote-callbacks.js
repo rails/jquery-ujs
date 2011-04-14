@@ -63,7 +63,7 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
   });
 });
 
-asyncTest('blank required form input field should abort request', 1, function() {
+asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 2, function() {
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
     .bind('ajax:beforeSend', function() {
@@ -71,6 +71,9 @@ asyncTest('blank required form input field should abort request', 1, function() 
     })
     .bind('iframe:loading', function() {
       ok(false, 'form should not get submitted');
+    })
+    .bind('ajax:aborted:required', function(){
+      ok(true, 'ajax:aborted:required should run');
     })
     .trigger('submit');
 
