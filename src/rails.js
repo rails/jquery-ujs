@@ -33,9 +33,9 @@
 		if (token) xhr.setRequestHeader('X-CSRF-Token', token);
 	}
 	if ('ajaxPrefilter' in $) {
-		$.ajaxPrefilter(function(options, originalOptions, xhr){ CSRFProtection(xhr) });
+		$.ajaxPrefilter(function(options, originalOptions, xhr){ CSRFProtection(xhr); });
 	} else {
-		$(document).ajaxSend(function(e, xhr){ CSRFProtection(xhr) });
+		$(document).ajaxSend(function(e, xhr){ CSRFProtection(xhr); });
 	}
 
 	// Triggers an event on an element and returns the event result
@@ -177,7 +177,7 @@
 			return false;
 		} else {
 			// slight timeout so that the submit button gets properly serialized
-			setTimeout(function(){ disableFormElements(form) }, 13);
+			setTimeout(function(){ disableFormElements(form); }, 13);
 		}
 	});
 
