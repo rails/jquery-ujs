@@ -104,15 +104,39 @@ function skipIt() {
 	// This test cannot work due to the security feature in browsers which makes the value
 	// attribute of file input fields readonly, so it cannot be set with default value.
 	// This is what the test would look like though if browsers let us automate this test.
-	asyncTest('non-blank file form input field should abort request', 1, function() {
+	asyncTest('non-blank file form input field should abort remote request, but submit normally', 3, function() {
 	  var form = $('form[data-remote]')
 	    .append($('<input type="file" name="attachment" value="default.png">'))
 	    .bind('ajax:beforeSend', function() {
-	      ok(true, 'ajax:beforeSend should not run');
+	      ok(false, 'ajax:beforeSend should not run');
 	    })
 	    .bind('iframe:loading', function() {
-	      ok(true, 'form should not get submitted');
+	      ok(true, 'form should get submitted');
 	    })
+      .bind('ajax:aborted:file', function() {
+        ok(true, 'ajax:aborted:file event should run');
+      })
+	    .trigger('submit');
+	
+	  setTimeout(function() {
+	    form.find('input[type="file"]').val('');
+	    form.unbind('ajax:beforeSend');
+	    submit();
+	  }, 13);
+	});
+
+  syncTest('blank file input field should abort request entirely if handler bound to "ajax:aborted:file" event that returns false', 1, function() {
+	  var form = $('form[data-remote]')
+	    .append($('<input type="file" name="attachment" value="default.png">'))
+	    .bind('ajax:beforeSend', function() {
+	      ok(false, 'ajax:beforeSend should not run');
+	    })
+	    .bind('iframe:loading', function() {
+	      ok(false, 'form should not get submitted');
+	    })
+      .bind('ajax:aborted:file', function() {
+        return false;
+      })
 	    .trigger('submit');
 	
 	  setTimeout(function() {
