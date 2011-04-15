@@ -160,6 +160,16 @@
     return false;
   }
 
+  function callFormSubmitBindings(form) {
+    var events = form.data('events'), continuePropagation = true;
+    if (events != undefined && events['submit'] != undefined) {
+      $.each(events['submit'], function(i, obj){
+        if (typeof obj.handler === 'function') return continuePropagation = obj.handler(obj.data);
+      })
+    }
+    return continuePropagation;
+  }
+
 	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
 		var link = $(this);
 		if (!allowAction(link)) return stopEverything(e);
@@ -184,6 +194,10 @@
 		if (nonBlankInputs(form, 'input:file')) {
 			return fire(form, 'ajax:aborted:file');
 		}
+
+    // If browser does not support submit bubbling, then this live-binding will be called before direct
+    // bindings. Therefore, we should directly call any direct bindings before remotely submitting form.
+    if (!$.support.submitBubbles && callFormSubmitBindings(form) == false) return stopEverything(e)
 
 		if (remote) {
 			handleRemote(form);
