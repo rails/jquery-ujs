@@ -168,7 +168,7 @@
 
 		callFormSubmitBindings: function(form) {
 			var events = form.data('events'), continuePropagation = true;
-			if (events != undefined && events['submit'] != undefined) {
+			if (events !== undefined && events['submit'] !== undefined) {
 				$.each(events['submit'], function(i, obj){
 					if (typeof obj.handler === 'function') return continuePropagation = obj.handler(obj.data);
 				});
@@ -187,7 +187,7 @@
 		var link = $(this);
 		if (!rails.allowAction(link)) return rails.stopEverything(e);
 
-		if (link.data('remote') != undefined) {
+		if (link.data('remote') !== undefined) {
 			rails.handleRemote(link);
 			return false;
 		} else if (link.data('method')) {
