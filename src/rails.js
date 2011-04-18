@@ -170,6 +170,8 @@
 			return false;
 		},
 
+		// find all the submit events directly bound to the form and
+		// manually invoke them. If anyone returns false then stop the loop
 		callFormSubmitBindings: function(form) {
 			var events = form.data('events'), continuePropagation = true;
 			if (events !== undefined && events['submit'] !== undefined) {
@@ -181,6 +183,7 @@
 		}
 	};
 
+	// ajaxPrefilter is a jQuery 1.5 feature
 	if ('ajaxPrefilter' in $) {
 		$.ajaxPrefilter(function(options, originalOptions, xhr){ rails.CSRFProtection(xhr); });
 	} else {
