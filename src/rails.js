@@ -51,7 +51,7 @@
 			if (token) xhr.setRequestHeader('X-CSRF-Token', token);
 		},
 
-		// Triggers an event on an element and returns the event result
+		// Triggers an event on an element and returns false if the event result is false
 		fire: function(obj, name, data) {
 			var event = $.Event(name);
 			obj.trigger(event, data);
