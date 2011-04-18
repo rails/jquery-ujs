@@ -210,7 +210,7 @@
 	});
 
 	$('form').live('submit.rails', function(e) {
-		var form = $(this), remote = form.data('remote') != undefined;
+		var form = $(this), remote = form.data('remote') !== undefined;
 		if (!rails.allowAction(form)) return rails.stopEverything(e);
 
 		// skip other logic when required values are missing or file upload is present
