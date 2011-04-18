@@ -204,6 +204,7 @@
 		if (rails.blankInputs(form, 'input[name][required]') && rails.fire(form, 'ajax:aborted:required')) {
 			return !remote;
 		}
+
 		if (rails.nonBlankInputs(form, 'input:file')) {
 			return rails.fire(form, 'ajax:aborted:file');
 		}
@@ -223,9 +224,13 @@
 
 	$('form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])').live('click.rails', function() {
 		var button = $(this);
+
 		if (!rails.allowAction(button)) return rails.stopEverything(e);
+
 		// register the pressed submit button
-		var name = button.attr('name'), data = name ? {name:name, value:button.val()} : null;
+		var name = button.attr('name'),
+			data = name ? {name:name, value:button.val()} : null;
+
 		button.closest('form').data('ujs:submit-button', data);
 	});
 
