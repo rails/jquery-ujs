@@ -151,7 +151,10 @@
 			var blankExists = false,
 				selector = specifiedSelector || 'input';
 			form.find(selector).each(function() {
-				if (!$(this).val()) blankExists = true;
+				if (!$(this).val()) {
+					blankExists = true;
+					return false; //this terminates the each loop
+				}
 			});
 			return blankExists;
 		},
@@ -160,7 +163,10 @@
 			var nonBlankExists = false,
 				selector = specifiedSelector || 'input';
 			form.find(selector).each(function() {
-				if ($(this).val()) nonBlankExists = true;
+				if ($(this).val()) {
+					nonBlankExists = true;
+					return false; //this terminates the each loop
+				}
 			});
 			return nonBlankExists;
 		},
