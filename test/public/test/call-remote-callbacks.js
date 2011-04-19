@@ -63,22 +63,26 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
   });
 });
 
-asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 2, function() {
+asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 5, function() {
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
+    .append($('<textarea name="user_bio" required="required">'))
     .bind('ajax:beforeSend', function() {
       ok(false, 'ajax:beforeSend should not run');
     })
     .bind('iframe:loading', function() {
       ok(false, 'form should not get submitted');
     })
-    .bind('ajax:aborted:required', function(){
+    .bind('ajax:aborted:required', function(e,data){
+      ok(data.length == 2, 'ajax:aborted:required event is passed all blank required inputs (jQuery objects)');
+      ok(data.first().is('input[name="user_name"]') , 'ajax:aborted:required adds blank required input to data');
+      ok(data.last().is('textarea[name="user_bio"]'), 'ajax:aborted:required adds blank required textarea to data');
       ok(true, 'ajax:aborted:required should run');
     })
     .trigger('submit');
 
   setTimeout(function() {
-    form.find('input[required]').val('Tyler');
+    form.find('input[required],textarea[required]').val('Tyler');
     form.unbind('ajax:beforeSend');
     submit();
   }, 13);
@@ -104,7 +108,7 @@ function skipIt() {
 	// This test cannot work due to the security feature in browsers which makes the value
 	// attribute of file input fields readonly, so it cannot be set with default value.
 	// This is what the test would look like though if browsers let us automate this test.
-	asyncTest('non-blank file form input field should abort remote request, but submit normally', 3, function() {
+	asyncTest('non-blank file form input field should abort remote request, but submit normally', 5, function() {
 	  var form = $('form[data-remote]')
 	    .append($('<input type="file" name="attachment" value="default.png">'))
 	    .bind('ajax:beforeSend', function() {
@@ -113,7 +117,9 @@ function skipIt() {
 	    .bind('iframe:loading', function() {
 	      ok(true, 'form should get submitted');
 	    })
-      .bind('ajax:aborted:file', function() {
+      .bind('ajax:aborted:file', function(e,data) {
+        ok(data.length == 1, 'ajax:aborted:file event is passed all non-blank file inputs (jQuery objects)');
+        ok(data.first().is('input[name="attachment"]') , 'ajax:aborted:file adds non-blank file input to data');
         ok(true, 'ajax:aborted:file event should run');
       })
 	    .trigger('submit');

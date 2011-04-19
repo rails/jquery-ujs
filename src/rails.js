@@ -147,28 +147,21 @@
 			return !message || (rails.fire(element, 'confirm') && confirm(message));
 		},
 
-		blankInputs: function(form, specifiedSelector) {
-			var blankExists = false,
-				selector = specifiedSelector || 'input';
+		blankInputs: function(form, specifiedSelector, nonBlank) {
+			var inputs = $(), input,
+				selector = specifiedSelector || 'input,textarea';
 			form.find(selector).each(function() {
-				if (!$(this).val()) {
-					blankExists = true;
-					return false; //this terminates the each loop
+				input = $(this);
+				// Collect non-blank inputs if nonBlank option is true, otherwise, collect blank inputs
+				if (nonBlank ? input.val() : !input.val()) {
+					inputs = inputs.add(input);
 				}
 			});
-			return blankExists;
+			return inputs.length ? inputs : false;
 		},
 
 		nonBlankInputs: function(form, specifiedSelector) {
-			var nonBlankExists = false,
-				selector = specifiedSelector || 'input';
-			form.find(selector).each(function() {
-				if ($(this).val()) {
-					nonBlankExists = true;
-					return false; //this terminates the each loop
-				}
-			});
-			return nonBlankExists;
+			return rails.blankInputs(form, specifiedSelector, true); // true specifies nonBlank
 		},
 
 		stopEverything: function(e) {
@@ -210,16 +203,19 @@
 	});
 
 	$('form').live('submit.rails', function(e) {
-		var form = $(this), remote = form.data('remote') !== undefined;
+		var form = $(this),
+			remote = form.data('remote') !== undefined,
+			blankRequiredInputs = rails.blankInputs(form, 'input[name][required],textarea[name][required]'),
+			nonBlankFileInputs = rails.nonBlankInputs(form, 'input:file');
 		if (!rails.allowAction(form)) return rails.stopEverything(e);
 
 		// skip other logic when required values are missing or file upload is present
-		if (rails.blankInputs(form, 'input[name][required]') && rails.fire(form, 'ajax:aborted:required')) {
+		if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
 			return !remote;
 		}
 
-		if (rails.nonBlankInputs(form, 'input:file')) {
-			return rails.fire(form, 'ajax:aborted:file');
+		if (nonBlankFileInputs) {
+			return rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
 		}
 
 		// If browser does not support submit bubbling, then this live-binding will be called before direct
