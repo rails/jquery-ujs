@@ -218,15 +218,15 @@
 			return !remote;
 		}
 
-		if (rails.nonBlankInputs(form, 'input:file')) {
-			return rails.fire(form, 'ajax:aborted:file');
-		}
-
-		// If browser does not support submit bubbling, then this live-binding will be called before direct
-		// bindings. Therefore, we should directly call any direct bindings before remotely submitting form.
-		if (!$.support.submitBubbles && rails.callFormSubmitBindings(form) === false) return rails.stopEverything(e);
-
 		if (remote) {
+			if (rails.nonBlankInputs(form, 'input:file')) {
+				return rails.fire(form, 'ajax:aborted:file');
+			}
+
+			// If browser does not support submit bubbling, then this live-binding will be called before direct
+			// bindings. Therefore, we should directly call any direct bindings before remotely submitting form.
+			if (!$.support.submitBubbles && rails.callFormSubmitBindings(form) === false) return rails.stopEverything(e);
+
 			rails.handleRemote(form);
 			return false;
 		} else {
