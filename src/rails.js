@@ -49,6 +49,15 @@
 
 	$.rails = rails = {
 
+		// Link elements bound by jquery-ujs
+		linkClickSelector:            'a[data-confirm], a[data-method], a[data-remote]',
+
+		// Form elements bound by jquery-ujs
+		formSubmitSelector:        'form',
+
+		// Form input elements bound by jquery-ujs
+		formInputClickSelector:    'form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])',
+
 		// Make sure that every Ajax request sends the CSRF token
 		CSRFProtection: function(xhr) {
 			var token = $('meta[name="csrf-token"]').attr('content');
@@ -196,7 +205,7 @@
 		$(document).ajaxSend(function(e, xhr){ rails.CSRFProtection(xhr); });
 	}
 
-	$('a[data-confirm], a[data-method], a[data-remote]').live('click.rails', function(e) {
+	$(rails.linkClickSelector).live('click.rails', function(e) {
 		var link = $(this);
 		if (!rails.allowAction(link)) return rails.stopEverything(e);
 
@@ -209,7 +218,7 @@
 		}
 	});
 
-	$('form').live('submit.rails', function(e) {
+	$(rails.formSubmitSelector).live('submit.rails', function(e) {
 		var form = $(this), remote = form.data('remote') !== undefined;
 		if (!rails.allowAction(form)) return rails.stopEverything(e);
 
@@ -235,7 +244,7 @@
 		}
 	});
 
-	$('form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])').live('click.rails', function() {
+	$(rails.formInputClickSelector).live('click.rails', function() {
 		var button = $(this);
 
 		if (!rails.allowAction(button)) return rails.stopEverything(e);
@@ -247,11 +256,11 @@
 		button.closest('form').data('ujs:submit-button', data);
 	});
 
-	$('form').live('ajax:beforeSend.rails', function(event) {
+	$(rails.formSubmitSelector).live('ajax:beforeSend.rails', function(event) {
 		if (this == event.target) rails.disableFormElements($(this));
 	});
 
-	$('form').live('ajax:complete.rails', function(event) {
+	$(rails.formSubmitSelector).live('ajax:complete.rails', function(event) {
 		if (this == event.target) rails.enableFormElements($(this));
 	});
 
