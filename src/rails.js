@@ -59,6 +59,18 @@
 		// Form input elements bound by jquery-ujs
 		formInputClickSelector: 'form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])',
 
+		// Form input elements disabled during form submission
+		disableSelector: 'input[data-disable-with], button[data-disable-with], textarea[data-disable-with]',
+
+		// Form input elements re-enabled after form submission
+		enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled',
+
+		// Form required input elements
+		requiredInputSelector: 'input[name][required],textarea[name][required]',
+
+		// Form file input elements
+		fileInputSelector: 'input:file',
+
 		// Make sure that every Ajax request sends the CSRF token
 		CSRFProtection: function(xhr) {
 			var token = $('meta[name="csrf-token"]').attr('content');
@@ -141,7 +153,7 @@
 			- Adds disabled=disabled attribute
 		*/
 		disableFormElements: function(form) {
-			form.find('input[data-disable-with], button[data-disable-with], textarea[data-disable-with]').each(function() {
+			form.find(rails.disableSelector).each(function() {
 				var element = $(this), method = element.is('button') ? 'html' : 'val';
 				element.data('ujs:enable-with', element[method]());
 				element[method](element.data('disable-with'));
@@ -154,7 +166,7 @@
 			- Removes disabled attribute
 		*/
 		enableFormElements: function(form) {
-			form.find('input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled').each(function() {
+			form.find(rails.enableSelector).each(function() {
 				var element = $(this), method = element.is('button') ? 'html' : 'val';
 				if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
 				element.removeAttr('disabled');
@@ -229,8 +241,8 @@
 	$(rails.formSubmitSelector).live('submit.rails', function(e) {
 		var form = $(this),
 			remote = form.data('remote') !== undefined,
-			blankRequiredInputs = rails.blankInputs(form, 'input[name][required],textarea[name][required]'),
-			nonBlankFileInputs = rails.nonBlankInputs(form, 'input:file');
+			blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
+			nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
 
 		if (!rails.allowAction(form)) return rails.stopEverything(e);
 
