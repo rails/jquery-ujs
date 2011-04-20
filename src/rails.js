@@ -140,7 +140,7 @@
 			- Adds disabled=disabled attribute
 		*/
 		disableFormElements: function(form) {
-			form.find('input[data-disable-with], button[data-disable-with]').each(function() {
+			form.find('input[data-disable-with], button[data-disable-with], textarea[data-disable-with]').each(function() {
 				var element = $(this), method = element.is('button') ? 'html' : 'val';
 				element.data('ujs:enable-with', element[method]());
 				element[method](element.data('disable-with'));
@@ -153,7 +153,7 @@
 			- Removes disabled attribute
 		*/
 		enableFormElements: function(form) {
-			form.find('input[data-disable-with]:disabled, button[data-disable-with]:disabled').each(function() {
+			form.find('input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled').each(function() {
 				var element = $(this), method = element.is('button') ? 'html' : 'val';
 				if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
 				element.removeAttr('disabled');
