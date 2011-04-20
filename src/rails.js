@@ -28,7 +28,7 @@
  * ===========================
  *
  * If any blank required inputs (required="required") are detected in the remote form, the whole form submission
- * is canceled. Note that this is unlike non-blank file inputs, which still allow non-AJAX form submission.
+ * is canceled. Note that this is unlike file inputs, which still allow standard (non-AJAX) form submission.
  *
  * The `ajax:aborted:required` event allows you to bind your own handler to inform the user of blank required inputs.
  *
