@@ -27,8 +27,7 @@
  * Required fields in rails.js
  * ===========================
  *
- * If any required input field (input[required]) is blank then the AJAX form submission is cancelled.
- * Note that unlike file uploads case here the whole form submission is cancelled ,by default.
+ * Blank required inputs (required="required") cause the whole AJAX form submission to be canceled by default.
  *
  * The `ajax:aborted:required` event allows you to bind your own handler to inform the user of blank required inputs.
  *
