@@ -255,10 +255,10 @@
 		}
 	});
 
-	$(rails.formInputClickSelector).live('click.rails', function() {
+	$(rails.formInputClickSelector).live('click.rails', function(event) {
 		var button = $(this);
 
-		if (!rails.allowAction(button)) return rails.stopEverything(e);
+		if (!rails.allowAction(button)) return rails.stopEverything(event);
 
 		// register the pressed submit button
 		var name = button.attr('name'),
