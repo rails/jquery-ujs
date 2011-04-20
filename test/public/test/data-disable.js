@@ -117,3 +117,19 @@ asyncTest('form with input[data-disable-with] is replaced with disabled field in
     }, 30);
   }).trigger('submit');
 });
+
+asyncTest('form textarea with "data-disable-with" attribute', 3, function() {
+  var form = $('form[data-remote]'),
+      textarea = $('<textarea data-disable-with="processing ..." name="user_bio">born, lived, died.</textarea>').appendTo(form);
+
+  form.bind('ajax:success', function(e, data) {
+    setTimeout(function() {
+      equal(data.params.user_bio, 'born, lived, died.');
+      start();
+    }, 13)
+  })
+  form.trigger('submit');
+
+  ok(textarea.is(':disabled'), 'textarea should be disabled');
+  equal(textarea.val(), 'processing ...', 'textarea should have disabled value given to it');
+});
