@@ -240,7 +240,7 @@
 
 	$(rails.formSubmitSelector).live('submit.rails', function(e) {
 		var form = $(this),
-			remote = form.data('remote') !== undefined,
+			remote = form.data('remote') != undefined,
 			blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
 			nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
 
