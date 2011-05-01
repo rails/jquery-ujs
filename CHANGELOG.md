@@ -13,6 +13,7 @@ to newest):
 - [`e9311550fdb3afeb`](https://github.com/rails/jquery-ujs/commit/e9311550fdb3afeb2917bcb1fef39767bf715003) added CSRF Protection to remote requests
 - [`a284dd706e7d76e8`](https://github.com/rails/jquery-ujs/commit/a284dd706e7d76e85471ef39ab3efdf07feef374) CSRF fixed - changed to only add if token is present
 - [`f9b21b3a3c7c4684`](https://github.com/rails/jquery-ujs/commit/f9b21b3a3c7c46840fed8127a90def26911fad3d) `ajax:before` added back
+- [`7f2acc1811f62877`](https://github.com/rails/jquery-ujs/commit/7f2acc1811f62877611e16451530728b5e13dbe7) last version before file-upload aborting behavior added
 - [`ca575e184e93b3ef`](https://github.com/rails/jquery-ujs/commit/ca575e184e93b3efe1a858cf598f8a37f0a760cc) added `ajax:aborted:required` and `ajax:aborted:file` event hooks
 - [`d2abd6f9df4e4a42`](https://github.com/rails/jquery-ujs/commit/d2abd6f9df4e4a426c17c218b7d5e05004c768d0) fixed submit and bubbling behavior for IE
 - [`d59144177d867908`](https://github.com/rails/jquery-ujs/commit/d59144177d86790891fdb99b0e3437312e04fda2) created external api via `$.rails` object
