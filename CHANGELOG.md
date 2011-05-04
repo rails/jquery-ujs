@@ -17,3 +17,4 @@ to newest):
 - [`ca575e184e93b3ef`](https://github.com/rails/jquery-ujs/commit/ca575e184e93b3efe1a858cf598f8a37f0a760cc) added `ajax:aborted:required` and `ajax:aborted:file` event hooks
 - [`d2abd6f9df4e4a42`](https://github.com/rails/jquery-ujs/commit/d2abd6f9df4e4a426c17c218b7d5e05004c768d0) fixed submit and bubbling behavior for IE
 - [`d59144177d867908`](https://github.com/rails/jquery-ujs/commit/d59144177d86790891fdb99b0e3437312e04fda2) created external api via `$.rails` object
+- [`cd357e492de14747`](https://github.com/rails/jquery-ujs/commit/cd357e492de147472a8a2524575acce5d923e640) added support for jQuery 1.6 and dropped support for jQuery 1.4.3
