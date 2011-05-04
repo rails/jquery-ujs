@@ -15,7 +15,7 @@ Full [documentation is on the wiki][wiki], including the [list of published Ajax
 Requirements
 ------------
 
-- [jQuery 1.4.3][jquery] or later;
+- [jQuery 1.4.4][jquery] or later;
 - for Ruby on Rails only: `<%= csrf_meta_tag %>` in the HEAD of your HTML layout;
 - HTML5 doctype (optional).
 

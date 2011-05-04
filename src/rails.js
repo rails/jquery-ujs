@@ -1,7 +1,7 @@
 /**
  * Unobtrusive scripting adapter for jQuery
  *
- * Requires jQuery 1.4.3 or later.
+ * Requires jQuery 1.4.4 or later.
  * https://github.com/rails/jquery-ujs
 
  * Uploading file using rails.js
