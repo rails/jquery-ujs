@@ -171,11 +171,16 @@
       });
     },
 
-    // If message provided in 'data-confirm' attribute, fires `confirm` event and returns result of confirm dialog.
-    // Attaching a handler to the element's `confirm` event that returns false cancels the confirm dialog.
+    /* If message provided in 'data-confirm' attribute:
+      - fires `confirm` event
+      - shows the confirm dialog
+      - fires the `confirmed` event
+     and returns true if no function stopped the chain and user chose yes; false otherwise.
+     Attaching a handler to the element's `confirm` event that returns false cancels the confirm dialog.
+    */
     allowAction: function(element) {
       var message = element.data('confirm');
-      return !message || (rails.fire(element, 'confirm') && confirm(message));
+      return !message || (rails.fire(element, 'confirm') && confirm(message) && rails.fire(element, 'confirmed'));
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
