@@ -179,8 +179,15 @@
      Attaching a handler to the element's `confirm` event that returns false cancels the confirm dialog.
     */
     allowAction: function(element) {
-      var message = element.data('confirm');
-      return !message || (rails.fire(element, 'confirm') && confirm(message) && rails.fire(element, 'confirmed'));
+      var message = element.data('confirm'),
+          answer = false, callback;
+      if (!message) { return true; }
+
+      if (rails.fire(element, 'confirm')) {
+        answer = confirm(message);
+        callback = rails.fire(element, 'confirm:complete', [answer]);
+      }
+      return answer && callback;
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
