@@ -82,6 +82,16 @@
       return event.result !== false;
     },
 
+    // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
+    confirm: function(message) {
+      return confirm(message);
+    },
+
+    // Default ajax function, may be overridden with custom function in $.rails.ajax
+    ajax: function(options) {
+      return $.ajax(options);
+    },
+
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
       var method, url, data,
@@ -105,7 +115,7 @@
           data = null;
         }
 
-        $.ajax({
+        rails.ajax({
           url: url, type: method || 'GET', data: data, dataType: dataType,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
@@ -184,7 +194,7 @@
       if (!message) { return true; }
 
       if (rails.fire(element, 'confirm')) {
-        answer = confirm(message);
+        answer = rails.confirm(message);
         callback = rails.fire(element, 'confirm:complete', [answer]);
       }
       return answer && callback;
