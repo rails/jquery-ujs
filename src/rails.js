@@ -181,12 +181,16 @@
       });
     },
 
-    /* If message provided in 'data-confirm' attribute:
-      - fires `confirm` event
-      - shows the confirm dialog
-      - fires the `confirmed` event
-     and returns true if no function stopped the chain and user chose yes; false otherwise.
-     Attaching a handler to the element's `confirm` event that returns false cancels the confirm dialog.
+    /*
+	 For 'data-confirm' attribute:
+       - fires `confirm` event
+       - shows the confirmation dialog
+       - fires the `confirm:complete` event
+
+     Returns `true` if no function stops the chain and user chose yes; `false` otherwise.
+	 Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog.
+	 Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
+	 return false.
     */
     allowAction: function(element) {
       var message = element.data('confirm'),
