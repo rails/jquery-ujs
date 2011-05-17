@@ -225,6 +225,7 @@
 
     // Helper function, needed to provide consistent behavior in IE
     stopEverything: function(e) {
+      $(e.target).trigger('ujs:everythingStopped');
       e.stopImmediatePropagation();
       return false;
     },
@@ -272,7 +273,7 @@
 
     // skip other logic when required values are missing or file upload is present
     if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
-      return !remote;
+      return rails.stopEverything(e);
     }
 
     if (remote) {

@@ -88,6 +88,20 @@ asyncTest('blank required form input field should abort request and trigger "aja
   }, 13);
 });
 
+asyncTest('blank required form input for non-remote form should abort normal submission', 1, function() {
+  var form = $('form[data-remote]')
+    .append($('<input type="text" name="user_name" required="required">'))
+    .removeAttr('data-remote')
+    .bind('ujs:everythingStopped', function() {
+      ok(true, 'ujs:everythingStopped should run');
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
 asyncTest('form should be submitted with blank required fields if handler is bound to "ajax:aborted:required" event that returns false', 1, function(){
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
