@@ -36,17 +36,27 @@ In Ruby on Rails 3, the `csrf_meta_tag` helper generates two meta tags containin
 Installation
 ------------
 
-For automated installation, use the "jquery-rails" generator:
+1. For automated installation in Rails, use the "jquery-rails" gem.
+   Place this in your Gemfile:
 
-    # Gemfile
-    gem 'jquery-rails', '>= 0.2.6'
+       gem 'jquery-rails', '>= 1.0.3'
 
-And run this command (add `--ui` if you want jQuery UI):
+   And run:
 
-    $ bundle install
-    $ rails generate jquery:install
+       $ bundle install
 
-This will remove the Prototype.js library from Rails, add latest jQuery library and fetch the adapter. Be sure to choose to overwrite the "rails.js" file.
+2. This next step depends on your version of Rails.
+
+   a. For Rails 3.1, add these lines to the top of your app/assets/javascripts/application.js file:
+
+          //= require jquery
+          //= require jquery_ujs
+
+   b. For Rails 3.0, run this command (add `--ui` if you want jQuery UI):
+
+          $ rails generate jquery:install
+
+      This will remove the Prototype.js library from Rails, add latest jQuery library and fetch the adapter. Be sure to choose to overwrite the "rails.js" file.
 
 ### Manual installation
 
