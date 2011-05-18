@@ -18,3 +18,6 @@ to newest):
 - [`d2abd6f9df4e4a42`](https://github.com/rails/jquery-ujs/commit/d2abd6f9df4e4a426c17c218b7d5e05004c768d0) fixed submit and bubbling behavior for IE
 - [`d59144177d867908`](https://github.com/rails/jquery-ujs/commit/d59144177d86790891fdb99b0e3437312e04fda2) created external api via `$.rails` object
 - [`cd357e492de14747`](https://github.com/rails/jquery-ujs/commit/cd357e492de147472a8a2524575acce5d923e640) added support for jQuery 1.6 and dropped support for jQuery 1.4.3
+- [`50c06dcc02c1b08c`](https://github.com/rails/jquery-ujs/commit/50c06dcc02c1b08cb7a9b4b8eced54ed685c1c93) added `confirm:complete` event hook which is passed result from confirm dialog
+- [`8063d1d47ea6a08e`](https://github.com/rails/jquery-ujs/commit/8063d1d47ea6a08e545e9a6ba3e84af584200e41) made $.rails.confirm and $.rails.ajax functions available in $.rails object
+- [`a96c4e9b074998c6`](https://github.com/rails/jquery-ujs/commit/a96c4e9b074998c6b6d102e4573b81c8a76f07a7) added support for jQuery 1.6.1
