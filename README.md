@@ -16,15 +16,15 @@ Requirements
 ------------
 
 - [jQuery 1.4.4][jquery] or later;
-- for Ruby on Rails only: `<%= csrf_meta_tag %>` in the HEAD of your HTML layout;
+- for Ruby on Rails only: `<%= csrf_meta_tags %>` in the HEAD of your HTML layout;
 - HTML5 doctype (optional).
 
 If you don't use HTML5, adding "data" attributes to your HTML4 or XHTML pages might make them fail [W3C markup validation][validator]. However, this shouldn't create any issues for web browsers or other user agents.
 
-In Ruby on Rails 3, the `csrf_meta_tag` helper generates two meta tags containing values necessary for [cross-site request forgery protection][csrf] built into Rails. If you're using Rails 2, here is how to implement that helper:
+In Ruby on Rails 3, the `csrf_meta_tags` helper generates two meta tags containing values necessary for [cross-site request forgery protection][csrf] built into Rails. If you're using Rails 2, here is how to implement that helper:
 
     # app/helpers/application_helper.rb
-    def csrf_meta_tag
+    def csrf_meta_tags
       if protect_against_forgery?
         out = %(<meta name="csrf-param" content="%s"/>\n)
         out << %(<meta name="csrf-token" content="%s"/>)
