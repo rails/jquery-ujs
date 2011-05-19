@@ -4,6 +4,7 @@ module('data-remote', {
       .append($('<a />', {
         href: '/echo',
         'data-remote': 'true',
+        'data-params': 'data1=value1&data2=value2',
         text: 'my address'
       }))
       .append($('<form />', {
@@ -15,11 +16,13 @@ module('data-remote', {
   }
 });
 
-asyncTest('clicking on a link with data-remote attribute', 3, function() {
+asyncTest('clicking on a link with data-remote attribute', 5, function() {
   $('a[data-remote]')
     .bind('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
+      equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
+      equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
       App.assert_get_request(data); 
     })
     .bind('ajax:complete', function() { start() })

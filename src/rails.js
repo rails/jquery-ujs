@@ -112,8 +112,8 @@
         } else {
           method = element.data('method');
           url = element.attr('href');
-          data = null;
-        }
+          data = element.data('params') || null; 
+       }
 
         rails.ajax({
           url: url, type: method || 'GET', data: data, dataType: dataType,
