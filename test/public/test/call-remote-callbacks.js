@@ -66,7 +66,7 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
 asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 5, function() {
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
-    .append($('<textarea name="user_bio" required="required">'))
+    .append($('<textarea name="user_bio" required="required" value=""></textarea>'))
     .bind('ajax:beforeSend', function() {
       ok(false, 'ajax:beforeSend should not run');
     })
