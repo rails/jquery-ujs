@@ -4,7 +4,7 @@ module('data-remote', {
       .append($('<a />', {
         href: '/echo',
         'data-remote': 'true',
-        'data-body': 'data1=value1&data2=value2',
+        'data-params': 'data1=value1&data2=value2',
         text: 'my address'
       }))
       .append($('<form />', {
