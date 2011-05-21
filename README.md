@@ -16,7 +16,6 @@ Requirements
 ------------
 
 - [jQuery 1.4.4][jquery] or later;
-- for Ruby on Rails only: `<%= csrf_meta_tags %>` in the HEAD of your HTML layout (Rails 3.1)
 - HTML5 doctype (optional).
 
 If you don't use HTML5, adding "data" attributes to your HTML4 or XHTML pages might make them fail [W3C markup validation][validator]. However, this shouldn't create any issues for web browsers or other user agents.
@@ -48,7 +47,7 @@ Choose to overwrite jquery_ujs.js if prompted.*
     $ rails generate jquery:install
 
 
-### Manual installation
+### Manual installation (including Rails 2)
 
 [Download jQuery][jquery] and ["rails.js"][adapter] and place them in your "javascripts" directory.
 
@@ -58,7 +57,9 @@ Configure the following in your application startup file:
 
 Now the template helper `javascript_include_tag :defaults` will generate SCRIPT tags to load jQuery and rails.js.
 
-In Ruby on Rails 3.1, the `csrf_meta_tags` helper generates two meta tags containing values necessary for [cross-site request forgery protection][csrf] built into Rails. In Rails 3.0, the helper is named `csrf_meta_tag`. If you're using Rails 2, here is how to implement that helper:
+For Rails 2, you will need to manually implement the `csrf_meta_tag` helper and include it inside the `<head>` of your application layout.
+
+The `csrf_meta_tags` (Rails 3.1) and `csrf_meta_tag` (Rails 3.0) helpers generate two meta tags containing values necessary for the [cross-site request forgery protection][csrf] built into Rails. Here is how to implement that helper in Rails 2:
 
     # app/helpers/application_helper.rb
     def csrf_meta_tag
