@@ -112,7 +112,7 @@
         } else {
           method = element.data('method');
           url = element.attr('href');
-          data = element.attr('data-body') || null; 
+          data = element.data('body') || null; 
        }
 
         rails.ajax({
