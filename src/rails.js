@@ -112,7 +112,6 @@
         } else {
           method = element.data('method');
           url = element.attr('href');
-//          data = null;
           data = element.attr('data-body') || null; 
        }
 
