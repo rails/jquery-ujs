@@ -64,7 +64,7 @@
     enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled',
 
     // Form required input elements
-    requiredInputSelector: 'input[name][required],textarea[name][required]',
+    requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
 
     // Form file input elements
     fileInputSelector: 'input:file',

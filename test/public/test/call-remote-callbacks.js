@@ -66,7 +66,7 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
 asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 5, function() {
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
-    .append($('<textarea name="user_bio" required="required" value=""></textarea>'))
+    .append($('<textarea name="user_bio" required="required"></textarea>'))
     .bind('ajax:beforeSend', function() {
       ok(false, 'ajax:beforeSend should not run');
     })
@@ -110,6 +110,23 @@ asyncTest('form should be submitted with blank required fields if handler is bou
     })
     .bind('ajax:aborted:required', function() {
       return false;
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
+asyncTest('disabled fields should not be included in blank required check', 1, function() {
+  var form = $('form[data-remote]')
+    .append($('<input type="text" name="user_name" required="required" disabled="disabled">'))
+    .append($('<textarea name="user_bio" required="required" disabled="disabled"></textarea>'))
+    .bind('ajax:beforeSend', function() {
+      ok(true, 'ajax:beforeSend should run');
+    })
+    .bind('ajax:aborted:required', function() {
+      ok(false, 'ajax:aborted:required should not run');
     })
     .trigger('submit');
 
