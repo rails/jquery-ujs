@@ -9,6 +9,8 @@ module('call-remote-callbacks', {
   teardown: function() {
     $('form[data-remote]').die('ajax:beforeSend');
     $('form[data-remote]').die('ajax:before');
+    $('form[data-remote]').die('ajax:complete');
+    $('form[data-remote]').die('ajax:success');
   }
 });
 
@@ -231,6 +233,24 @@ asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on 
       equal(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
     });
   });
+});
+
+asyncTest('binding to ajax callbacks via .live() triggers handlers properly', 3, function() {
+  $('form[data-remote]')
+    .live('ajax:beforeSend', function() {
+      ok(true, 'ajax:beforeSend handler is triggered');
+    })
+    .live('ajax:complete', function() {
+      ok(true, 'ajax:complete handler is triggered');
+    })
+    .live('ajax:success', function() {
+      ok(true, 'ajax:success handler is triggered');
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
 });
 
 })();
