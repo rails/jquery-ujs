@@ -20,7 +20,7 @@ function submit(fn) {
       ok(true, 'ajax:complete');
       start();
     });
-  
+
   if (fn) fn(form);
   form.trigger('submit');
 }
@@ -39,7 +39,7 @@ asyncTest('modifying form fields with "ajax:before" sends modified data in reque
     });
 
   submit(function(form) {
-    form.bind('ajax:success', function(e, data, status, xhr) { 
+    form.bind('ajax:success', function(e, data, status, xhr) {
       equal(data.params.user_name, 'steve', 'modified field value should have been submitted');
       equal(data.params.other_user_name, 'jonathan', 'added field value should have been submitted');
       equal(data.params.removed_user_name, undefined, 'removed field value should be undefined');
@@ -156,7 +156,7 @@ function skipIt() {
         ok(true, 'ajax:aborted:file event should run');
       })
 	    .trigger('submit');
-	
+
 	  setTimeout(function() {
 	    form.find('input[type="file"]').val('');
 	    form.unbind('ajax:beforeSend');
@@ -164,7 +164,7 @@ function skipIt() {
 	  }, 13);
 	});
 
-  syncTest('blank file input field should abort request entirely if handler bound to "ajax:aborted:file" event that returns false', 1, function() {
+  asyncTest('blank file input field should abort request entirely if handler bound to "ajax:aborted:file" event that returns false', 1, function() {
 	  var form = $('form[data-remote]')
 	    .append($('<input type="file" name="attachment" value="default.png">'))
 	    .bind('ajax:beforeSend', function() {
@@ -177,7 +177,7 @@ function skipIt() {
         return false;
       })
 	    .trigger('submit');
-	
+
 	  setTimeout(function() {
 	    form.find('input[type="file"]').val('');
 	    form.unbind('ajax:beforeSend');
@@ -191,7 +191,7 @@ asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation',
     ok(true, 'ajax:beforeSend observed with event delegation');
     return false;
   });
-  
+
   submit(function(form) {
     form.unbind('ajax:complete').bind('ajax:complete', function() {
       ok(false, 'ajax:complete should not run');
@@ -224,7 +224,7 @@ asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on 
   submit(function(form) {
     form.attr('action', '/error');
     form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
-    form.bind('ajax:error', function(e, xhr, status, error) { 
+    form.bind('ajax:error', function(e, xhr, status, error) {
       ok(xhr.getResponseHeader, 'first argument to "ajax:error" should be an XHR object');
       equal(status, 'error', 'second argument to ajax:error should be a status string');
       if (jQuery().jquery.indexOf('1.4') === 0) strictEqual(error, undefined)
