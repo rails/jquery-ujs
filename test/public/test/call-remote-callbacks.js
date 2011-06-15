@@ -235,6 +235,7 @@ asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on 
   });
 });
 
+// IF THIS TEST IS FAILING, TRY INCREASING THE TIMEOUT AT THE BOTTOM TO > 100
 asyncTest('binding to ajax callbacks via .live() triggers handlers properly', 3, function() {
   $('form[data-remote]')
     .live('ajax:beforeSend', function() {
@@ -250,7 +251,7 @@ asyncTest('binding to ajax callbacks via .live() triggers handlers properly', 3,
 
   setTimeout(function() {
     start();
-  }, 13);
+  }, 63);
 });
 
 })();
