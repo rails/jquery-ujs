@@ -95,7 +95,7 @@
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
       var method, url, data,
-        crossDomain = element.data('cross-domain') || false,
+        crossDomain = element.data('cross-domain') || null,
         dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
       if (rails.fire(element, 'ajax:before')) {
@@ -247,7 +247,7 @@
   if ('ajaxPrefilter' in $) {
     $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
   } else {
-    $(document).ajaxSend(function(e, xhr){ rails.CSRFProtection(xhr); });
+    $(document).ajaxSend(function(e, xhr, options){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
   }
 
   $(rails.linkClickSelector).live('click.rails', function(e) {

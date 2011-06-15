@@ -92,4 +92,41 @@ asyncTest('sends CSRF token in custom header', 1, function() {
   });
 });
 
+asyncTest('does not send CSRF token in custom header if crossDomain', 1, function() {
+  build_form({ 'data-cross-domain': 'true' });
+  $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
+
+  // Manually set request header to be XHR, since setting crossDomain: true in .ajax()
+  // causes jQuery to skip setting the request header, to prevent our test/server.rb from
+  // raising an an error (when request.xhr? is false).
+  $('#qunit-fixture').find('form').bind('ajax:beforeSend', function(e, xhr) {
+    xhr.setRequestHeader('X-Requested-With', "XMLHttpRequest");
+  });
+
+  submit(function(e, data, status, xhr) {
+    equal(data.HTTP_X_CSRF_TOKEN, undefined, 'X-CSRF-Token header should NOT be sent');
+  });
+});
+
+asyncTest('intelligently guesses crossDomain behavior when target URL is a different domain', 1, function(e, xhr) {
+
+  // Don't set data-cross-domain here, just set action to be a different domain than localhost
+  build_form({ action: 'http://www.alfajango.com' });
+  $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
+
+  $('#qunit-fixture').find('form')
+    .bind('ajax:beforeSend', function(e, xhr, settings) {
+
+      // crossDomain doesn't work with jquery 1.4, because it wasn't added until 1.5
+      if (jQuery().jquery.indexOf('1.4') === 0) strictEqual(settings.crossDomain, null)
+      else equal(settings.crossDomain, true, 'crossDomain should be set to true');
+
+      // prevent request from actually getting sent off-domain
+      return false;
+    })
+    .trigger('submit');
+
+  setTimeout(function() { start(); }, 13);
+});
+
 })();
