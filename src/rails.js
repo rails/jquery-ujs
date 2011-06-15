@@ -95,6 +95,7 @@
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
       var method, url, data,
+        crossDomain = element.data('cross-domain') || false,
         dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
       if (rails.fire(element, 'ajax:before')) {
@@ -116,7 +117,7 @@
        }
 
         rails.ajax({
-          url: url, type: method || 'GET', data: data, dataType: dataType,
+          url: url, type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
             if (settings.dataType === undefined) {
@@ -244,7 +245,7 @@
 
   // ajaxPrefilter is a jQuery 1.5 feature
   if ('ajaxPrefilter' in $) {
-    $.ajaxPrefilter(function(options, originalOptions, xhr){ rails.CSRFProtection(xhr); });
+    $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
   } else {
     $(document).ajaxSend(function(e, xhr){ rails.CSRFProtection(xhr); });
   }
