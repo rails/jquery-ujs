@@ -51,6 +51,9 @@
     // Link elements bound by jquery-ujs
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote]',
 
+		// Select elements bound by jquery-ujs
+		selectChangeSelector: 'select[data-remote]',
+
     // Form elements bound by jquery-ujs
     formSubmitSelector: 'form',
 
@@ -110,7 +113,12 @@
             data.push(button);
             element.data('ujs:submit-button', null);
           }
-        } else {
+        } else if (element.is('select')) {
+          method = element.data('method');
+          url = element.data('url');
+					data = element.serialize();
+					if (element.data('params')) data = data + "&" + element.data('params'); 
+       } else {
           method = element.data('method');
           url = element.attr('href');
           data = element.data('params') || null; 
@@ -262,6 +270,14 @@
       return false;
     }
   });
+
+	$(rails.selectChangeSelector).live('change.rails', function(e) {
+    var link = $(this);
+    if (!rails.allowAction(link)) return rails.stopEverything(e);
+
+    rails.handleRemote(link);
+    return false;
+  });	
 
   $(rails.formSubmitSelector).live('submit.rails', function(e) {
     var form = $(this),

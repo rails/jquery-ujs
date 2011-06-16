@@ -12,7 +12,16 @@ module('data-remote', {
         'data-remote': 'true',
         method: 'post'
       }))
-      .find('form').append($('<input type="text" name="user_name" value="john">'));
+      .find('form').append($('<input type="text" name="user_name" value="john">'))
+			.append($('<select />', {
+				'name': 'user_data',
+				'data-remote': 'true',
+        'data-params': 'data1=value1',
+				'data-url': '/echo'
+			}))
+			.find('select')
+			.append($('<option />', {value: 'optionValue1', text: 'option1'}))
+			.append($('<option />', {value: 'optionValue2', text: 'option2'}));
   }
 });
 
@@ -27,6 +36,20 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
     })
     .bind('ajax:complete', function() { start() })
     .trigger('click');
+});
+
+asyncTest('changing a select option with data-remote attribute', 5, function() {
+  $('select[data-remote]')
+    .bind('ajax:success', function(e, data, status, xhr) { 
+      App.assert_callback_invoked('ajax:success');
+      App.assert_request_path(data, '/echo');
+      equal(data.params.user_data, 'optionValue2', 'ajax arguments should have key term with right value');
+			equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
+      App.assert_get_request(data); 
+    })
+    .bind('ajax:complete', function() { start() })
+    .val('optionValue2')
+		.trigger('change');
 });
 
 asyncTest('submitting form with data-remote attribute', 4, function() {
