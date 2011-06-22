@@ -124,6 +124,9 @@
           data = element.data('params') || null; 
        }
 
+        //If form action or anchor href are empty, get the current location
+        url = url ? url : window.location.href;
+
         rails.ajax({
           url: url, type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
