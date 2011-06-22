@@ -83,6 +83,29 @@ asyncTest('allow empty "data-remote" attribute', 1, function() {
   });
 });
 
+asyncTest('allow empty form "action"', 1, function() {
+  build_form({ action: '' });
+
+  $('#qunit-fixture').find('form')
+    .bind('ajax:beforeSend', function(e, xhr, settings) {
+      // Get current location (the same way jQuery does)
+      var currentLocation = document.createElement( "a" );
+      currentLocation.href = "";
+      currentLocation = currentLocation.href;
+
+      // Actual location (strip out settings.data that jQuery serializes and appends)
+      var ajaxLocation = settings.url.replace(settings.data,"").replace(/&$/, "");
+      equal(ajaxLocation.match(/^(.*)/)[1], currentLocation, 'URL should be current page by default');
+
+      // Prevent the request from actually getting sent to the current page and
+      // causing an error.
+      return false;
+    })
+    .trigger('submit');
+
+  setTimeout(function() { start(); }, 13);
+});
+
 asyncTest('sends CSRF token in custom header', 1, function() {
   build_form({ method: 'post' });
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');

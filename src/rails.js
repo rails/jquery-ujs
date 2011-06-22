@@ -118,14 +118,14 @@
           url = element.data('url');
 					data = element.serialize();
 					if (element.data('params')) data = data + "&" + element.data('params'); 
-       } else {
-          method = element.data('method');
-          url = element.attr('href');
-          data = element.data('params') || null; 
-       }
+        } else {
+           method = element.data('method');
+           url = element.attr('href');
+           data = element.data('params') || null; 
+        }
 
-        rails.ajax({
-          url: url, type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
+        options = {
+          type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
             if (settings.dataType === undefined) {
@@ -142,7 +142,11 @@
           error: function(xhr, status, error) {
             element.trigger('ajax:error', [xhr, status, error]);
           }
-        });
+        };
+        // Do not pass url to `ajax` options if blank
+        if (url) { $.extend(options, { url: url }); }
+
+        rails.ajax(options);
       }
     },
 
