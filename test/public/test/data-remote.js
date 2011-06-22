@@ -12,16 +12,8 @@ module('data-remote', {
         'data-remote': 'true',
         method: 'post'
       }))
-      .find('form').append($('<input type="text" name="user_name" value="john">'))
-			.append($('<select />', {
-				'name': 'user_data',
-				'data-remote': 'true',
-        'data-params': 'data1=value1',
-				'data-url': '/echo'
-			}))
-			.find('select')
-			.append($('<option />', {value: 'optionValue1', text: 'option1'}))
-			.append($('<option />', {value: 'optionValue2', text: 'option2'}));
+      .find('form').append($('<input type="text" name="user_name" value="john">'));
+
   }
 });
 
@@ -39,6 +31,18 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
 });
 
 asyncTest('changing a select option with data-remote attribute', 5, function() {
+  $('form')
+    .append(
+      $('<select />', {
+        'name': 'user_data',
+        'data-remote': 'true',
+        'data-params': 'data1=value1',
+        'data-url': '/echo'
+      })
+      .append($('<option />', {value: 'optionValue1', text: 'option1'}))
+      .append($('<option />', {value: 'optionValue2', text: 'option2'}))
+    );
+
   $('select[data-remote]')
     .bind('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
