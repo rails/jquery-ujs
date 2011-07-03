@@ -90,9 +90,9 @@
       var res =  confirm(message);
       var answer = $.Deferred();
       if (res) {
-        res.resolve();
+        answer.resolve();
       } else {
-        res.reject();
+        answer.reject();
       };
       return answer.promise();
     },
@@ -276,14 +276,13 @@
 
   $(rails.linkClickSelector).live('click.rails', function(e) {
     var link = $(this);
+    e.preventDefault();
     rails.allowAction(link).then(
       function() {
         if (link.data('remote') !== undefined) {
           rails.handleRemote(link);
-          e.preventDefault();
         } else if (link.data('method')) {
           rails.handleMethod(link);
-          e.preventDefault();
         }
       }, 
       function() {
@@ -293,10 +292,10 @@
 
   $(rails.selectChangeSelector).live('change.rails', function(e) {
     var link = $(this);
+    e.preventDefault();
     rails.allowAction(link).then(
       function() {
         rails.handleRemote(link);
-        e.preventDefault();
       },
       function() {
         rails.stopEverything(e);
@@ -308,6 +307,8 @@
       remote = form.data('remote') !== undefined,
       blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
       nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
+
+    e.preventDefault();
 
     rails.allowAction(form).then(
       function() {
@@ -326,7 +327,6 @@
          if (!$.support.submitBubbles && rails.callFormSubmitBindings(form) === false) return rails.stopEverything(e);
 
            rails.handleRemote(form);
-           e.preventDefault();
          } else {
            // slight timeout so that the submit button gets properly serialized
            setTimeout(function(){ rails.disableFormElements(form); }, 13);
@@ -339,6 +339,7 @@
 
   $(rails.formInputClickSelector).live('click.rails', function(event) {
     var button = $(this);
+    e.preventDefault();
 
     rails.allowAction(button).then(
        function() {
@@ -348,6 +349,7 @@
              data = name ? {name:name, value:button.val()} : null;
 
          button.closest('form').data('ujs:submit-button', data);
+         //TODO: submit the form
        },
        function() {
          rails.stopEverything(event);
