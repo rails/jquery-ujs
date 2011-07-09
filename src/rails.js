@@ -116,8 +116,8 @@
         } else if (element.is('select')) {
           method = element.data('method');
           url = element.data('url');
-					data = element.serialize();
-					if (element.data('params')) data = data + "&" + element.data('params'); 
+          data = element.serialize();
+          if (element.data('params')) data = data + "&" + element.data('params'); 
         } else {
            method = element.data('method');
            url = element.attr('href');
