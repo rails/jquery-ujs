@@ -227,8 +227,7 @@ asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on 
     form.bind('ajax:error', function(e, xhr, status, error) {
       ok(xhr.getResponseHeader, 'first argument to "ajax:error" should be an XHR object');
       equal(status, 'error', 'second argument to ajax:error should be a status string');
-      if (jQuery().jquery.indexOf('1.4') === 0) strictEqual(error, undefined)
-      else equal(error, 'Forbidden', 'third argument to ajax:error should be an HTTP status response');
+      equal(error, 'Forbidden', 'third argument to ajax:error should be an HTTP status response');
       // Opera returns "0" for HTTP code
       equal(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
     });

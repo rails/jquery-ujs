@@ -30,7 +30,7 @@ helpers do
 end
 
 get '/' do
-  params[:version] ||= '1.4.4'
+  params[:version] ||= '1.6.2'
   erb :index
 end
 

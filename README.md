@@ -15,7 +15,7 @@ Full [documentation is on the wiki][wiki], including the [list of published Ajax
 Requirements
 ------------
 
-- [jQuery 1.4.4][jquery] or later;
+- [jQuery 1.6][jquery] or later;
 - HTML5 doctype (optional).
 
 If you don't use HTML5, adding "data" attributes to your HTML4 or XHTML pages might make them fail [W3C markup validation][validator]. However, this shouldn't create any issues for web browsers or other user agents.
@@ -25,7 +25,7 @@ Installation
 
 For automated installation in Rails, use the "jquery-rails" gem. Place this in your Gemfile:
 
-    gem 'jquery-rails', '>= 1.0.3'
+    gem 'jquery-rails', '>= 1.0.12'
 
 And run:
 

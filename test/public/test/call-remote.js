@@ -61,8 +61,6 @@ asyncTest('prefer JS, but accept any format', 1, function() {
 
   submit(function(e, data, status, xhr) {
     var accept = data.HTTP_ACCEPT;
-    // HACK to normalize header sent by jQuery 1.4.4 and below:
-    accept = accept.replace('*/*, */*', '*/*');
     ok(accept.indexOf('*/*;q=0.5, text/javascript, application/javascript') === 0, 'Accept: ' + accept);
   });
 });
@@ -146,9 +144,7 @@ asyncTest('intelligently guesses crossDomain behavior when target URL is a diffe
   $('#qunit-fixture').find('form')
     .bind('ajax:beforeSend', function(e, xhr, settings) {
 
-      // crossDomain doesn't work with jquery 1.4, because it wasn't added until 1.5
-      if (jQuery().jquery.indexOf('1.4') === 0) strictEqual(settings.crossDomain, null)
-      else equal(settings.crossDomain, true, 'crossDomain should be set to true');
+      equal(settings.crossDomain, true, 'crossDomain should be set to true');
 
       // prevent request from actually getting sent off-domain
       return false;
