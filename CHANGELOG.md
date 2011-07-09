@@ -22,3 +22,4 @@ to newest):
 - [`8063d1d47ea6a08e`](https://github.com/rails/jquery-ujs/commit/8063d1d47ea6a08e545e9a6ba3e84af584200e41) made $.rails.confirm and $.rails.ajax functions available in $.rails object
 - [`a96c4e9b074998c6`](https://github.com/rails/jquery-ujs/commit/a96c4e9b074998c6b6d102e4573b81c8a76f07a7) added support for jQuery 1.6.1
 - [`dad6982dc5926866`](https://github.com/rails/jquery-ujs/commit/dad6982dc592686677e6845e681233c40d2ead27) added support for `data-params` attribute on remote links
+- [`5433841d01622345`](https://github.com/rails/jquery-ujs/commit/5433841d01622345f734f22f82394ac035c2f783) removed support for jquery 1.4.4 and 1.5.x, and added support for jquery 1.6.2
