@@ -117,11 +117,11 @@
           method = element.data('method');
           url = element.data('url');
           data = element.serialize();
-          if (element.data('params')) data = data + "&" + element.data('params'); 
+          if (element.data('params')) data = data + "&" + element.data('params');
         } else {
            method = element.data('method');
            url = element.attr('href');
-           data = element.data('params') || null; 
+           data = element.data('params') || null;
         }
 
         options = {
@@ -276,7 +276,7 @@
 
     rails.handleRemote(link);
     return false;
-  });	
+  });
 
   $(rails.formSubmitSelector).live('submit.rails', function(e) {
     var form = $(this),
@@ -309,7 +309,8 @@
   });
 
   $(rails.formInputClickSelector).live('click.rails', function(event) {
-    var button = $(this);
+    var button = $(this),
+      remote = form.data('remote') !== undefined;
 
     if (!rails.allowAction(button)) return rails.stopEverything(event);
 
@@ -317,7 +318,13 @@
     var name = button.attr('name'),
       data = name ? {name:name, value:button.val()} : null;
 
-    button.closest('form').data('ujs:submit-button', data);
+    var form = button.closest('form');
+    form.data('ujs:submit-button', data);
+
+    if(remote) {
+      rails.handleRemote(form);
+      return false;
+    }
   });
 
   $(rails.formSubmitSelector).live('ajax:beforeSend.rails', function(event) {
