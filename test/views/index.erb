@@ -3,6 +3,11 @@
 <%= test 'data-confirm', 'data-remote', 'data-disable', 'call-remote', 'call-remote-callbacks', 'data-method' %>
 
 <h1 id="qunit-header"><%= @title %></h1>
+<div id="jquery-cdn">
+  CDN:
+  <%= cdn_link 'jquery' %> •
+  <%= cdn_link 'googleapis' %>
+</div>
 <div id="jquery-version">
   jQuery version:
   <%= jquery_link '1.6' %> •

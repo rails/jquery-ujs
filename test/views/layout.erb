@@ -4,11 +4,12 @@
     <title><%= @title %></title>
     <link href="/vendor/qunit.css" media="screen" rel="stylesheet" type="text/css" media="screen, projection" />
     <style>
-      #jquery-version {
+      #jquery-cdn, #jquery-version {
         color: #8699A4; text-align: right; font-family: sans-serif; line-height: 1;
         margin-top: -1.8em; padding: 0 2em .8em 0;
       }
-      #jquery-version a { color: white; text-decoration: underline; }
+      #jquery-cdn { margin-right: 300px; }
+      #jquery-cdn a, #jquery-version a { color: white; text-decoration: underline; }
     </style>
     
     <%= script_tag jquery_src %>
