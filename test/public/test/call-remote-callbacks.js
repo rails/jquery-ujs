@@ -137,6 +137,38 @@ asyncTest('disabled fields should not be included in blank required check', 1, f
   }, 13);
 });
 
+asyncTest('form should be submitted with blank required fields if it has the "novalidate" attribute', 2, function(){
+  var form = $('form[data-remote]')
+    .append($('<input type="text" name="user_name" required="required">'))
+    .attr("novalidate", "novalidate")
+    .bind('ajax:beforeSend', function() {
+      ok(true, 'ajax:beforeSend should run');
+    })
+    .bind('ajax:complete', function() {
+      ok(true, 'ajax:complete should run')
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
+asyncTest('blank required form input for non-remote form with "novalidate" attribute should not abort normal submission', 1, function() {
+  var form = $('form[data-remote]')
+    .append($('<input type="text" name="user_name" required="required">'))
+    .removeAttr('data-remote')
+    .attr("novalidate","novalidate")
+    .bind('iframe:loading', function() {
+      ok(true, 'form should get submitted');
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
 function skipIt() {
 	// This test cannot work due to the security feature in browsers which makes the value
 	// attribute of file input fields readonly, so it cannot be set with default value.
