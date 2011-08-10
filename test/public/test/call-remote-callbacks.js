@@ -120,7 +120,7 @@ asyncTest('form should be submitted with blank required fields if handler is bou
   }, 13);
 });
 
-asyncTest('disabled fields should not be included in blank required check', 1, function() {
+asyncTest('disabled fields should not be included in blank required check', 2, function() {
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required" disabled="disabled">'))
     .append($('<textarea name="user_bio" required="required" disabled="disabled"></textarea>'))
@@ -129,12 +129,9 @@ asyncTest('disabled fields should not be included in blank required check', 1, f
     })
     .bind('ajax:aborted:required', function() {
       ok(false, 'ajax:aborted:required should not run');
-    })
-    .trigger('submit');
+    });
 
-  setTimeout(function() {
-    start();
-  }, 13);
+  submit();
 });
 
 asyncTest('form should be submitted with blank required fields if it has the "novalidate" attribute', 2, function(){
@@ -144,14 +141,11 @@ asyncTest('form should be submitted with blank required fields if it has the "no
     .bind('ajax:beforeSend', function() {
       ok(true, 'ajax:beforeSend should run');
     })
-    .bind('ajax:complete', function() {
-      ok(true, 'ajax:complete should run')
-    })
-    .trigger('submit');
+    .bind('ajax:aborted:required', function() {
+      ok(false, 'ajax:aborted:required should not run');
+    });
 
-  setTimeout(function() {
-    start();
-  }, 13);
+  submit();
 });
 
 asyncTest('blank required form input for non-remote form with "novalidate" attribute should not abort normal submission', 1, function() {
