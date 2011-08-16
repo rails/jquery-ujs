@@ -124,7 +124,7 @@
            data = element.data('params') || null; 
         }
 
-        options = {
+        var options = {
           type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
