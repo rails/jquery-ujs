@@ -124,7 +124,7 @@
            data = element.data('params') || null; 
         }
 
-        options = {
+        var options = {
           type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
@@ -144,7 +144,7 @@
           }
         };
         // Do not pass url to `ajax` options if blank
-        if (url) { $.extend(options, { url: url }); }
+        if (url) { options.url = url; }
 
         rails.ajax(options);
       }
