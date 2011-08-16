@@ -144,7 +144,7 @@
           }
         };
         // Do not pass url to `ajax` options if blank
-        if (url) { $.extend(options, { url: url }); }
+        if (url) { options.url = url; }
 
         rails.ajax(options);
       }
