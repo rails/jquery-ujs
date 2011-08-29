@@ -99,7 +99,8 @@
     handleRemote: function(element) {
       var method, url, data,
         crossDomain = element.data('cross-domain') || null,
-        dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
+        dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType),
+        options;
 
       if (rails.fire(element, 'ajax:before')) {
 
@@ -124,7 +125,7 @@
            data = element.data('params') || null; 
         }
 
-        var options = {
+        options = {
           type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
@@ -143,7 +144,7 @@
             element.trigger('ajax:error', [xhr, status, error]);
           }
         };
-        // Do not pass url to `ajax` options if blank
+        // Only pass url to `ajax` options if not blank
         if (url) { options.url = url; }
 
         rails.ajax(options);
