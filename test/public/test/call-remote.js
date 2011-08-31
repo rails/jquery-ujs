@@ -98,7 +98,7 @@ asyncTest('allow empty form "action"', 1, function() {
       }
 
       // Actual location (strip out settings.data that jQuery serializes and appends)
-      ajaxLocation = settings.url.replace(settings.data,"").replace(/&$/, "");
+      ajaxLocation = settings.url.replace(settings.data,"").replace(/&$/, "").replace(/\?$/, "");
       equal(ajaxLocation.match(/^(.*)/)[1], currentLocation, 'URL should be current page by default');
 
       // Prevent the request from actually getting sent to the current page and
