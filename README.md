@@ -25,7 +25,9 @@ Installation
 
 For automated installation in Rails, use the "jquery-rails" gem. Place this in your Gemfile:
 
-    gem 'jquery-rails', '>= 1.0.12'
+```ruby
+gem 'jquery-rails', '>= 1.0.12'
+```
 
 And run:
 
@@ -35,8 +37,10 @@ This next step depends on your version of Rails.
 
 a. For Rails 3.1, add these lines to the top of your app/assets/javascripts/application.js file:
 
-    //= require jquery
-    //= require jquery_ujs
+```javascript
+//= require jquery
+//= require jquery_ujs
+```
 
 b. For Rails 3.0, run this command (add `--ui` if you want jQuery UI):
 
@@ -53,7 +57,9 @@ Choose to overwrite jquery_ujs.js if prompted.*
 
 Configure the following in your application startup file:
 
-    config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
+```ruby
+  config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
+```
 
 Now the template helper `javascript_include_tag :defaults` will generate SCRIPT tags to load jQuery and rails.js.
 
