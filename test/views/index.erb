@@ -10,10 +10,12 @@
 </div>
 <div id="jquery-version">
   jQuery version:
-  <%= jquery_link '1.6' %> •
-  <%= jquery_link '1.6.1' %> •
-  <%= jquery_link '1.6.2' %> •
-  <%= jquery_link 'edge' if File.exist?(settings.root + '/public/vendor/jquery.js') %>
+
+  <% jquery_versions.each do |v| %>
+    <%= ' • ' if v != jquery_versions.first %>
+    <%= jquery_link v %>
+  <% end %>
+ <%= (' • ' + jquery_link('edge')) if File.exist?(settings.root + '/public/vendor/jquery.js') %>
 </div>
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
