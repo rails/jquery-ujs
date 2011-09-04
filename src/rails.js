@@ -52,7 +52,7 @@
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote]',
 
 		// Select elements bound by jquery-ujs
-		selectChangeSelector: 'select[data-remote], input[type="checkbox"][data-remote]',
+		inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
 
     // Form elements bound by jquery-ujs
     formSubmitSelector: 'form',
@@ -114,7 +114,7 @@
             data.push(button);
             element.data('ujs:submit-button', null);
           }
-        } else if (element.is('select') || element.is("input[type='checkbox']")) {
+        } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
           url = element.data('url');
           data = element.serialize();
@@ -271,7 +271,7 @@
     }
   });
 
-	$(rails.selectChangeSelector).live('change.rails', function(e) {
+	$(rails.inputChangeSelector).live('change.rails', function(e) {
     var link = $(this);
     if (!rails.allowAction(link)) return rails.stopEverything(e);
 
