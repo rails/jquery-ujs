@@ -49,7 +49,7 @@
 
   $.rails = rails = {
     // Link elements bound by jquery-ujs
-    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote]',
+    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with]',
 
 		// Select elements bound by jquery-ujs
 		selectChangeSelector: 'select[data-remote]',
@@ -71,6 +71,9 @@
 
     // Form file input elements
     fileInputSelector: 'input:file',
+
+    // Link onClick disable selector with possible reenable after remote submission
+    linkDisableSelector: 'a[data-disable-with]',
 
     // Make sure that every Ajax request sends the CSRF token
     CSRFProtection: function(xhr) {
@@ -253,14 +256,40 @@
         });
       }
       return continuePropagation;
+    },
+
+    //  replace element's html with the 'data-disable-with' after storing original html
+    //  and prevent clicking on it
+    disableElement: function(element) {
+      element.data('ujs:enable-with', element.html()); // store enabled state
+      element.html(element.data('disable-with')); // set to disabled state
+      element.bind('click.railsDisable', function(e) { // prevent further clicking
+        return rails.stopEverything(e)
+      });
+    },
+
+    // restore element to its original state which was disabled by 'disableElement' above
+    enableElement: function(element) {
+      if (element.data('ujs:enable-with') !== undefined) {
+        element.html(element.data('ujs:enable-with')); // set to old enabled state
+        element.removeData('ujs:enable-with'); // clean up cache
+      }
+      element.unbind('click.railsDisable'); // enable element
     }
+
   };
 
   $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
 
+  $(rails.linkDisableSelector).live('ajax:complete', function() {
+      rails.enableElement($(this));
+  });
+
   $(rails.linkClickSelector).live('click.rails', function(e) {
     var link = $(this);
     if (!rails.allowAction(link)) return rails.stopEverything(e);
+
+    if (link.is(rails.linkDisableSelector)) rails.disableElement(link);
 
     if (link.data('remote') !== undefined) {
       rails.handleRemote(link);
