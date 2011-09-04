@@ -96,6 +96,7 @@ asyncTest('allow empty form "action"', 1, function() {
         currentLocation.href = "";
         currentLocation = currentLocation.href;
       }
+      currentLocation = currentLocation.replace(/\?$/, '');
 
       // Actual location (strip out settings.data that jQuery serializes and appends)
       ajaxLocation = settings.url.replace(settings.data,"").replace(/&$/, "").replace(/\?$/, "");

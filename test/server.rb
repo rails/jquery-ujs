@@ -48,7 +48,7 @@ helpers do
 end
 
 get '/' do
-  params[:version] ||= JQUERY_VERSIONS.last
+  params[:version] ||= '1.6.2'
   params[:cdn] ||= 'jquery'
   erb :index
 end
