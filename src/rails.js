@@ -97,7 +97,8 @@
     // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
     confirm: function(message) {
       var res = confirm(message),
-        answer = $.Deferred();
+          answer = $.Deferred();
+
       rails.resolveOrReject(answer, res);
       return answer.promise();
     },
@@ -109,10 +110,10 @@
 
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
-      var method, url, data,
-        crossDomain = element.data('cross-domain') || null,
-        dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType),
-        options;
+      var method, url, data, button,
+          crossDomain = element.data('cross-domain') || null,
+          dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType),
+          options;
 
       if (rails.fire(element, 'ajax:before')) {
 
@@ -121,7 +122,7 @@
           url = element.attr('action');
           data = element.serializeArray();
           // memoized value from clicked submit button
-          var button = element.data('ujs:submit-button');
+          button = element.data('ujs:submit-button');
           if (button) {
             data.push(button);
             element.data('ujs:submit-button', null);
@@ -132,9 +133,9 @@
           data = element.serialize();
           if (element.data('params')) data = data + "&" + element.data('params'); 
         } else {
-           method = element.data('method');
-           url = element.attr('href');
-           data = element.data('params') || null; 
+          method = element.data('method');
+          url = element.attr('href');
+          data = element.data('params') || null; 
         }
 
         options = {
@@ -167,11 +168,11 @@
     // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
     handleMethod: function(link) {
       var href = link.attr('href'),
-        method = link.data('method'),
-        csrf_token = $('meta[name=csrf-token]').attr('content'),
-        csrf_param = $('meta[name=csrf-param]').attr('content'),
-        form = $('<form method="post" action="' + href + '"></form>'),
-        metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
+          method = link.data('method'),
+          csrf_token = $('meta[name=csrf-token]').attr('content'),
+          csrf_param = $('meta[name=csrf-param]').attr('content'),
+          form = $('<form method="post" action="' + href + '"></form>'),
+          metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
 
       if (csrf_param !== undefined && csrf_token !== undefined) {
         metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
@@ -188,7 +189,9 @@
     */
     disableFormElements: function(form) {
       form.find(rails.disableSelector).each(function() {
-        var element = $(this), method = element.is('button') ? 'html' : 'val';
+        var element = $(this),
+            method = element.is('button') ? 'html' : 'val';
+
         element.data('ujs:enable-with', element[method]());
         element[method](element.data('disable-with'));
         element.attr('disabled', 'disabled');
@@ -201,7 +204,9 @@
     */
     enableFormElements: function(form) {
       form.find(rails.enableSelector).each(function() {
-        var element = $(this), method = element.is('button') ? 'html' : 'val';
+        var element = $(this),
+            method = element.is('button') ? 'html' : 'val';
+
         if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
         element.removeAttr('disabled');
       });
@@ -219,7 +224,9 @@
    */
     allowAction: function(element) {
       var message = element.data('confirm'),
-          confirmAnswer, answer = $.Deferred();
+          confirmAnswer,
+          answer = $.Deferred();
+
       if (!message) { return $.when(true); }
 
       if (rails.fire(element, 'confirm')) {
@@ -235,15 +242,18 @@
           }
         );
         return answer.promise();
+      // If `confirm` event handler returned false...
+      } else {
+        answer.reject();
+        return answer.promise();
       }
-      answer.reject();
-      return answer.promise();
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
     blankInputs: function(form, specifiedSelector, nonBlank) {
       var inputs = $(), input,
-        selector = specifiedSelector || 'input,textarea';
+          selector = specifiedSelector || 'input,textarea';
+
       form.find(selector).each(function() {
         input = $(this);
         // Collect non-blank inputs if nonBlank option is true, otherwise, collect blank inputs
@@ -270,6 +280,7 @@
     // manually invoke them. If anyone returns false then stop the loop
     callFormSubmitBindings: function(form) {
       var events = form.data('events'), continuePropagation = true;
+
       if (events !== undefined && events['submit'] !== undefined) {
         $.each(events['submit'], function(i, obj){
           if (typeof obj.handler === 'function') return continuePropagation = obj.handler(obj.data);
@@ -283,10 +294,10 @@
 
   $(rails.linkClickSelector).live('click.rails', function(e) {
     var link = $(this);
+
     if (link.data('rails:click:inner')) {
       return;
     }
-    e.preventDefault();
 
     rails.allowAction(link).then(
       function() {
@@ -302,12 +313,15 @@
       },
       function() {
         rails.stopEverything(e);
-      });
+      }
+    );
+
+    e.preventDefault();
   });
 
   $(rails.selectChangeSelector).live('change.rails', function(e) {
     var link = $(this);
-    e.preventDefault();
+
     rails.allowAction(link).then(
       function() {
         rails.handleRemote(link);
@@ -316,20 +330,19 @@
         rails.stopEverything(e);
       }
     );
+
+    e.preventDefault();
   });
 
   $(rails.formSubmitSelector).live('submit.rails', function(e) {
     var form = $(this),
-      remote = (form.data('remote') !== undefined),
-      blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
-      nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
+        remote = (form.data('remote') !== undefined),
+        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
+        nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
 
     if (form.data('rails:form:submit:inner')) {
       return;
     }
-
-    e.preventDefault();
-
 
     rails.allowAction(form).then(
       function() {
@@ -362,11 +375,12 @@
         rails.stopEverything(e);
       }
     );
+
+    e.preventDefault();
   });
 
   $(rails.formInputClickSelector).live('click.rails', function(event) {
     var button = $(this);
-    e.preventDefault();
 
     rails.allowAction(button).then(
       function() {
@@ -382,6 +396,8 @@
         rails.stopEverything(event);
       }
     );
+
+    e.preventDefault();
   });
 
   $(rails.formSubmitSelector).live('ajax:beforeSend.rails', function(event) {
