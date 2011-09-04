@@ -52,7 +52,7 @@
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote]',
 
 		// Select elements bound by jquery-ujs
-		selectChangeSelector: 'select[data-remote]',
+		selectChangeSelector: 'select[data-remote], input[type="checkbox"][data-remote]',
 
     // Form elements bound by jquery-ujs
     formSubmitSelector: 'form',
@@ -114,15 +114,15 @@
             data.push(button);
             element.data('ujs:submit-button', null);
           }
-        } else if (element.is('select')) {
+        } else if (element.is('select') || element.is("input[type='checkbox']")) {
           method = element.data('method');
           url = element.data('url');
           data = element.serialize();
-          if (element.data('params')) data = data + "&" + element.data('params'); 
+          if (element.data('params')) data = data + "&" + element.data('params');
         } else {
            method = element.data('method');
            url = element.attr('href');
-           data = element.data('params') || null; 
+           data = element.data('params') || null;
         }
 
         options = {
@@ -277,7 +277,7 @@
 
     rails.handleRemote(link);
     return false;
-  });	
+  });
 
   $(rails.formSubmitSelector).live('submit.rails', function(e) {
     var form = $(this),
