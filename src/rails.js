@@ -120,9 +120,9 @@
           data = element.serialize();
           if (element.data('params')) data = data + "&" + element.data('params');
         } else {
-           method = element.data('method');
-           url = element.attr('href');
-           data = element.data('params') || null;
+          method = element.data('method');
+          url = element.attr('href');
+          data = element.data('params') || null;
         }
 
         options = {
