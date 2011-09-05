@@ -15,6 +15,12 @@ module('data-disable', {
       .find('form:last')
       // WEEIRDD: the form won't submit to an iframe if the button is name="submit" (??!)
       .append($('<input type="submit" data-disable-with="submitting ..." name="submit2" value="Submit" />'));
+
+    $('#qunit-fixture').append($('<a />', {
+      text: 'Click me',
+      href: '/echo',
+      'data-disable-with': 'clicking...'
+    }));
   }
 });
 
@@ -132,4 +138,45 @@ asyncTest('form textarea with "data-disable-with" attribute', 3, function() {
 
   ok(textarea.is(':disabled'), 'textarea should be disabled');
   equal(textarea.val(), 'processing ...', 'textarea should have disabled value given to it');
+});
+
+asyncTest('link with "data-disable-with" attribute disables', 4, function() {
+  var link = $('a[data-disable-with]');
+
+  ok(!link.data('ujs:enable-with'), 'link should not be disabled');
+  equal(link.html(), 'Click me', 'link should have value given to it');
+
+  function checkDisabledLink() {
+    ok(link.data('ujs:enable-with'), 'link should be disabled');
+    equal(link.html(), 'clicking...');
+  }
+
+  link.trigger('click');
+  checkDisabledLink();
+  start();
+});
+
+asyncTest('remote link with "data-disable-with" attribute disables and re-enables', 6, function() {
+  var link = $('a[data-disable-with]').attr('data-remote', true);
+
+  function checkEnabledLink() {
+    ok(!link.data('ujs:enable-with'), 'link should not be disabled');
+    equal(link.html(), 'Click me', 'link should have value given to it');
+  }
+  checkEnabledLink();
+
+  function checkDisabledLink() {
+    ok(link.data('ujs:enable-with'), 'link should be disabled');
+    equal(link.html(), 'clicking...');
+  }
+
+  link
+    .bind('ajax:beforeSend', function() {
+      checkDisabledLink();
+    })
+    .live('ajax:complete', function() {
+      checkEnabledLink();
+      start();
+    })
+    .trigger('click');
 });
