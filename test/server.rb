@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'json'
 
-JQUERY_VERSIONS = %w[ 1.6 1.6.1 1.6.2 1.6.3 ].freeze
+JQUERY_VERSIONS = %w[ 1.6 1.6.1 1.6.2 1.6.3 1.6.4 ].freeze
 
 use Rack::Static, :urls => ["/src"], :root => File.expand_path('..', settings.root)
 
