@@ -159,9 +159,10 @@
     handleMethod: function(link) {
       var href = link.attr('href'),
         method = link.data('method'),
+        target = link.attr('target') || "",  // to pass along any original 'target' attribute to the form tag
         csrf_token = $('meta[name=csrf-token]').attr('content'),
         csrf_param = $('meta[name=csrf-param]').attr('content'),
-        form = $('<form method="post" action="' + href + '"></form>'),
+        form = $('<form method="post" action="' + href + '" target="' + target + '"></form>'),
         metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
 
       if (csrf_param !== undefined && csrf_token !== undefined) {
