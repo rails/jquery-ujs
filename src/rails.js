@@ -168,14 +168,19 @@
     // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
     handleMethod: function(link) {
       var href = link.attr('href'),
-          method = link.data('method'),
+          method = link.data('method') || 'GET',
           csrf_token = $('meta[name=csrf-token]').attr('content'),
           csrf_param = $('meta[name=csrf-param]').attr('content'),
-          form = $('<form method="post" action="' + href + '"></form>'),
-          metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
+          form = $('<form></form>', { action: href }),
+          metadata_input = '';
 
-      if (csrf_param !== undefined && csrf_token !== undefined) {
-        metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
+      if (method !== 'GET') {
+        form.attr('method', 'POST');
+        metadata_input += '<input name="_method" value="' + method + '" type="hidden" />';
+
+        if (csrf_param !== undefined && csrf_token !== undefined) {
+          metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
+        }
       }
 
       form.hide().append(metadata_input).appendTo('body');
@@ -295,20 +300,12 @@
   $(rails.linkClickSelector).live('click.rails', function(e) {
     var link = $(this);
 
-    if (link.data('rails:click:inner')) {
-      return;
-    }
-
     rails.allowAction(link).then(
       function() {
         if (link.data('remote') !== undefined) {
           rails.handleRemote(link);
-        } else if (link.data('method')) {
-          rails.handleMethod(link);
         } else {
-          link.data('rails:click:inner', true);
-          link.click();
-          link.data('rails:click:inner', false);
+          rails.handleMethod(link);
         }
       },
       function() {
@@ -340,10 +337,6 @@
         blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
         nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
 
-    if (form.data('rails:form:submit:inner')) {
-      return;
-    }
-
     rails.allowAction(form).then(
       function() {
         // skip other logic when required values are missing or file upload is present
@@ -365,9 +358,10 @@
           // slight timeout so that the submit button gets properly serialized
           setTimeout(function() {
             rails.disableFormElements(form);
-            form.data('rails:form:submit:inner', true);
-            form.submit();
-            form.data('rails:form:submit:inner', false);
+            // Submit the form from dom-level js (i.e. *not* via jquery),
+            // which will skip all submit bindings (including this live-binding),
+            // since they have already been called.
+            form.get(0).submit();
           }, 13);
         }
       },
