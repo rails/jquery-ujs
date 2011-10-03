@@ -26,10 +26,11 @@ $(document).bind('submit', function(e) {
   if (!e.isDefaultPrevented()) {
     var form = $(e.target), action = form.attr('action'),
         name = 'form-frame' + jQuery.guid++,
-        iframe = $('<iframe name="' + name + '" />');
+        iframe = $('<iframe name="' + name + '" />'),
+        target_input = '<input name="_target" value="' + form.attr('target') + '" type="hidden" />';
 
     if (action.indexOf('iframe') < 0) form.attr('action', action + '?iframe=true')
-    form.attr('target', name);
+    form.attr('target', name).append(target_input);
     $('#qunit-fixture').append(iframe);
     $.event.trigger('iframe:loading', form);
   }

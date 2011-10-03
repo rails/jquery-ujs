@@ -1,11 +1,15 @@
 (function(){
 
-module('data-method');
+module('data-method', {
+  setup: function() {
+    $('#qunit-fixture').append($('<a />', {
+      href: '/echo', 'data-method': 'delete', text: 'destroy!'
+    }));
+  }
+});
 
-function submit(fn) {
-  $('#qunit-fixture').
-    append($('<a />', { href: '/echo', 'data-method': 'delete', text: 'destroy!' }))
-    .find('a')
+function submit(fn, options) {
+  $('#qunit-fixture').find('a')
       .bind('iframe:loaded', function(e, data) {
         fn(data);
         start();
@@ -28,6 +32,13 @@ asyncTest('link with "data-method" and CSRF', 1, function() {
   
   submit(function(data) {
     equal(data.params.authenticity_token, 'cf50faa3fe97702ca1ae');
+  });
+});
+
+asyncTest('link "target" should be carried over to generated form', 1, function() {
+  $('a[data-method]').attr('target', 'super-special-frame');
+  submit(function(data) {
+    equal(data.params._target, 'super-special-frame');
   });
 });
 
