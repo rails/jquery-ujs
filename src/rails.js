@@ -291,12 +291,13 @@
   });
 
   $(rails.linkClickSelector).live('click.rails', function(e) {
-    var link = $(this);
+    var link = $(this), method = link.data('method'), data = link.data('params');
     if (!rails.allowAction(link)) return rails.stopEverything(e);
 
     if (link.is(rails.linkDisableSelector)) rails.disableElement(link);
 
     if (link.data('remote') !== undefined) {
+      if ( (e.metaKey || e.ctrlKey) && (!method || method === 'GET') && !data ) { return true; }
       rails.handleRemote(link);
       return false;
     } else if (link.data('method')) {
