@@ -5,6 +5,11 @@ module('data-confirm', {
       'data-remote': 'true',
       'data-confirm': 'Are you absolutely sure?',
       text: 'my social security number'
+    }))
+    .append($('<form />', {
+      action: '/echo',
+      'data-confirm': 'true',
+      method: 'post'
     }));
 
     this.windowConfirm = window.confirm;
@@ -104,7 +109,7 @@ asyncTest('binding to confirm:complete event and returning false', 2, function()
 
 asyncTest('clicking non-ajax link with data-confirm', 2, function() {
   window.confirm = function(msg) {
-    ok(true, 'confirm dialog should be callsed');
+    ok(true, 'confirm dialog should be called');
     return true;
   };
 
@@ -121,4 +126,25 @@ asyncTest('clicking non-ajax link with data-confirm', 2, function() {
   setTimeout(function() {
     start();
   }, 10);
+});
+
+asyncTest('submitting non-ajax form with data-confirm', 3, function() {
+  window.confirm = function(msg) {
+    ok(true, 'confirm dialog should be called');
+    return true;
+  };
+
+  $('form[data-confirm]')
+    .bind('submit', function() {
+      ok(true, 'direct submit binding should only be called once');
+    })
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax should not be called');
+    })
+    .bind('iframe:loaded', function() {
+      ok(true, 'should submit via non-ajax');
+      start();
+    })
+    .trigger('submit');
+
 });
