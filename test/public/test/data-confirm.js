@@ -101,3 +101,24 @@ asyncTest('binding to confirm:complete event and returning false', 2, function()
     start();
   }, 50);
 });
+
+asyncTest('clicking non-ajax link with data-confirm', 2, function() {
+  window.confirm = function(msg) {
+    ok(true, 'confirm dialog should be callsed');
+    return true;
+  };
+
+  $('a[data-confirm]')
+    .removeAttr('data-remote')
+    .bind('click', function() {
+      ok(true, 'direct click binding should only be called once');
+    })
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax should not be called');
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    start();
+  }, 10);
+});
