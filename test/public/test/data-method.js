@@ -1,6 +1,10 @@
 (function(){
 
-module('data-method');
+module('data-method', {
+  teardown: function() {
+    $('form[data-ujs-generated]').remove();
+  }
+});
 
 function submit(fn) {
   $('#qunit-fixture').

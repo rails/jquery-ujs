@@ -11,6 +11,8 @@ module('data-confirm', {
   },
   teardown: function() {
     window.confirm = this.windowConfirm;
+
+    $('form[data-ujs-generated]').remove();
   }
 });
 

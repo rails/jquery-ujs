@@ -171,7 +171,7 @@
           method = link.data('method') || 'GET',
           csrf_token = $('meta[name=csrf-token]').attr('content'),
           csrf_param = $('meta[name=csrf-param]').attr('content'),
-          form = $('<form></form>', { action: href }),
+          form = $('<form></form>', { action: href, method: method, 'data-ujs-generated': 'true' }),
           metadata_input = '';
 
       if (method !== 'GET') {
