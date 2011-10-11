@@ -54,9 +54,12 @@ asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for li
     })
     .trigger(e);
 
+  e = $.Event('click');
+  e.metaKey = true;
+
   link
     .removeAttr('data-method')
-    .attr('data-params', 'name=steve');
+    .attr('data-params', 'name=steve')
     .trigger(e);
 
   setTimeout(function(){ start(); }, 13);
