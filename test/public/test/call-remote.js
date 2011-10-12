@@ -99,7 +99,9 @@ asyncTest('allow empty form "action"', 1, function() {
       currentLocation = currentLocation.replace(/\?$/, '');
 
       // Actual location (strip out settings.data that jQuery serializes and appends)
-      ajaxLocation = settings.url.replace(settings.data,"").replace(/&$/, "").replace(/\?$/, "");
+      // HACK: can no longer use settings.data below to see what was appended to URL, as of
+      // jQuery 1.6.3 (see http://bugs.jquery.com/ticket/10202 and https://github.com/jquery/jquery/pull/544)
+      ajaxLocation = settings.url.replace("user_name=john","").replace(/&$/, "").replace(/\?$/, "");
       equal(ajaxLocation.match(/^(.*)/)[1], currentLocation, 'URL should be current page by default');
 
       // Prevent the request from actually getting sent to the current page and
