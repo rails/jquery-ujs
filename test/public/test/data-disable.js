@@ -180,3 +180,29 @@ asyncTest('remote link with "data-disable-with" attribute disables and re-enable
     })
     .trigger('click');
 });
+
+asyncTest('remote link with "data-disable-with" attribute disables and re-enables when ajax:before event is cancelled', 6, function() {
+  var link = $('a[data-disable-with]').attr('data-remote', true);
+
+  function checkEnabledLink() {
+    ok(!link.data('ujs:enable-with'), 'link should not be disabled');
+    equal(link.html(), 'Click me', 'link should have value given to it');
+  }
+  checkEnabledLink();
+
+  function checkDisabledLink() {
+    ok(link.data('ujs:enable-with'), 'link should be disabled');
+    equal(link.html(), 'clicking...');
+  }
+
+  link
+    .bind('ajax:before', function() {
+      checkDisabledLink();
+      return false;
+    })
+    .trigger('click');
+    setTimeout(function() {
+      checkEnabledLink();
+      start();
+    }, 30);
+});
