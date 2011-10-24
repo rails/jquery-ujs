@@ -99,3 +99,19 @@ asyncTest('binding to confirm:complete event and returning false', 2, function()
     start();
   }, 50);
 });
+
+asyncTest('binding to condition event and returning false', 1, function() {
+  $('a[data-confirm]')
+    .bind('condition', function() {
+      App.assert_callback_invoked('condition');
+      return false;
+    })
+    .bind('confirm', function() {
+      App.assert_callback_not_invoked('confirm')
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    start();
+  }, 50);
+});

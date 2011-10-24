@@ -210,8 +210,14 @@
       Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog.
       Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
       return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
+      Regardless of the presence of the 'data-confirm' attribute, the condition event will be fired to allow for custom
+      logic to prevent the execution of the action.
    */
     allowAction: function(element) {
+      if (!rails.fire(element, 'condition')) {
+        return false;
+      }
+
       var message = element.data('confirm'),
           answer = false, callback;
       if (!message) { return true; }
