@@ -150,7 +150,7 @@
         // Only pass url to `ajax` options if not blank
         if (url) { options.url = url; }
 
-        rails.ajax(options);
+        return rails.ajax(options);
       } else {
         return false;
       }
