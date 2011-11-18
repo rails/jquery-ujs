@@ -252,11 +252,11 @@
 
     // find all the submit events directly bound to the form and
     // manually invoke them. If anyone returns false then stop the loop
-    callFormSubmitBindings: function(form) {
+    callFormSubmitBindings: function(form, event) {
       var events = form.data('events'), continuePropagation = true;
       if (events !== undefined && events['submit'] !== undefined) {
         $.each(events['submit'], function(i, obj){
-          if (typeof obj.handler === 'function') return continuePropagation = obj.handler(obj.data);
+          if (typeof obj.handler === 'function') return continuePropagation = obj.handler(event);
         });
       }
       return continuePropagation;
@@ -335,7 +335,7 @@
 
       // If browser does not support submit bubbling, then this live-binding will be called before direct
       // bindings. Therefore, we should directly call any direct bindings before remotely submitting form.
-      if (!$.support.submitBubbles && rails.callFormSubmitBindings(form) === false) return rails.stopEverything(e);
+      if (!$.support.submitBubbles && rails.callFormSubmitBindings(form, e) === false) return rails.stopEverything(e);
 
       rails.handleRemote(form);
       return false;

@@ -116,14 +116,15 @@ asyncTest('submitting form with data-remote attribute', 4, function() {
     .trigger('submit');
 });
 
-asyncTest('form\'s submit bindings in browsers that don\'t support submit bubbling', 4, function() {
+asyncTest('form\'s submit bindings in browsers that don\'t support submit bubbling', 5, function() {
   var form = $('form[data-remote]'), directBindingCalled = false;
 
   ok(!directBindingCalled, 'nothing is called');
 
   form
     .append($('<input type="submit" />'))
-    .bind('submit', function(){
+    .bind('submit', function(event){
+      ok(event.type == 'submit', 'submit event handlers are called with submit event');
       ok(true, 'binding handler is called');
       directBindingCalled = true;
     })
