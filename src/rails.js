@@ -52,8 +52,8 @@
     // Link elements bound by jquery-ujs
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with]',
 
-		// Select elements bound by jquery-ujs
-		inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
+    // Select elements bound by jquery-ujs
+    inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
 
     // Form elements bound by jquery-ujs
     formSubmitSelector: 'form',
@@ -163,11 +163,21 @@
         target = link.attr('target'),
         csrf_token = $('meta[name=csrf-token]').attr('content'),
         csrf_param = $('meta[name=csrf-param]').attr('content'),
+        params = link.data('params'),
         form = $('<form method="post" action="' + href + '"></form>'),
         metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
 
       if (csrf_param !== undefined && csrf_token !== undefined) {
         metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
+      }
+
+      if (params) {
+        $.each(params.split('&'), function(i, obj) {
+          var res = obj.split('='),
+            name = res[0],
+            value = decodeURIComponent(res[1]).replace(/\+/, ' ');
+          metadata_input += '<input name="' + name + '" value="' + value + '" type="hidden" />';
+        });
       }
 
       if (target) { form.attr('target', target); }
@@ -307,7 +317,7 @@
     }
   });
 
-	$(rails.inputChangeSelector).live('change.rails', function(e) {
+  $(rails.inputChangeSelector).live('change.rails', function(e) {
     var link = $(this);
     if (!rails.allowAction(link)) return rails.stopEverything(e);
 
