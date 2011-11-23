@@ -287,11 +287,13 @@
 
   $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
 
-  $(rails.linkDisableSelector).live('ajax:complete', function() {
-      rails.enableElement($(this));
-  });
-
-  $(rails.linkClickSelector).live('click.rails', function(e) {
+  // Eventhandlers
+  
+  var rails_on_ajax_complete = function(e) {
+    rails.enableElement($(this));
+  };
+  
+  var rails_on_click = function(e) {
     var link = $(this), method = link.data('method'), data = link.data('params');
     if (!rails.allowAction(link)) return rails.stopEverything(e);
 
@@ -305,17 +307,17 @@
       rails.handleMethod(link);
       return false;
     }
-  });
-
-	$(rails.inputChangeSelector).live('change.rails', function(e) {
+  };
+  
+  var rails_on_change = function(e) {
     var link = $(this);
     if (!rails.allowAction(link)) return rails.stopEverything(e);
 
     rails.handleRemote(link);
     return false;
-  });
-
-  $(rails.formSubmitSelector).live('submit.rails', function(e) {
+  };
+  
+  var rails_on_submit = function(e) {
     var form = $(this),
       remote = form.data('remote') !== undefined,
       blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
@@ -343,26 +345,74 @@
       // slight timeout so that the submit button gets properly serialized
       setTimeout(function(){ rails.disableFormElements(form); }, 13);
     }
-  });
-
-  $(rails.formInputClickSelector).live('click.rails', function(event) {
+  };
+  
+  var rails_on_input_click = function(e) {
     var button = $(this);
 
-    if (!rails.allowAction(button)) return rails.stopEverything(event);
+    if (!rails.allowAction(button)) return rails.stopEverything(e);
 
     // register the pressed submit button
     var name = button.attr('name'),
       data = name ? {name:name, value:button.val()} : null;
 
     button.closest('form').data('ujs:submit-button', data);
-  });
+  };
+  
+  var rails_on_ajax_form_beforeSend = function(e) {
+    if (this == e.target) rails.disableFormElements($(this));
+  };
+  
+  var rails_on_ajax_form_complete = function(e) {
+    if (this == e.target) rails.enableFormElements($(this));
+  };
 
-  $(rails.formSubmitSelector).live('ajax:beforeSend.rails', function(event) {
-    if (this == event.target) rails.disableFormElements($(this));
-  });
-
-  $(rails.formSubmitSelector).live('ajax:complete.rails', function(event) {
-    if (this == event.target) rails.enableFormElements($(this));
-  });
+  if ($().jquery < '1.7') {
+    // Use 'live' for jquery < 1.7
+    $(rails.linkDisableSelector).live('ajax:complete', function(e) {
+      rails_on_ajax_complete.call(this, e);
+    });
+    $(rails.linkClickSelector).live('click.rails', function(e) {
+      return rails_on_click.call(this, e);
+    });
+  	$(rails.inputChangeSelector).live('change.rails', function(e) {
+      return rails_on_change.call(this, e);
+    });
+    $(rails.formSubmitSelector).live('submit.rails', function(e) {
+      return rails_on_submit.call(this, e);
+    });
+    $(rails.formInputClickSelector).live('click.rails', function(e) {
+      return rails_on_input_click.call(this, e);
+    });
+    $(rails.formSubmitSelector).live('ajax:beforeSend.rails', function(e) {
+      rails_on_ajax_form_beforeSend.call(this, e);
+    });
+    $(rails.formSubmitSelector).live('ajax:complete.rails', function(e) {
+      rails_on_ajax_form_complete.call(this, e);
+    });
+  } else {
+    // Use 'on' (faster and more unobtrusive) for jquery > 1.7
+    $(document).on('ajax:complete', rails.linkDisableSelector, function(e) {
+      rails_on_ajax_complete.call(this, e);
+    });
+    $(document).on('click.rails', rails.linkClickSelector, function(e) {
+      return rails_on_click.call(this, e);
+    });
+    $(document).on('change.rails', rails.inputChangeSelector, function(e) {
+      return rails_on_change.call(this, e);
+    });
+    $(document).on('submit.rails', rails.formSubmitSelector, function(e) {
+      return rails_on_submit.call(this, e);
+    });
+    $(document).on('click.rails', rails.formInputClickSelector, function(e) {
+      return rails_on_input_click.call(this, e);
+    });
+    $(document).on('ajax:beforeSend.rails', rails.formSubmitSelector, function(e) {
+      rails_on_ajax_form_beforeSend.call(this, e);
+    });
+    $(document).on('ajax:complete.rails', rails.formSubmitSelector, function(e) {
+      rails_on_ajax_form_complete.call(this, e);
+    });
+  }
 
 })( jQuery );
