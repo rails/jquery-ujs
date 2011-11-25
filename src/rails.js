@@ -151,7 +151,9 @@
         // Only pass url to `ajax` options if not blank
         if (url) { options.url = url; }
 
-        rails.ajax(options);
+        return rails.ajax(options);
+      } else {
+        return false;
       }
     },
 
@@ -299,7 +301,9 @@
 
     if (link.data('remote') !== undefined) {
       if ( (e.metaKey || e.ctrlKey) && (!method || method === 'GET') && !data ) { return true; }
-      rails.handleRemote(link);
+      if(rails.handleRemote(link) === false) {
+        rails.enableElement($(this));
+      }
       return false;
     } else if (link.data('method')) {
       rails.handleMethod(link);
