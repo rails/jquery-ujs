@@ -53,7 +53,7 @@
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with]',
 
 		// Select elements bound by jquery-ujs
-		inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
+		inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote], button[data-remote]',
 
     // Form elements bound by jquery-ujs
     formSubmitSelector: 'form',
