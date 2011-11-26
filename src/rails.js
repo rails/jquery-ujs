@@ -301,10 +301,10 @@
 
     if (link.data('remote') !== undefined) {
       if ( (e.metaKey || e.ctrlKey) && (!method || method === 'GET') && !data ) { return true; }
-      if(rails.handleRemote(link) === false) {
-        rails.enableElement($(this));
-      }
+
+      if (rails.handleRemote(link) === false) { rails.enableElement(link); }
       return false;
+
     } else if (link.data('method')) {
       rails.handleMethod(link);
       return false;
@@ -343,6 +343,7 @@
 
       rails.handleRemote(form);
       return false;
+
     } else {
       // slight timeout so that the submit button gets properly serialized
       setTimeout(function(){ rails.disableFormElements(form); }, 13);

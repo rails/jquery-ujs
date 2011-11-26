@@ -200,3 +200,25 @@ asyncTest('a[data-remote][data-disable-with] re-enables when `ajax:beforeSend` e
     start();
   }, 30);
 });
+
+asyncTest('form[data-remote] input|button|textarea[data-disable-with] does not disable when `ajax:beforeSend` event is cancelled', 8, function() {
+  var form = $('form[data-remote]'),
+      input = form.find('input:text'),
+      button = $('<button data-disable-with="submitting ..." name="submit2">Submit</button>').appendTo(form),
+      textarea = $('<textarea data-disable-with="processing ..." name="user_bio">born, lived, died.</textarea>').appendTo(form),
+      submit = $('<input type="submit" data-disable-with="submitting ..." name="submit2" value="Submit" />').appendTo(form);
+
+  form
+    .bind('ajax:beforeSend', function() {
+      return false;
+    })
+    .trigger('submit');
+
+  checkEnabledState(input, 'john');
+  checkEnabledState(button, 'Submit');
+  checkEnabledState(textarea, 'born, lived, died.');
+  checkEnabledState(submit, 'Submit');
+
+  start();
+
+});
