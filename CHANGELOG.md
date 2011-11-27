@@ -23,3 +23,11 @@ to newest):
 - [`a96c4e9b074998c6`](https://github.com/rails/jquery-ujs/commit/a96c4e9b074998c6b6d102e4573b81c8a76f07a7) added support for jQuery 1.6.1
 - [`dad6982dc5926866`](https://github.com/rails/jquery-ujs/commit/dad6982dc592686677e6845e681233c40d2ead27) added support for `data-params` attribute on remote links
 - [`5433841d01622345`](https://github.com/rails/jquery-ujs/commit/5433841d01622345f734f22f82394ac035c2f783) removed support for jquery 1.4.4 and 1.5.x, and added support for jquery 1.6.2
+- [`cd619df9f0daad33`](https://github.com/rails/jquery-ujs/commit/cd619df9f0daad3303aacd4f992fff19158b1e5d) added support for html5 `novalidate` attribute, so required fields validation is not enforced
+- [`840ab6ac76b2d5ab`](https://github.com/rails/jquery-ujs/commit/840ab6ac76b2d5ab931841bc3d8567e5b57f183e) added support for jquery 1.6.3
+- [`ba5808e73111fb65`](https://github.com/rails/jquery-ujs/commit/ba5808e73111fb65e91610b078577bb014d9b6d8) added `data-remote` support for checkboxes
+- [`6e9a06d45eaf2da1`](https://github.com/rails/jquery-ujs/commit/6e9a06d45eaf2da1036d4c2ead25ff57d0127d03) added `data-disable-with` support for links
+- [`89396108ce574080`](https://github.com/rails/jquery-ujs/commit/89396108ce574080f9b877cad74573c5d1ae9aa2) added `data-remote` support for all input types
+- [`c01215c3d48ebb9f`](https://github.com/rails/jquery-ujs/commit/c01215c3d48ebb9f9f1059f26efa0c0c9092da2b) added support for jquery 1.6.4
+- [`17f4004310b6ece3`](https://github.com/rails/jquery-ujs/commit/17f4004310b6ece3cb240914932b4d6d46032c24) added support for jquery 1.7
+- [`cb54ae287f5c7320`](https://github.com/rails/jquery-ujs/commit/cb54ae287f5c73207aef2891cdf22212aea5fb86) added support for jquery 1.7.1
