@@ -55,10 +55,21 @@ Choose to overwrite jquery_ujs.js if prompted.*
 
 [Download jQuery][jquery] and ["rails.js"][adapter] and place them in your "javascripts" directory.
 
-Configure the following in your application startup file:
+Configure the following in your application startup file (for Rails 3):
 
 ```ruby
   config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
+```
+
+Or create an initializer (for Rails 2):
+
+```ruby
+module ActionView::Helpers::AssetTagHelper
+  remove_const :JAVASCRIPT_DEFAULT_SOURCES
+  JAVASCRIPT_DEFAULT_SOURCES = %w(jquery.js rails.js)
+
+  reset_javascript_include_default
+end
 ```
 
 Now the template helper `javascript_include_tag :defaults` will generate SCRIPT tags to load jQuery and rails.js.
