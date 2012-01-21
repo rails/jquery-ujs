@@ -328,7 +328,7 @@
     if (!rails.allowAction(form)) return rails.stopEverything(e);
 
     // skip other logic when required values are missing or file upload is present
-    if (blankRequiredInputs && form.attr("novalidate") == undefined && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
+    if (blankRequiredInputs && form.attr("novalidate") == undefined && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs]) && !($.browser.opera && $.browser.version >= 10)) {
       return rails.stopEverything(e);
     }
 
