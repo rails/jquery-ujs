@@ -47,6 +47,34 @@ asyncTest('modifying form fields with "ajax:before" sends modified data in reque
   });
 });
 
+asyncTest('modifying data("type") with "ajax:before" requests new dataType in request', 2, function(){
+  $('form[data-remote]').data('type','html')
+    .live('ajax:before', function() {
+      var form = $(this);
+      form.data('type','xml')
+    });
+
+  submit(function(form) {
+    form.bind('ajax:beforeSend', function(e, xhr, settings) {
+      equal(settings.dataType, 'xml', 'modified dataType should have been requested');
+    });
+  });
+});
+
+asyncTest('setting data("cross-domain",true) with "ajax:before" uses new setting in request', 2, function(){
+  $('form[data-remote]').data('cross-domain',false)
+    .live('ajax:before', function() {
+      var form = $(this);
+      form.data('cross-domain',true)
+    });
+
+  submit(function(form) {
+    form.bind('ajax:beforeSend', function(e, xhr, settings) {
+      equal(settings.crossDomain, true, 'setting modified in ajax:before should have forced cross-domain request');
+    });
+  });
+});
+
 asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function() {
   submit(function(form) {
     form.bind('ajax:beforeSend', function() {
