@@ -248,7 +248,7 @@
     // Helper function, needed to provide consistent behavior in IE
     stopEverything: function(e) {
       $(e.target).trigger('ujs:everythingStopped');
-      e.stopImmediatePropagation();
+      e.preventDefault();
       return false;
     },
 
