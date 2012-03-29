@@ -171,10 +171,21 @@
         csrf_token = $('meta[name=csrf-token]').attr('content'),
         csrf_param = $('meta[name=csrf-param]').attr('content'),
         form = $('<form method="post" action="' + href + '"></form>'),
-        metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
+        metadata_input = '<input name="_method" value="' + method + '" type="hidden" />',
+        params = link.data('params');
 
       if (csrf_param !== undefined && csrf_token !== undefined) {
         metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
+      }
+      
+      if (params !== undefined) {
+        params = $.each(params.split(/&/), function(i, param) {
+          var split = param.indexOf('=');
+          if (split > 0) {
+            metadata_input += '<input name="' + unescape(param.substring(0, split)) + '" value="' +
+                              unescape(param.substring(split + 1)) + '" type="hidden" />';
+          }
+        });
       }
 
       if (target) { form.attr('target', target); }
