@@ -31,3 +31,4 @@ to newest):
 - [`c01215c3d48ebb9f`](https://github.com/rails/jquery-ujs/commit/c01215c3d48ebb9f9f1059f26efa0c0c9092da2b) added support for jquery 1.6.4
 - [`17f4004310b6ece3`](https://github.com/rails/jquery-ujs/commit/17f4004310b6ece3cb240914932b4d6d46032c24) added support for jquery 1.7
 - [`cb54ae287f5c7320`](https://github.com/rails/jquery-ujs/commit/cb54ae287f5c73207aef2891cdf22212aea5fb86) added support for jquery 1.7.1
+- [`dbb1b5f72a62e59f`](https://github.com/rails/jquery-ujs/commit/dbb1b5f72a62e59f34f6b5be4bee291ee7f3318f) added support for jquery 1.7.2
