@@ -374,4 +374,11 @@
     if (this == event.target) rails.enableFormElements($(this));
   });
 
+  $(function(){
+    // making sure that all forms have actual up-to-date token(cached forms contain old one)
+    csrf_token = $('meta[name=csrf-token]').attr('content');
+    csrf_param = $('meta[name=csrf-param]').attr('content');
+    $('form input[name='+csrf_param+']').val(csrf_token);
+  });
+
 })( jQuery );
