@@ -17,17 +17,17 @@ module('data-confirm', {
 asyncTest('clicking on a link with data-confirm attribute. Confirm yes.', 6, function() {
   var message;
   // auto-confirm:
-  window.confirm = function(msg) { message = msg; return true };
+  window.confirm = function(msg) { message = msg; return true; };
 
   $('a[data-confirm]')
     .bind('confirm:complete', function(e, data) {
       App.assert_callback_invoked('confirm:complete');
-      ok(data == true, 'confirm:complete passes in confirm answer (true)');
+      ok(data === true, 'confirm:complete passes in confirm answer (true)');
     })
-    .bind('ajax:success', function(e, data, status, xhr) { 
+    .bind('ajax:success', function(e, data, status, xhr) {
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
-      App.assert_get_request(data); 
+      App.assert_get_request(data);
 
       equal(message, 'Are you absolutely sure?');
       start();
@@ -38,12 +38,12 @@ asyncTest('clicking on a link with data-confirm attribute. Confirm yes.', 6, fun
 asyncTest('clicking on a link with data-confirm attribute. Confirm No.', 3, function() {
   var message;
   // auto-decline:
-  window.confirm = function(msg) { message = msg; return false };
+  window.confirm = function(msg) { message = msg; return false; };
 
   $('a[data-confirm]')
     .bind('confirm:complete', function(e, data) {
       App.assert_callback_invoked('confirm:complete');
-      ok(data == false, 'confirm:complete passes in confirm answer (false)');
+      ok(data === false, 'confirm:complete passes in confirm answer (false)');
     })
     .bind('ajax:beforeSend', function(e, data, status, xhr) {
       App.assert_callback_not_invoked('ajax:beforeSend');
@@ -69,7 +69,7 @@ asyncTest('binding to confirm event and returning false', 1, function() {
       return false;
     })
     .bind('confirm:complete', function() {
-      App.assert_callback_not_invoked('confirm:complete')
+      App.assert_callback_not_invoked('confirm:complete');
     })
     .trigger('click');
 

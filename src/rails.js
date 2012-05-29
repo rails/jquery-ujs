@@ -106,10 +106,11 @@
 
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
-      var method, url, data, crossDomain, dataType, options;
+      var method, url, data, crossDomain, withCredentials, dataType, options;
 
       if (rails.fire(element, 'ajax:before')) {
         crossDomain = element.data('cross-domain') || null;
+        withCredentials = element.data('with-credentials') || null;
         dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
         if (element.is('form')) {
@@ -134,7 +135,7 @@
         }
 
         options = {
-          type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
+          type: method || 'GET', data: data, dataType: dataType,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
             if (settings.dataType === undefined) {
@@ -150,10 +151,15 @@
           },
           error: function(xhr, status, error) {
             element.trigger('ajax:error', [xhr, status, error]);
-          }
+          },
+          xhrFields: {
+            withCredentials: withCredentials
+          },
+          crossDomain: crossDomain
         };
         // Only pass url to `ajax` options if not blank
         if (url) { options.url = url; }
+        if (withCredentials) { options.xhrFields = { withCredentials: withCredentials }; }
 
         return rails.ajax(options);
       } else {
@@ -274,7 +280,7 @@
       element.data('ujs:enable-with', element.html()); // store enabled state
       element.html(element.data('disable-with')); // set to disabled state
       element.bind('click.railsDisable', function(e) { // prevent further clicking
-        return rails.stopEverything(e)
+        return rails.stopEverything(e);
       });
     },
 
