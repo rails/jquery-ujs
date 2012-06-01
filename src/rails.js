@@ -159,7 +159,6 @@
         };
         // Only pass url to `ajax` options if not blank
         if (url) { options.url = url; }
-        if (withCredentials) { options.xhrFields = { withCredentials: withCredentials }; }
 
         return rails.ajax(options);
       } else {
