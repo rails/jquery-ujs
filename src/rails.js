@@ -45,6 +45,17 @@
  *     });
  */
 
+  // Cut down on the number if issues from people inadvertently including jquery_ujs twice
+  // by detecting and raising an error when it happens.
+  var alreadyInitialized = function() {
+    var events = $(document).data('events');
+    return events.click && $.grep(events.click, function(e) { return e.namespace === 'rails'; }).length;
+  }
+
+  if ( alreadyInitialized() ) {
+    $.error('jquery-ujs has already been loaded!');
+  }
+
   // Shorthand to make it a little easier to call public rails functions from within rails.js
   var rails;
 
