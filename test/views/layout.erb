@@ -11,8 +11,15 @@
       #jquery-cdn { margin-right: 550px; }
       #jquery-cdn a, #jquery-version a { color: white; text-decoration: underline; }
     </style>
-    
+
     <%= script_tag jquery_src %>
+    <script>
+      // This is for test in override.js.
+      // Must go after jQuery is loaded, but before jquery-ujs.
+      $(document).bind('rails:attachBindings', function() {
+        $.rails.linkClickSelector += ', a[data-custom-remote-link]';
+      });
+    </script>
     <%= script_tag "/src/rails.js" %>
   </head>
 
