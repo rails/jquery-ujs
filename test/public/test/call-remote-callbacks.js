@@ -308,4 +308,16 @@ asyncTest('binding to ajax callbacks via .live() triggers handlers properly', 3,
   }, 63);
 });
 
+asyncTest('binding to ajax:send event to call jquery methods on ajax object', 2, function() {
+  $('form[data-remote]')
+    .bind('ajax:send', function(e, xhr) {
+      ok(true, 'event should fire');
+      equal(typeof(xhr.abort), 'function', 'event should pass jqXHR object');
+      xhr.abort();
+    })
+    .trigger('submit');
+
+    setTimeout(function() { start(); }, 35);
+});
+
 })();
