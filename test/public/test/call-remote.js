@@ -157,4 +157,19 @@ asyncTest('intelligently guesses crossDomain behavior when target URL is a diffe
   setTimeout(function() { start(); }, 13);
 });
 
+asyncTest('does not set crossDomain if explicitly set to false on element', 1, function() {
+  build_form({ action: 'http://www.alfajango.com', 'data-cross-domain': false });
+  $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
+
+  $('#qunit-fixture').find('form')
+    .bind('ajax:beforeSend', function(e, xhr, settings) {
+      equal(settings.crossDomain, false, 'crossDomain should be set to false');
+      // prevent request from actually getting sent off-domain
+      return false;
+    })
+    .trigger('submit');
+
+  setTimeout(function() { start(); }, 13);
+});
+
 })();

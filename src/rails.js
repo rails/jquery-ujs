@@ -106,10 +106,11 @@
 
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
-      var method, url, data, crossDomain, dataType, options;
+      var method, url, data, elCrossDomain, crossDomain, dataType, options;
 
       if (rails.fire(element, 'ajax:before')) {
-        crossDomain = element.data('cross-domain') || null;
+        elCrossDomain = element.data('cross-domain');
+        crossDomain = elCrossDomain === undefined ? null : elCrossDomain;
         dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
         if (element.is('form')) {
