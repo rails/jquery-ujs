@@ -5,14 +5,14 @@ function build_form(attrs) {
 
   $('#qunit-fixture').append($('<form />', attrs))
     .find('form').append($('<input type="text" name="user_name" value="john">'));
-};
+}
 
 module('call-remote');
 
 function submit(fn) {
   $('form')
     .bind('ajax:success', fn)
-    .bind('ajax:complete', function() { start() })
+    .bind('ajax:complete', function() { start(); })
     .trigger('submit');
 }
 
