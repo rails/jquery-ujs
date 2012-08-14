@@ -246,12 +246,13 @@
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
     blankInputs: function(form, specifiedSelector, nonBlank) {
-      var inputs = $(), input,
+      var inputs = $(), input, valueToCheck,
         selector = specifiedSelector || 'input,textarea';
       form.find(selector).each(function() {
         input = $(this);
-        // Collect non-blank inputs if nonBlank option is true, otherwise, collect blank inputs
-        if (nonBlank ? input.val() : !input.val()) {
+        valueToCheck = input.is(':checkbox,:radio') ? input.is(':checked') : input.val();
+        // If nonBlank and valueToCheck are both truthy, or nonBlank and valueToCheck are both falsey
+        if (valueToCheck == !!nonBlank) {
           inputs = inputs.add(input);
         }
       });

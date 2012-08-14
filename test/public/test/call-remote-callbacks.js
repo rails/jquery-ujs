@@ -191,6 +191,35 @@ asyncTest('blank required form input for non-remote form with "novalidate" attri
   }, 13);
 });
 
+asyncTest('unchecked required checkbox should abort form submission', 1, function() {
+  var form = $('form[data-remote]')
+    .append($('<input type="checkbox" name="agree" required="required">'))
+    .removeAttr('data-remote')
+    .bind('ujs:everythingStopped', function() {
+      ok(true, 'ujs:everythingStopped should run');
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
+asyncTest('unchecked required radio should abort form submission', 1, function() {
+  var form = $('form[data-remote]')
+    .append($('<input type="radio" name="yes_no" required="required" value=1>'))
+    .append($('<input type="radio" name="yes_no" required="required" value=2>'))
+    .removeAttr('data-remote')
+    .bind('ujs:everythingStopped', function() {
+      ok(true, 'ujs:everythingStopped should run');
+    })
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
 function skipIt() {
   // This test cannot work due to the security feature in browsers which makes the value
   // attribute of file input fields readonly, so it cannot be set with default value.
