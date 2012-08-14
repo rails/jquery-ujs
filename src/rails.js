@@ -355,6 +355,7 @@
 
       if (remote) {
         if (nonBlankFileInputs) {
+          setTimeout(function(){ rails.disableFormElements(form); }, 13);
           return rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
         }
 
