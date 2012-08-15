@@ -49,7 +49,7 @@
   // by detecting and raising an error when it happens.
   var alreadyInitialized = function() {
     var events = $(document).data('events');
-    return events.click && $.grep(events.click, function(e) { return e.namespace === 'rails'; }).length;
+    return events && events.click && $.grep(events.click, function(e) { return e.namespace === 'rails'; }).length;
   }
 
   if ( alreadyInitialized() ) {
