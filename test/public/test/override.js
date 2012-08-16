@@ -39,7 +39,7 @@ asyncTest("the getter for an element's href works normally if not overridden", 1
 });
 
 asyncTest("the event selector strings are overridable", 2, function() {
-  var documentClickBindings = $(document).data('events').click,
+  var documentClickBindings = $._data(document, 'events').click,
       linkClickBinding = $.grep(documentClickBindings, function(a) {
         return a.selector.indexOf('a[data-remote]') != -1;
       })[0];
@@ -50,5 +50,19 @@ asyncTest("the event selector strings are overridable", 2, function() {
 
   start();
 });
+
+// Not sure why this test isn't working in jquery 1.7,
+// or why the error message doesn't show in the console in 1.8
+// when the test is run.
+//
+//asyncTest("including jquery-ujs multiple times throws error", 1, function() {
+//  var script = document.createElement( 'script' );
+//  script.type = 'text/javascript';
+//  script.src = '/src/rails.js';
+//  raises(function() {
+//    $("#qunit-fixture").append( script );
+//  }, 'appending rails.js again throws error');
+//  setTimeout(function() { start(); }, 50);
+//});
 
 })();
