@@ -328,7 +328,13 @@
       if (link.data('remote') !== undefined) {
         if ( (e.metaKey || e.ctrlKey) && (!method || method === 'GET') && !data ) { return true; }
 
-        if (rails.handleRemote(link) === false) { rails.enableElement(link); }
+        var handleRemote = rails.handleRemote(link);
+        // response from rails.handleRemote() will either be false or a deferred object promise.
+        if (handleRemote === false) {
+          rails.enableElement(link);
+        } else {
+          handleRemote.error( function() { rails.enableElement(link); } );
+        }
         return false;
 
       } else if (link.data('method')) {
