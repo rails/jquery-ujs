@@ -32,3 +32,8 @@ to newest):
 - [`17f4004310b6ece3`](https://github.com/rails/jquery-ujs/commit/17f4004310b6ece3cb240914932b4d6d46032c24) added support for jquery 1.7
 - [`cb54ae287f5c7320`](https://github.com/rails/jquery-ujs/commit/cb54ae287f5c73207aef2891cdf22212aea5fb86) added support for jquery 1.7.1
 - [`dbb1b5f72a62e59f`](https://github.com/rails/jquery-ujs/commit/dbb1b5f72a62e59f34f6b5be4bee291ee7f3318f) added support for jquery 1.7.2
+- [`8100cf3b2462f144`](https://github.com/rails/jquery-ujs/commit/8100cf3b2462f144e6a0bcef7cb78d05be41755d) created `rails:attachBindings` to allow for customization of
+  $.rails object settings
+- [`e4ca2045b202cd7a`](https://github.com/rails/jquery-ujs/commit/e4ca2045b202cd7ade97d78c20caa2822c5c28da) created `ajax:send` event to provide access to jqXHR object from
+  ajax requests
+- [`4382f580766fcdd1`](https://github.com/rails/jquery-ujs/commit/4382f580766fcdd14201c204f43ca5aeb0928501) added support for `data-with-credentials`
