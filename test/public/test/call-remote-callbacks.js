@@ -75,6 +75,20 @@ asyncTest('setting data("cross-domain",true) with "ajax:before" uses new setting
   });
 });
 
+asyncTest('setting data("with-credentials",true) with "ajax:before" uses new setting in request', 2, function(){
+  $('form[data-remote]').data('with-credentials',false)
+    .live('ajax:before', function() {
+      var form = $(this);
+      form.data('with-credentials',true);
+    });
+
+  submit(function(form) {
+    form.bind('ajax:beforeSend', function(e, xhr, settings) {
+      equal(settings.xhrFields && settings.xhrFields.withCredentials, true, 'setting modified in ajax:before should have forced withCredentials request');
+    });
+  });
+});
+
 asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function() {
   submit(function(form) {
     form.bind('ajax:beforeSend', function() {
