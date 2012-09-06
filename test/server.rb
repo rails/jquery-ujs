@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'json'
 
-JQUERY_VERSIONS = %w[ 1.7 1.7.1 1.7.2 1.8.0 ].freeze
+JQUERY_VERSIONS = %w[ 1.7 1.7.1 1.7.2 1.8.0 1.8.1 ].freeze
 
 use Rack::Static, :urls => ["/src"], :root => File.expand_path('..', settings.root)
 
@@ -48,7 +48,7 @@ helpers do
 end
 
 get '/' do
-  params[:version] ||= '1.8.0'
+  params[:version] ||= '1.8.1'
   params[:cdn] ||= 'jquery'
   erb :index
 end
