@@ -234,6 +234,26 @@ asyncTest('unchecked required radio should abort form submission', 1, function()
   }, 13);
 });
 
+asyncTest('required radio should only require one to be checked', 1, function() {
+  var form = $('form[data-remote]')
+    .append($('<input type="radio" name="yes_no" required="required" value=1 id="checkme">'))
+    .append($('<input type="radio" name="yes_no" required="required" value=2>'))
+    .removeAttr('data-remote')
+    .bind('iframe:loading', function() {
+      ok(true, 'form should get submitted');
+    })
+    .bind('ujs:everythingStopped', function() {
+      ok(false, 'ujs:everythingStopped should not run');
+    })
+    .find('#checkme').prop('checked', true)
+    .end()
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
 function skipIt() {
   // This test cannot work due to the security feature in browsers which makes the value
   // attribute of file input fields readonly, so it cannot be set with default value.
