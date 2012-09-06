@@ -38,3 +38,4 @@ to newest):
   ajax requests
 - [`4382f580766fcdd1`](https://github.com/rails/jquery-ujs/commit/4382f580766fcdd14201c204f43ca5aeb0928501) added support for `data-with-credentials`
 - [`12da9fc2f175c8e4`](https://github.com/rails/jquery-ujs/commit/12da9fc2f175c8e445413b15cf6b685deb271d6e) added support for jQuery 1.8.0, removed support for jquery 1.6.x
+- [`faeb0ad734ff6867`](https://github.com/rails/jquery-ujs/commit/faeb0ad734ff6867149b8522f9a29081734442e6) added support for jQuery 1.8.1
