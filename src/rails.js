@@ -253,15 +253,16 @@
     blankInputs: function(form, specifiedSelector, nonBlank) {
       var inputs = $(), input, valueToCheck,
           selector = specifiedSelector || 'input,textarea',
-          $allInputs = form.find(selector);
-      $allInputs.each(function() {
+          allInputs = form.find(selector);
+
+      allInputs.each(function() {
         input = $(this);
         valueToCheck = input.is(':checkbox,:radio') ? input.is(':checked') : input.val();
         // If nonBlank and valueToCheck are both truthy, or nonBlank and valueToCheck are both falsey
         if (!valueToCheck === !nonBlank) {
 
           // Don't count unchecked required radio if other radio with same name is checked
-          if (input.is(':radio') && $allInputs.filter('input:radio:checked[name="' + input.attr('name') + '"]').length) {
+          if (input.is(':radio') && allInputs.filter('input:radio:checked[name="' + input.attr('name') + '"]').length) {
             return true; // Skip to next input
           }
 
