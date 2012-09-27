@@ -35,7 +35,7 @@
     formSubmitSelector: 'form',
 
     // Form input elements bound by jquery-ujs
-    formInputClickSelector: 'form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])',
+    formInputClickSelector: 'input[type=submit], input[type=image], button[type=submit], button:not(button[type])',
 
     // Form input elements disabled during form submission
     disableSelector: 'input[data-disable-with], button[data-disable-with], textarea[data-disable-with]',
@@ -178,7 +178,9 @@
       - Sets disabled property to true
     */
     disableFormElements: function(form) {
-      form.find(rails.disableSelector).each(function() {
+      $(rails.disableSelector).filter('[form=' + form.attr('id') + ']')
+          .add(form.find(rails.disableSelector))
+          .each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         element.data('ujs:enable-with', element[method]());
         element[method](element.data('disable-with'));
@@ -191,7 +193,9 @@
       - Sets disabled property to false
     */
     enableFormElements: function(form) {
-      form.find(rails.enableSelector).each(function() {
+      form.find(rails.enableSelector)
+          .add($(rails.enableSelector).filter('[form=' + form.attr('id') + ']'))
+          .each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
         element.prop('disabled', false);
@@ -224,7 +228,8 @@
     blankInputs: function(form, specifiedSelector, nonBlank) {
       var inputs = $(), input, valueToCheck,
           selector = specifiedSelector || 'input,textarea',
-          allInputs = form.find(selector);
+          allInputs = form.find(selector)
+          .add($(selector).filter('[form=' + form.attr('id') + ']'));
 
       allInputs.each(function() {
         input = $(this);
@@ -378,7 +383,17 @@
       var name = button.attr('name'),
         data = name ? {name:name, value:button.val()} : null;
 
-      button.closest('form').data('ujs:submit-button', data);
+	  var attrForm = $('#' + button.attr('form'));
+
+	  if (attrForm == undefined || !attrForm.is('form') || attrForm == button.closest('form')) {
+	    // Button lacks a "form" attribute, or the indicated element isn't a form, or
+	    // the indicated element is also the button's closest parent form. Set data, and
+	    // wait for events to take their natural course.
+	    button.closest('form').data('ujs:submit-button', data);
+	  } else {
+	    // Button's form is not its closest ancestor. Set data on the specified form instead
+	    attrForm.data('ujs:submit-button', data);
+	  }
     });
 
     $(document).delegate(rails.formSubmitSelector, 'ajax:beforeSend.rails', function(event) {
