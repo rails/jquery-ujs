@@ -428,11 +428,15 @@
             if (!$.support.submitBubbles && $().jquery < '1.7' && rails.callFormSubmitBindings(form, e) === false) return rails.stopEverything(e);
 
             rails.handleRemote(form);
-            return false;
-
           } else {
             // slight timeout so that the submit button gets properly serialized
-            setTimeout(function(){ rails.disableFormElements(form); }, 13);
+            setTimeout(function() {
+              rails.disableFormElements(form);
+              // Submit the form from dom-level js (i.e. *not* via jquery),
+              // which will skip all submit bindings (including this live-binding),
+              // since they have already been called.
+              form.get(0).submit();
+            }, 13);
           }
         },
         function() {
@@ -452,14 +456,14 @@
           var name = button.attr('name'),
             data = name ? {name:name, value:button.val()} : null;
 
-          button.closest('form').data('ujs:submit-button', data);
+          button.closest('form').data('ujs:submit-button', data).submit();
         },
         function() {
           rails.stopEverything(event);
         }
       );
 
-      e.preventDefault();
+      event.preventDefault();
     });
 
     $(document).delegate(rails.formSubmitSelector, 'ajax:beforeSend.rails', function(event) {
