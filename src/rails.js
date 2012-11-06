@@ -308,7 +308,7 @@
 
     // restore element to its original state which was disabled by 'disableElement' above
     enableElement: function(element) {
-      if (element.data('ujs:enable-with') !== undefined) {
+      if (element.data('ujs:enable-with') !== undefined && element.data('ujs:enable-with') !== false) {
         element.html(element.data('ujs:enable-with')); // set to old enabled state
         // this should be element.removeData('ujs:enable-with')
         // but, there is currently a bug in jquery which makes hyphenated data attributes not get removed

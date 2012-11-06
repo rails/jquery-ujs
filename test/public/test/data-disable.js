@@ -165,6 +165,19 @@ asyncTest('a[data-remote][data-disable-with] disables and re-enables', 6, functi
     .trigger('click');
 });
 
+test('re-enabling an element that is already enabled has no effect', function () {
+  var link = $('a[data-disable-with]');
+
+  $.rails.disableElement(link)
+  checkDisabledState(link, 'clicking...');
+
+  $.rails.enableElement(link)
+  checkEnabledState(link, 'Click me')
+
+  $.rails.enableElement(link)
+  checkEnabledState(link, 'Click me')
+})
+
 asyncTest('a[data-remote][data-disable-with] re-enables when `ajax:before` event is cancelled', 6, function() {
   var link = $('a[data-disable-with]').attr('data-remote', true);
 
