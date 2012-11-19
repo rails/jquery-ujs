@@ -82,7 +82,7 @@
     requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
 
     // Form file input elements
-    fileInputSelector: 'input:file',
+    fileInputSelector: 'input[type=file]',
 
     // Link onClick disable selector with possible reenable after remote submission
     linkDisableSelector: 'a[data-disable-with]',
