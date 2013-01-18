@@ -21,6 +21,9 @@ module('data-disable', {
       href: '/echo',
       'data-disable-with': 'clicking...'
     }));
+  },
+  teardown: function() {
+    $(document).unbind('iframe:loaded');
   }
 });
 
@@ -82,14 +85,15 @@ asyncTest('form input[type=submit][data-disable-with] disables', 6, function(){
   checkEnabledState(input, 'Submit');
 
   // WEEIRDD: attaching this handler makes the test work in IE7
-  form.bind('iframe:loading', function(e, form) {});
+  $(document).bind('iframe:loading', function(e, form) {});
 
-  form.bind('iframe:loaded', function(e, data) {
+  $(document).bind('iframe:loaded', function(e, data) {
     setTimeout(function() {
       checkDisabledState(input, 'submitting ...');
       start();
     }, 30);
-  }).trigger('submit');
+  });
+  form.trigger('submit');
 
   setTimeout(function() {
     checkDisabledState(input, 'submitting ...');
