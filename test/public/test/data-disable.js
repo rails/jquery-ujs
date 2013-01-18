@@ -162,9 +162,11 @@ asyncTest('a[data-remote][data-disable-with] disables and re-enables', 6, functi
     .bind('ajax:beforeSend', function() {
       checkDisabledState(link, 'clicking...');
     })
-    .live('ajax:complete', function() {
-      checkEnabledState(link, 'Click me');
-      start();
+    .bind('ajax:complete', function() {
+      setTimeout( function() {
+        checkEnabledState(link, 'Click me');
+        start();
+      }, 15);
     })
     .trigger('click');
 });

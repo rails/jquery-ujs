@@ -7,10 +7,10 @@ module('call-remote-callbacks', {
     }));
   },
   teardown: function() {
-    $('form[data-remote]').die('ajax:beforeSend');
-    $('form[data-remote]').die('ajax:before');
-    $('form[data-remote]').die('ajax:complete');
-    $('form[data-remote]').die('ajax:success');
+    $(document).undelegate('form[data-remote]', 'ajax:beforeSend');
+    $(document).undelegate('form[data-remote]', 'ajax:before');
+    $(document).undelegate('form[data-remote]', 'ajax:complete');
+    $(document).undelegate('form[data-remote]', 'ajax:success');
   }
 });
 
@@ -29,7 +29,7 @@ asyncTest('modifying form fields with "ajax:before" sends modified data in reque
   $('form[data-remote]')
     .append($('<input type="text" name="user_name" value="john">'))
     .append($('<input type="text" name="removed_user_name" value="john">'))
-    .live('ajax:before', function() {
+    .bind('ajax:before', function() {
       var form = $(this);
       form
         .append($('<input />',{name: 'other_user_name',value: 'jonathan'}))
@@ -49,7 +49,7 @@ asyncTest('modifying form fields with "ajax:before" sends modified data in reque
 
 asyncTest('modifying data("type") with "ajax:before" requests new dataType in request', 2, function(){
   $('form[data-remote]').data('type','html')
-    .live('ajax:before', function() {
+    .bind('ajax:before', function() {
       var form = $(this);
       form.data('type','xml')
     });
@@ -63,7 +63,7 @@ asyncTest('modifying data("type") with "ajax:before" requests new dataType in re
 
 asyncTest('setting data("cross-domain",true) with "ajax:before" uses new setting in request', 2, function(){
   $('form[data-remote]').data('cross-domain',false)
-    .live('ajax:before', function() {
+    .bind('ajax:before', function() {
       var form = $(this);
       form.data('cross-domain',true)
     });
@@ -77,7 +77,7 @@ asyncTest('setting data("cross-domain",true) with "ajax:before" uses new setting
 
 asyncTest('setting data("with-credentials",true) with "ajax:before" uses new setting in request', 2, function(){
   $('form[data-remote]').data('with-credentials',false)
-    .live('ajax:before', function() {
+    .bind('ajax:before', function() {
       var form = $(this);
       form.data('with-credentials',true);
     });
@@ -304,7 +304,7 @@ function skipIt() {
 }
 
 asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation', 1, function() {
-  $('form[data-remote]').live('ajax:beforeSend', function() {
+  $(document).delegate('form[data-remote]', 'ajax:beforeSend', function() {
     ok(true, 'ajax:beforeSend observed with event delegation');
     return false;
   });
@@ -353,18 +353,18 @@ asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on 
 });
 
 // IF THIS TEST IS FAILING, TRY INCREASING THE TIMEOUT AT THE BOTTOM TO > 100
-asyncTest('binding to ajax callbacks via .live() triggers handlers properly', 3, function() {
-  $('form[data-remote]')
-    .live('ajax:beforeSend', function() {
+asyncTest('binding to ajax callbacks via .delegate() triggers handlers properly', 3, function() {
+  $(document)
+    .delegate('form[data-remote]', 'ajax:beforeSend', function() {
       ok(true, 'ajax:beforeSend handler is triggered');
     })
-    .live('ajax:complete', function() {
+    .delegate('form[data-remote]', 'ajax:complete', function() {
       ok(true, 'ajax:complete handler is triggered');
     })
-    .live('ajax:success', function() {
+    .delegate('form[data-remote]', 'ajax:success', function() {
       ok(true, 'ajax:success handler is triggered');
-    })
-    .trigger('submit');
+    });
+  $('form[data-remote]').trigger('submit');
 
   setTimeout(function() {
     start();
