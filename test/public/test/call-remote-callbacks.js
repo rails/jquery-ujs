@@ -11,6 +11,7 @@ module('call-remote-callbacks', {
     $(document).undelegate('form[data-remote]', 'ajax:before');
     $(document).undelegate('form[data-remote]', 'ajax:complete');
     $(document).undelegate('form[data-remote]', 'ajax:success');
+    $(document).unbind('ajaxStop');
   }
 });
 
@@ -101,7 +102,7 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
     form.bind('ajax:error', function(e, xhr, status, error) {
       ok(false, 'ajax:error should not run');
     });
-    form.bind('ajaxStop', function() {
+    $(document).bind('ajaxStop', function() {
       start();
     });
   });
@@ -313,7 +314,7 @@ asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation',
     form.unbind('ajax:complete').bind('ajax:complete', function() {
       ok(false, 'ajax:complete should not run');
     });
-    form.bind('ajaxStop', function() {
+    $(document).bind('ajaxStop', function() {
       start();
     });
   });
