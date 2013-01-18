@@ -5,16 +5,20 @@ module('data-method', {
     $('#qunit-fixture').append($('<a />', {
       href: '/echo', 'data-method': 'delete', text: 'destroy!'
     }));
+  },
+  teardown: function() {
+    $(document).unbind('iframe:loaded');
   }
 });
 
 function submit(fn, options) {
+  $(document).bind('iframe:loaded', function(e, data) {
+    fn(data);
+    start();
+  });
+
   $('#qunit-fixture').find('a')
-      .bind('iframe:loaded', function(e, data) {
-        fn(data);
-        start();
-      })
-      .trigger('click');
+    .trigger('click');
 }
 
 asyncTest('link with "data-method" set to "delete"', 3, function() {

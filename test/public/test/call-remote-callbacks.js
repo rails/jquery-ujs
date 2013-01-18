@@ -12,6 +12,7 @@ module('call-remote-callbacks', {
     $(document).undelegate('form[data-remote]', 'ajax:complete');
     $(document).undelegate('form[data-remote]', 'ajax:success');
     $(document).unbind('ajaxStop');
+    $(document).unbind('iframe:loading');
   }
 });
 
@@ -109,14 +110,15 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
 });
 
 asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 5, function() {
+  $(document).bind('iframe:loading', function() {
+    ok(false, 'form should not get submitted');
+  });
+
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
     .append($('<textarea name="user_bio" required="required"></textarea>'))
     .bind('ajax:beforeSend', function() {
       ok(false, 'ajax:beforeSend should not run');
-    })
-    .bind('iframe:loading', function() {
-      ok(false, 'form should not get submitted');
     })
     .bind('ajax:aborted:required', function(e,data){
       ok(data.length == 2, 'ajax:aborted:required event is passed all blank required inputs (jQuery objects)');
@@ -192,13 +194,14 @@ asyncTest('form should be submitted with blank required fields if it has the "no
 });
 
 asyncTest('blank required form input for non-remote form with "novalidate" attribute should not abort normal submission', 1, function() {
+  $(document).bind('iframe:loading', function() {
+    ok(true, 'form should get submitted');
+  });
+
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
     .removeAttr('data-remote')
     .attr("novalidate","novalidate")
-    .bind('iframe:loading', function() {
-      ok(true, 'form should get submitted');
-    })
     .trigger('submit');
 
   setTimeout(function() {
@@ -236,13 +239,14 @@ asyncTest('unchecked required radio should abort form submission', 1, function()
 });
 
 asyncTest('required radio should only require one to be checked', 1, function() {
+  $(document).bind('iframe:loading', function() {
+    ok(true, 'form should get submitted');
+  });
+
   var form = $('form[data-remote]')
     .append($('<input type="radio" name="yes_no" required="required" value=1 id="checkme">'))
     .append($('<input type="radio" name="yes_no" required="required" value=2>'))
     .removeAttr('data-remote')
-    .bind('iframe:loading', function() {
-      ok(true, 'form should get submitted');
-    })
     .bind('ujs:everythingStopped', function() {
       ok(false, 'ujs:everythingStopped should not run');
     })
