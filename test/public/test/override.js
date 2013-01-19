@@ -41,8 +41,10 @@ asyncTest("the getter for an element's href works normally if not overridden", 1
 asyncTest("the event selector strings are overridable", 2, function() {
   var documentClickBindings = $._data(document, 'events').click,
       linkClickBinding = $.grep(documentClickBindings, function(a) {
-        return a.selector.indexOf('a[data-remote]') != -1;
+        return a.selector && a.selector.indexOf('a[data-remote]') != -1;
       })[0];
+
+      //var documentClickBindings = "", linkClickBinding = {selector: ""};
 
   ok($.rails.linkClickSelector.indexOf(', a[data-custom-remote-link]') != -1, 'linkClickSelector contains custom selector');
 
