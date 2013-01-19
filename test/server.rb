@@ -48,7 +48,7 @@ helpers do
 end
 
 get '/' do
-  params[:version] ||= '1.8.3'
+  params[:version] ||= '1.9.0'
   params[:cdn] ||= 'jquery'
   erb :index
 end
