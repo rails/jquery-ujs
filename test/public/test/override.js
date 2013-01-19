@@ -44,8 +44,6 @@ asyncTest("the event selector strings are overridable", 2, function() {
         return a.selector && a.selector.indexOf('a[data-remote]') != -1;
       })[0];
 
-      //var documentClickBindings = "", linkClickBinding = {selector: ""};
-
   ok($.rails.linkClickSelector.indexOf(', a[data-custom-remote-link]') != -1, 'linkClickSelector contains custom selector');
 
   ok(linkClickBinding.selector.indexOf(', a[data-custom-remote-link]') != -1, 'actual document binding contains custom selector');
