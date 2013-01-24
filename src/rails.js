@@ -164,11 +164,17 @@
           error: function(xhr, status, error) {
             element.trigger('ajax:error', [xhr, status, error]);
           },
-          xhrFields: {
-            withCredentials: withCredentials
-          },
           crossDomain: crossDomain
         };
+
+        // There is no withCredentials for IE6-8 when
+        // "Enable native XMLHTTP support" is disabled
+        if (withCredentials) {
+          options.xhrFields = {
+            withCredentials: withCredentials
+          };
+        }
+
         // Only pass url to `ajax` options if not blank
         if (url) { options.url = url; }
 
