@@ -6,6 +6,8 @@
  *
  * Requires jQuery 1.7.0 or later.
  *
+ * Released under the MIT license
+ *
  * Uploading file using rails.js
  * =============================
  *
