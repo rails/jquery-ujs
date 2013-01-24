@@ -82,7 +82,7 @@
     requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
 
     // Form file input elements
-    fileInputSelector: 'input:file',
+    fileInputSelector: 'input[type=file]',
 
     // Link onClick disable selector with possible reenable after remote submission
     linkDisableSelector: 'a[data-disable-with]',
@@ -263,12 +263,12 @@
 
       allInputs.each(function() {
         input = $(this);
-        valueToCheck = input.is(':checkbox,:radio') ? input.is(':checked') : input.val();
+        valueToCheck = input.is('input[type=checkbox],input[type=radio]') ? input.is(':checked') : input.val();
         // If nonBlank and valueToCheck are both truthy, or nonBlank and valueToCheck are both falsey
         if (!valueToCheck === !nonBlank) {
 
           // Don't count unchecked required radio if other radio with same name is checked
-          if (input.is(':radio') && allInputs.filter('input:radio:checked[name="' + input.attr('name') + '"]').length) {
+          if (input.is('input[type=radio]') && allInputs.filter('input[type=radio]:checked[name="' + input.attr('name') + '"]').length) {
             return true; // Skip to next input
           }
 
