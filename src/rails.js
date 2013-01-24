@@ -8,26 +8,6 @@
  *
  * Released under the MIT license
  *
- * Uploading file using rails.js
- * =============================
- *
- * By default, browsers do not allow files to be uploaded via AJAX. As a result, if there are any non-blank file fields
- * in the remote form, this adapter aborts the AJAX submission and allows the form to submit through standard means.
- *
- * The `ajax:aborted:file` event allows you to bind your own handler to process the form submission however you wish.
- *
- * Ex:
- *     $('form').bind('ajax:aborted:file', function(event, elements){
- *       // Implement own remote file-transfer handler here for non-blank file inputs passed in `elements`.
- *       // Returning false in this handler tells rails.js to disallow standard form submission
- *       return false;
- *     });
- *
- * The `ajax:aborted:file` event is fired when a file-type input is detected with a non-blank value.
- *
- * Third-party tools can use this hook to detect when an AJAX file upload is attempted, and then use
- * techniques like the iframe method to upload the file instead.
- *
  * Required fields in rails.js
  * ===========================
  *
