@@ -78,6 +78,21 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
     .trigger('click');
 });
 
+asyncTest('clicking on a link with data-remote attribute and data-method post', 6, function() {
+  $('a[data-remote]')
+    .attr('data-method', 'post')
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assert_callback_invoked('ajax:success');
+      App.assert_request_path(data, '/echo');
+      equal(data.CONTENT_TYPE, 'application/x-www-form-urlencoded; charset=UTF-8', 'Content-Type header should be set');
+      equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
+      equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
+      App.assert_post_request(data);
+    })
+    .bind('ajax:complete', function() { start() })
+    .trigger('click');
+});
+
 asyncTest('changing a select option with data-remote attribute', 5, function() {
   $('form')
     .append(
