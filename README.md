@@ -52,6 +52,12 @@ Choose to overwrite jquery_ujs.js if prompted.*
 
 c. For Rails 2.x and for manual installation follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Manual-installing-and-Rails-2) .
 
+Requirements
+------------
+
+Follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing) to run tests .
+
+
 [data]: http://dev.w3.org/html5/spec/elements.html#embedding-custom-non-visible-data-with-the-data-attributes "Embedding custom non-visible data with the data-* attributes"
 [wiki]: https://github.com/rails/jquery-ujs/wiki
 [events]: https://github.com/rails/jquery-ujs/wiki/ajax
