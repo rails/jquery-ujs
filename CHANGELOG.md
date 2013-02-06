@@ -22,16 +22,16 @@ to newest):
 - [`8063d1d47ea6a08e`](https://github.com/rails/jquery-ujs/commit/8063d1d47ea6a08e545e9a6ba3e84af584200e41) made $.rails.confirm and $.rails.ajax functions available in $.rails object
 - [`a96c4e9b074998c6`](https://github.com/rails/jquery-ujs/commit/a96c4e9b074998c6b6d102e4573b81c8a76f07a7) added support for jQuery 1.6.1
 - [`dad6982dc5926866`](https://github.com/rails/jquery-ujs/commit/dad6982dc592686677e6845e681233c40d2ead27) added support for `data-params` attribute on remote links
-- [`5433841d01622345`](https://github.com/rails/jquery-ujs/commit/5433841d01622345f734f22f82394ac035c2f783) removed support for jquery 1.4.4 and 1.5.x, and added support for jquery 1.6.2
+- [`5433841d01622345`](https://github.com/rails/jquery-ujs/commit/5433841d01622345f734f22f82394ac035c2f783) removed support for jQuery 1.4.4 and 1.5.x, and added support for jQuery 1.6.2
 - [`cd619df9f0daad33`](https://github.com/rails/jquery-ujs/commit/cd619df9f0daad3303aacd4f992fff19158b1e5d) added support for html5 `novalidate` attribute, so required fields validation is not enforced
-- [`840ab6ac76b2d5ab`](https://github.com/rails/jquery-ujs/commit/840ab6ac76b2d5ab931841bc3d8567e5b57f183e) added support for jquery 1.6.3
+- [`840ab6ac76b2d5ab`](https://github.com/rails/jquery-ujs/commit/840ab6ac76b2d5ab931841bc3d8567e5b57f183e) added support for jQuery 1.6.3
 - [`ba5808e73111fb65`](https://github.com/rails/jquery-ujs/commit/ba5808e73111fb65e91610b078577bb014d9b6d8) added `data-remote` support for checkboxes
 - [`6e9a06d45eaf2da1`](https://github.com/rails/jquery-ujs/commit/6e9a06d45eaf2da1036d4c2ead25ff57d0127d03) added `data-disable-with` support for links
 - [`89396108ce574080`](https://github.com/rails/jquery-ujs/commit/89396108ce574080f9b877cad74573c5d1ae9aa2) added `data-remote` support for all input types
-- [`c01215c3d48ebb9f`](https://github.com/rails/jquery-ujs/commit/c01215c3d48ebb9f9f1059f26efa0c0c9092da2b) added support for jquery 1.6.4
-- [`17f4004310b6ece3`](https://github.com/rails/jquery-ujs/commit/17f4004310b6ece3cb240914932b4d6d46032c24) added support for jquery 1.7
-- [`cb54ae287f5c7320`](https://github.com/rails/jquery-ujs/commit/cb54ae287f5c73207aef2891cdf22212aea5fb86) added support for jquery 1.7.1
-- [`dbb1b5f72a62e59f`](https://github.com/rails/jquery-ujs/commit/dbb1b5f72a62e59f34f6b5be4bee291ee7f3318f) added support for jquery 1.7.2
+- [`c01215c3d48ebb9f`](https://github.com/rails/jquery-ujs/commit/c01215c3d48ebb9f9f1059f26efa0c0c9092da2b) added support for jQuery 1.6.4
+- [`17f4004310b6ece3`](https://github.com/rails/jquery-ujs/commit/17f4004310b6ece3cb240914932b4d6d46032c24) added support for jQuery 1.7
+- [`cb54ae287f5c7320`](https://github.com/rails/jquery-ujs/commit/cb54ae287f5c73207aef2891cdf22212aea5fb86) added support for jQuery 1.7.1
+- [`dbb1b5f72a62e59f`](https://github.com/rails/jquery-ujs/commit/dbb1b5f72a62e59f34f6b5be4bee291ee7f3318f) added support for jQuery 1.7.2
 - [`8100cf3b2462f144`](https://github.com/rails/jquery-ujs/commit/8100cf3b2462f144e6a0bcef7cb78d05be41755d) created `rails:attachBindings` to allow for customization of
   $.rails object settings
 - [`e4ca2045b202cd7a`](https://github.com/rails/jquery-ujs/commit/e4ca2045b202cd7ade97d78c20caa2822c5c28da) created `ajax:send` event to provide access to jqXHR object from
@@ -39,3 +39,7 @@ to newest):
 - [`4382f580766fcdd1`](https://github.com/rails/jquery-ujs/commit/4382f580766fcdd14201c204f43ca5aeb0928501) added support for `data-with-credentials`
 - [`12da9fc2f175c8e4`](https://github.com/rails/jquery-ujs/commit/12da9fc2f175c8e445413b15cf6b685deb271d6e) added support for jQuery 1.8.0, removed support for jquery 1.6.x
 - [`faeb0ad734ff6867`](https://github.com/rails/jquery-ujs/commit/faeb0ad734ff6867149b8522f9a29081734442e6) added support for jQuery 1.8.1
+- [`b6dae4ef4a2d031a`](https://github.com/rails/jquery-ujs/commit/b6dae4ef4a2d031a222627c7f6a4284602f99160) added support for jQuery 1.8.2
+- [`6927b82cadf3146c`](https://github.com/rails/jquery-ujs/commit/6927b82cadf3146c2b9ae3028e9b197af64011ca) added support for jQuery 1.8.3
+- [`cc356656cc3edf15`](https://github.com/rails/jquery-ujs/commit/cc356656cc3edf1596fd685265187d2f75d1bc7c) added support for jQuery 1.9.0
+- [`2f8ccdf26eac199a`](https://github.com/rails/jquery-ujs/commit/2f8ccdf26eac199a11aa1a893a8909bb4650d0fb) added support for jQuery 1.9.1
