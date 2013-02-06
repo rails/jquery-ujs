@@ -52,7 +52,7 @@ Choose to overwrite jquery_ujs.js if prompted.*
 
 c. For Rails 2.x and for manual installation follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Manual-installing-and-Rails-2) .
 
-Requirements
+How to run tests
 ------------
 
 Follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing) to run tests .
