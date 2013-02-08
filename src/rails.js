@@ -12,12 +12,7 @@
 
   // Cut down on the number if issues from people inadvertently including jquery_ujs twice
   // by detecting and raising an error when it happens.
-  var alreadyInitialized = function() {
-    var events = $._data(document, 'events');
-    return events && events.click && $.grep(events.click, function(e) { return e.namespace === 'rails'; }).length;
-  }
-
-  if ( alreadyInitialized() ) {
+  if ( $.rails !== undefined ) {
     $.error('jquery-ujs has already been loaded!');
   }
 
