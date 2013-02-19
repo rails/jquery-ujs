@@ -207,6 +207,23 @@ asyncTest('a[data-remote][data-disable-with] re-enables when `ajax:beforeSend` e
   }, 30);
 });
 
+asyncTest('a[data-remote][data-disable-with] re-enables when `ajax:error` event is triggered', 6, function() {
+  var link = $('a[data-disable-with]').attr('data-remote', true).attr('href', '/error');
+
+  checkEnabledState(link, 'Click me');
+
+  link
+    .bind('ajax:beforeSend', function() {
+      checkDisabledState(link, 'clicking...');
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    checkEnabledState(link, 'Click me');
+    start();
+  }, 30);
+});
+
 asyncTest('form[data-remote] input|button|textarea[data-disable-with] does not disable when `ajax:beforeSend` event is cancelled', 8, function() {
   var form = $('form[data-remote]'),
       input = form.find('input:text'),
