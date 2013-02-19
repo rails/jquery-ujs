@@ -274,7 +274,7 @@
 
     // restore element to its original state which was disabled by 'disableElement' above
     enableElement: function(element) {
-      if (element.data('ujs:enable-with') !== undefined) {
+      if (element.data('ujs:enable-with') !== undefined && element.data('ujs:enable-with') !== false) {
         element.html(element.data('ujs:enable-with')); // set to old enabled state
         element.removeData('ujs:enable-with'); // clean up cache
       }
