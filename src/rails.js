@@ -23,6 +23,9 @@
     // Link elements bound by jquery-ujs
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with]',
 
+    // Button elements boud jquery-ujs
+    buttonClickSelector: 'button[data-remote]',
+
     // Select elements bound by jquery-ujs
     inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
 
@@ -97,6 +100,11 @@
           }
         } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
+          url = element.data('url');
+          data = element.serialize();
+          if (element.data('params')) data = data + "&" + element.data('params');
+        } else if (element.is(rails.buttonClickSelector)) {
+          method = element.data('method') || 'post';
           url = element.data('url');
           data = element.serialize();
           if (element.data('params')) data = data + "&" + element.data('params');
@@ -313,6 +321,14 @@
         rails.handleMethod(link);
         return false;
       }
+    });
+
+    $(document).delegate(rails.buttonClickSelector, 'click.rails', function(e) {
+      var button = $(this);
+      if (!rails.allowAction(button)) return rails.stopEverything(e);
+
+      rails.handleRemote(button);
+      return false;
     });
 
     $(document).delegate(rails.inputChangeSelector, 'change.rails', function(e) {
