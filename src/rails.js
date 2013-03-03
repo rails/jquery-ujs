@@ -10,7 +10,7 @@
  *
  */
 
-  // Cut down on the number if issues from people inadvertently including jquery_ujs twice
+  // Cut down on the number of issues from people inadvertently including jquery_ujs twice
   // by detecting and raising an error when it happens.
   if ( $.rails !== undefined ) {
     $.error('jquery-ujs has already been loaded!');
