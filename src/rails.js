@@ -253,7 +253,7 @@
     // find all the submit events directly bound to the form and
     // manually invoke them. If anyone returns false then stop the loop
     callFormSubmitBindings: function(form, event) {
-      var events = form.data('events'), continuePropagation = true;
+      var events = jQuery._data(form, 'events'), continuePropagation = true;
       if (events !== undefined && events['submit'] !== undefined) {
         $.each(events['submit'], function(i, obj){
           if (typeof obj.handler === 'function') return continuePropagation = obj.handler(event);
