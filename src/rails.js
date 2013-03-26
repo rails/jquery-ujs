@@ -47,6 +47,9 @@
     // Link onClick disable selector with possible reenable after remote submission
     linkDisableSelector: 'a[data-disable-with]',
 
+    // Link disabled should not be able to transmit ajax request
+    linkDisabledAttribute: 'a[disabled=disabled]',
+
     // Make sure that every Ajax request sends the CSRF token
     CSRFProtection: function(xhr) {
       var token = $('meta[name="csrf-token"]').attr('content');
@@ -293,7 +296,7 @@
 
     $(document).delegate(rails.linkClickSelector, 'click.rails', function(e) {
       var link = $(this), method = link.data('method'), data = link.data('params');
-      if (!rails.allowAction(link)) return rails.stopEverything(e);
+      if (!rails.allowAction(link) || link.is(rails.linkDisabledAttribute)) return rails.stopEverything(e);
 
       if (link.is(rails.linkDisableSelector)) rails.disableElement(link);
 

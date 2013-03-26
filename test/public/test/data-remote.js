@@ -12,6 +12,12 @@ module('data-remote', {
         'data-remote': 'true',
         method: 'post'
       }))
+      .append($('<a />', {
+        href: '/echo',
+        'data-remote': 'true',
+        disabled: 'disabled',
+        text: 'Disabed link'
+      }))
       .find('form').append($('<input type="text" name="user_name" value="john">'));
 
   }
@@ -66,7 +72,7 @@ asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for li
 });
 
 asyncTest('clicking on a link with data-remote attribute', 5, function() {
-  $('a[data-remote]')
+  $('a[data-remote]:not([disabled=disabled])')
     .bind('ajax:success', function(e, data, status, xhr) { 
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
@@ -76,6 +82,15 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
     })
     .bind('ajax:complete', function() { start() })
     .trigger('click');
+});
+
+asyncTest('clicking on a link with disabled attribute', 0, function() {
+  $('a[disabled=disabled]')
+    .bind("ajax:before", function(e, data, status, xhr) {
+      ok(false, "should not send the request");
+    })
+    .trigger('click')
+  setTimeout(function(){ start(); }, 13);
 });
 
 asyncTest('changing a select option with data-remote attribute', 5, function() {
