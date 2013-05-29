@@ -7,6 +7,12 @@ module('data-remote', {
         'data-params': 'data1=value1&data2=value2',
         text: 'my address'
       }))
+      .append($('<button />', {
+        'data-url': '/echo',
+        'data-remote': 'true',
+        'data-params': 'data1=value1&data2=value2',
+        text: 'my button'
+      }))
       .append($('<form />', {
         action: '/echo',
         'data-remote': 'true',
@@ -67,12 +73,25 @@ asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for li
 
 asyncTest('clicking on a link with data-remote attribute', 5, function() {
   $('a[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) { 
+    .bind('ajax:success', function(e, data, status, xhr) {
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
       equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
       equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
-      App.assert_get_request(data); 
+      App.assert_get_request(data);
+    })
+    .bind('ajax:complete', function() { start() })
+    .trigger('click');
+});
+
+asyncTest('clicking on a button with data-remote attribute', 5, function() {
+  $('button[data-remote]')
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assert_callback_invoked('ajax:success');
+      App.assert_request_path(data, '/echo');
+      equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
+      equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
+      App.assert_post_request(data);
     })
     .bind('ajax:complete', function() { start() })
     .trigger('click');
@@ -92,12 +111,12 @@ asyncTest('changing a select option with data-remote attribute', 5, function() {
     );
 
   $('select[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) { 
+    .bind('ajax:success', function(e, data, status, xhr) {
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
       equal(data.params.user_data, 'optionValue2', 'ajax arguments should have key term with right value');
       equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
-      App.assert_get_request(data); 
+      App.assert_get_request(data);
     })
     .bind('ajax:complete', function() { start() })
     .val('optionValue2')
@@ -106,11 +125,11 @@ asyncTest('changing a select option with data-remote attribute', 5, function() {
 
 asyncTest('submitting form with data-remote attribute', 4, function() {
   $('form[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) { 
+    .bind('ajax:success', function(e, data, status, xhr) {
       App.assert_callback_invoked('ajax:success');
       App.assert_request_path(data, '/echo');
       equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
-      App.assert_post_request(data); 
+      App.assert_post_request(data);
     })
     .bind('ajax:complete', function() { start() })
     .trigger('submit');
