@@ -58,9 +58,14 @@
 
     // Triggers an event on an element and returns false if the event result is false
     fire: function(obj, name, data) {
+      return rails.fireNoCheck(obj, name, data) !== false;
+    },
+
+    // Triggers an event on an element and returns the event result
+    fireNoCheck: function(obj, name, data) {
       var event = $.Event(name);
       obj.trigger(event, data);
-      return event.result !== false;
+      return event.result;
     },
 
     // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
@@ -207,16 +212,25 @@
       - Fires the `confirm:complete` event
 
       Returns `true` if no function stops the chain and user chose yes; `false` otherwise.
-      Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog.
+      Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog
+      and makes this function return false.
+      Attaching a handler to the element's `confirm` event that returns the string "skip" cancels the confirmation dialog
+      and makes this function return true.
       Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
       return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
    */
     allowAction: function(element) {
       var message = element.data('confirm'),
-          answer = false, callback;
+          answer = false, callback, confirm;
+
       if (!message) { return true; }
 
-      if (rails.fire(element, 'confirm')) {
+      confirm = rails.fireNoCheck(element, 'confirm');
+
+      if(confirm === 'skip') {
+         return true;
+      }
+      else if (confirm !== false) {
         answer = rails.confirm(message);
         callback = rails.fire(element, 'confirm:complete', [answer]);
       }
