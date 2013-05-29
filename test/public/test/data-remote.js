@@ -91,7 +91,7 @@ asyncTest('clicking on a button with data-remote attribute', 5, function() {
       App.assert_request_path(data, '/echo');
       equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
       equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
-      App.assert_post_request(data);
+      App.assert_get_request(data);
     })
     .bind('ajax:complete', function() { start() })
     .trigger('click');

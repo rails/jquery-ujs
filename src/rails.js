@@ -104,7 +104,7 @@
           data = element.serialize();
           if (element.data('params')) data = data + "&" + element.data('params');
         } else if (element.is(rails.buttonClickSelector)) {
-          method = element.data('method') || 'post';
+          method = element.data('method') || 'get';
           url = element.data('url');
           data = element.serialize();
           if (element.data('params')) data = data + "&" + element.data('params');
