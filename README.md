@@ -58,7 +58,7 @@ How to run tests
 Follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing) to run tests .
 
 
-[data]: http://dev.w3.org/html5/spec/elements.html#embedding-custom-non-visible-data-with-the-data-attributes "Embedding custom non-visible data with the data-* attributes"
+[data]: http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes "Embedding custom non-visible data with the data-* attributes"
 [wiki]: https://github.com/rails/jquery-ujs/wiki
 [events]: https://github.com/rails/jquery-ujs/wiki/ajax
 [jquery]: http://docs.jquery.com/Downloading_jQuery
