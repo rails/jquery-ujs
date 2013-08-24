@@ -42,7 +42,7 @@ a. For Rails 3.1, add these lines to the top of your app/assets/javascripts/appl
 //= require jquery_ujs
 ```
 
-b. For Rails 3.0, run this command (add `--ui` if you want jQuery UI):
+b. For Rails 3.0, run this command:
 
 *Be sure to get rid of the rails.js file if it exists, and instead use
 the new jquery_ujs.js file that gets copied to the public directory.
