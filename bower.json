@@ -1,0 +1,16 @@
+{
+  name: 'jquery-ujs',
+  version: '3.0.4',
+  homepage: 'https://github.com/rails/jquery-ujs',
+  authors: [],
+  description: 'Ruby on Rails unobtrusive scripting adapter for jQuery',
+  main: 'src/rails.js',
+  license: 'MIT',
+  ignore: [
+    '**/.*',
+    'Gemfile.*',
+    'Rakefile',
+    'bower_components',
+    'test',
+  ]
+}
