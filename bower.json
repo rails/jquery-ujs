@@ -6,6 +6,9 @@
   "description": "Ruby on Rails unobtrusive scripting adapter for jQuery",
   "main": "src/rails.js",
   "license": "MIT",
+  "dependencies": {
+    "jquery": "~1.10.2"
+  },
   "ignore": [
     "**/.*",
     "Gemfile*",
