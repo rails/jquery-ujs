@@ -186,3 +186,96 @@ asyncTest('returning false in form\'s submit bindings in non-submit-bubbling bro
 
     setTimeout(function(){ start(); }, 13);
 });
+
+asyncTest('clicking on a link with falsy "data-remote" attribute does not fire ajaxyness ', 0, function() {
+  $('a[data-remote]')
+    .attr('data-remote', 'false')
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax should not be triggered');
+    })
+    .bind('click', function() {
+      return false;
+    })
+    .trigger('click');
+
+  setTimeout(function(){ start(); }, 20);
+});
+
+asyncTest('ctrl-clicking on a link with falsy "data-remote" attribute does not fire ajaxyness  even if "data-params" present', 0, function() {
+  var link = $('a[data-remote]'), e;
+  e = $.Event('click');
+  e.metaKey = true;
+
+  link
+    .removeAttr('data-params')
+    .attr('data-remote', 'false')
+    .attr('data-method', 'POST')
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax should not be triggered');
+    })
+    .bind('click', function() {
+      return false;
+    })
+    .trigger(e);
+
+  e = $.Event('click');
+  e.metaKey = true;
+
+  link
+    .removeAttr('data-method')
+    .attr('data-params', 'name=steve')
+    .trigger(e);
+
+  setTimeout(function(){ start(); }, 20);
+});
+
+asyncTest('clicking on a button with falsy "data-remote" attribute', 0, function() {
+  $('button[data-remote]:first')
+    .attr('data-remote', 'false')
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax should not be triggered');
+    })
+    .bind('click', function() {
+      return false;
+    })
+    .trigger('click');
+
+  setTimeout(function(){ start(); }, 20);
+});
+
+asyncTest('submitting a form with falsy "data-remote" attribute', 0, function() {
+  $('form[data-remote]:first')
+    .attr('data-remote', 'false')
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax should not be triggered');
+    })
+    .bind('submit', function() {
+      return false;
+    })
+    .trigger('submit');
+
+  setTimeout(function(){ start(); }, 20);
+});
+
+asyncTest('changing a select option with falsy "data-remote" attribute', 0, function() {
+  $('form')
+    .append(
+      $('<select />', {
+        'name': 'user_data',
+        'data-remote': 'false',
+        'data-params': 'data1=value1',
+        'data-url': '/echo'
+      })
+      .append($('<option />', {value: 'optionValue1', text: 'option1'}))
+      .append($('<option />', {value: 'optionValue2', text: 'option2'}))
+    );
+
+  $('select[data-remote=false]:first')
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'ajax should not be triggered');
+    })
+    .val('optionValue2')
+    .trigger('change');
+
+  setTimeout(function(){ start(); }, 20);
+});

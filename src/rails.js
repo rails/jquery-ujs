@@ -97,6 +97,13 @@
       return element.attr('href');
     },
 
+    // Checks whether "data-remote" is falsy or not to prevent remote submission if "data-remote"="false"
+    // because jQuery(selector).data("remote") === "false" if data attribute is string "false",
+    // e.g. <input id="id" data-remote="false" />
+    isRemote: function(element) {
+      return element.data('remote') !== undefined && element.data('remote') !== false;
+    },
+
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
       var method, url, data, elCrossDomain, crossDomain, withCredentials, dataType, options;
@@ -367,7 +374,7 @@
 
       if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
 
-      if (link.data('remote') !== undefined) {
+      if (rails.isRemote(link)) {
         if (metaClick && (!method || method === 'GET') && !data) { return true; }
 
         var handleRemote = rails.handleRemote(link);
@@ -387,6 +394,8 @@
 
     $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
       var button = $(this);
+      
+      if (! rails.isRemote(button)) return false;
 
       if (!rails.allowAction(button)) return rails.stopEverything(e);
 
@@ -404,6 +413,7 @@
 
     $document.delegate(rails.inputChangeSelector, 'change.rails', function(e) {
       var link = $(this);
+      if (! rails.isRemote(link)) return false;
       if (!rails.allowAction(link)) return rails.stopEverything(e);
 
       rails.handleRemote(link);
@@ -412,7 +422,7 @@
 
     $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e) {
       var form = $(this),
-        remote = form.data('remote') !== undefined,
+        remote = rails.isRemote(form),
         blankRequiredInputs,
         nonBlankFileInputs;
 
