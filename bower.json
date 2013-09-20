@@ -8,7 +8,7 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "Gemfile.*",
+    "Gemfile*",
     "Rakefile",
     "bower_components",
     "test"
