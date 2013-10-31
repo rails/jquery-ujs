@@ -245,3 +245,21 @@ asyncTest('form[data-remote] input|button|textarea[data-disable-with] does not d
   start();
 
 });
+
+asyncTest('ctrl-clicking on a link does not disables the link', 0, function() {
+  var link = $('a[data-disable-with]'), e;
+  e = $.Event('click');
+  e.metaKey = true;
+
+  checkEnabledState(link, 'Click me');
+
+  link.trigger(e);
+  checkEnabledState(link, 'Click me');
+
+  e = $.Event('click');
+  e.ctrlKey = true;
+
+  link.trigger(e);
+  checkEnabledState(link, 'Click me');
+  start();
+});
