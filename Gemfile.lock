@@ -1,9 +1,8 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     daemons (1.1.0)
     eventmachine (0.12.10)
-    json (1.4.6)
     rack (1.2.1)
     shotgun (0.8)
       rack (>= 1.0)
@@ -20,7 +19,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  json
   shotgun
   sinatra (~> 1.0)
   thin
