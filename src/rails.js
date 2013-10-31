@@ -161,6 +161,7 @@
       var href = rails.href(link),
         method = link.data('method'),
         target = link.attr('target'),
+        params = link.data('params'),
         csrf_token = $('meta[name=csrf-token]').attr('content'),
         csrf_param = $('meta[name=csrf-param]').attr('content'),
         form = $('<form method="post" action="' + href + '"></form>'),
@@ -168,6 +169,12 @@
 
       if (csrf_param !== undefined && csrf_token !== undefined) {
         metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
+      }
+      
+      if(params) {
+        for(key in params) {
+          metadata_input += '<input name="' + key + '" value="' + params[key] + '" type="hidden" />';
+        }
       }
 
       if (target) { form.attr('target', target); }
