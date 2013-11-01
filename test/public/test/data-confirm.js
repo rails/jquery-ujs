@@ -21,13 +21,13 @@ asyncTest('clicking on a link with data-confirm attribute. Confirm yes.', 6, fun
 
   $('a[data-confirm]')
     .bind('confirm:complete', function(e, data) {
-      App.assert_callback_invoked('confirm:complete');
+      App.assertCallbackInvoked('confirm:complete');
       ok(data == true, 'confirm:complete passes in confirm answer (true)');
     })
-    .bind('ajax:success', function(e, data, status, xhr) { 
-      App.assert_callback_invoked('ajax:success');
-      App.assert_request_path(data, '/echo');
-      App.assert_get_request(data); 
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      App.assertRequestPath(data, '/echo');
+      App.assertGetRequest(data);
 
       equal(message, 'Are you absolutely sure?');
       start();
@@ -42,11 +42,11 @@ asyncTest('clicking on a link with data-confirm attribute. Confirm No.', 3, func
 
   $('a[data-confirm]')
     .bind('confirm:complete', function(e, data) {
-      App.assert_callback_invoked('confirm:complete');
+      App.assertCallbackInvoked('confirm:complete');
       ok(data == false, 'confirm:complete passes in confirm answer (false)');
     })
     .bind('ajax:beforeSend', function(e, data, status, xhr) {
-      App.assert_callback_not_invoked('ajax:beforeSend');
+      App.assertCallbackNotInvoked('ajax:beforeSend');
     })
     .trigger('click');
 
@@ -65,11 +65,11 @@ asyncTest('binding to confirm event and returning false', 1, function() {
 
   $('a[data-confirm]')
     .bind('confirm', function() {
-      App.assert_callback_invoked('confirm');
+      App.assertCallbackInvoked('confirm');
       return false;
     })
     .bind('confirm:complete', function() {
-      App.assert_callback_not_invoked('confirm:complete')
+      App.assertCallbackNotInvoked('confirm:complete');
     })
     .trigger('click');
 
@@ -87,11 +87,11 @@ asyncTest('binding to confirm:complete event and returning false', 2, function()
 
   $('a[data-confirm]')
     .bind('confirm:complete', function() {
-      App.assert_callback_invoked('confirm:complete');
+      App.assertCallbackInvoked('confirm:complete');
       return false;
     })
     .bind('ajax:beforeSend', function() {
-      App.assert_callback_not_invoked('ajax:beforeSend');
+      App.assertCallbackNotInvoked('ajax:beforeSend');
     })
     .trigger('click');
 

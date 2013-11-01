@@ -53,7 +53,7 @@ asyncTest('modifying data("type") with "ajax:before" requests new dataType in re
   $('form[data-remote]').data('type','html')
     .bind('ajax:before', function() {
       var form = $(this);
-      form.data('type','xml')
+      form.data('type','xml');
     });
 
   submit(function(form) {
@@ -67,7 +67,7 @@ asyncTest('setting data("cross-domain",true) with "ajax:before" uses new setting
   $('form[data-remote]').data('cross-domain',false)
     .bind('ajax:before', function() {
       var form = $(this);
-      form.data('cross-domain',true)
+      form.data('cross-domain',true);
     });
 
   submit(function(form) {
@@ -94,7 +94,7 @@ asyncTest('setting data("with-credentials",true) with "ajax:before" uses new set
 asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function() {
   submit(function(form) {
     form.bind('ajax:beforeSend', function() {
-      ok(true, 'aborting request in ajax:beforeSend')
+      ok(true, 'aborting request in ajax:beforeSend');
       return false;
     });
     form.unbind('ajax:complete').bind('ajax:complete', function() {

@@ -161,18 +161,18 @@
       var href = rails.href(link),
         method = link.data('method'),
         target = link.attr('target'),
-        csrf_token = $('meta[name=csrf-token]').attr('content'),
-        csrf_param = $('meta[name=csrf-param]').attr('content'),
+        csrfToken = $('meta[name=csrf-token]').attr('content'),
+        csrfParam = $('meta[name=csrf-param]').attr('content'),
         form = $('<form method="post" action="' + href + '"></form>'),
-        metadata_input = '<input name="_method" value="' + method + '" type="hidden" />';
+        metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
 
-      if (csrf_param !== undefined && csrf_token !== undefined) {
-        metadata_input += '<input name="' + csrf_param + '" value="' + csrf_token + '" type="hidden" />';
+      if (csrfParam !== undefined && csrfToken !== undefined) {
+        metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
       }
 
       if (target) { form.attr('target', target); }
 
-      form.hide().append(metadata_input).appendTo('body');
+      form.hide().append(metadataInput).appendTo('body');
       form.submit();
     },
 
@@ -385,9 +385,9 @@
 
     $(function(){
       // making sure that all forms have actual up-to-date token(cached forms contain old one)
-      var csrf_token = $('meta[name=csrf-token]').attr('content');
-      var csrf_param = $('meta[name=csrf-param]').attr('content');
-      $('form input[name="' + csrf_param + '"]').val(csrf_token);
+      var csrfToken = $('meta[name=csrf-token]').attr('content');
+      var csrfParam = $('meta[name=csrf-param]').attr('content');
+      $('form input[name="' + csrfParam + '"]').val(csrfToken);
     });
   }
 
