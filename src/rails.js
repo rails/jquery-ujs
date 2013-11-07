@@ -24,7 +24,7 @@
     // Link elements bound by jquery-ujs
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with]',
 
-    // Button elements boud jquery-ujs
+    // Button elements bound by jquery-ujs
     buttonClickSelector: 'button[data-remote]',
 
     // Select elements bound by jquery-ujs
