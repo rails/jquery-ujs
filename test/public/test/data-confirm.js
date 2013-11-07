@@ -53,7 +53,6 @@ asyncTest('clicking on a button with data-confirm attribute. Confirm yes.', 6, f
       ok(data == true, 'confirm:complete passes in confirm answer (true)');
     })
     .bind('ajax:success', function(e, data, status, xhr) {
-      console.log(xhr);
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       App.assertGetRequest(data);
