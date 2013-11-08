@@ -57,6 +57,13 @@
       if (token) xhr.setRequestHeader('X-CSRF-Token', token);
     },
 
+    // making sure that all forms have actual up-to-date token(cached forms contain old one)
+    refreshCSRFTokens: function(){
+      var csrfToken = $('meta[name=csrf-token]').attr('content');
+      var csrfParam = $('meta[name=csrf-param]').attr('content');
+      $('form input[name="' + csrfParam + '"]').val(csrfToken);
+    },
+
     // Triggers an event on an element and returns false if the event result is false
     fire: function(obj, name, data) {
       var event = $.Event(name);
@@ -384,10 +391,7 @@
     });
 
     $(function(){
-      // making sure that all forms have actual up-to-date token(cached forms contain old one)
-      var csrfToken = $('meta[name=csrf-token]').attr('content');
-      var csrfParam = $('meta[name=csrf-param]').attr('content');
-      $('form input[name="' + csrfParam + '"]').val(csrfToken);
+      rails.refreshCSRFTokens();
     });
   }
 
