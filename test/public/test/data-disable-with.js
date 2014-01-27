@@ -27,7 +27,6 @@ module('data-disable-with', {
   }
 });
 
-
 asyncTest('form input field with "data-disable-with" attribute', 7, function() {
   var form = $('form[data-remote]'), input = form.find('input[type=text]');
 
@@ -38,8 +37,8 @@ asyncTest('form input field with "data-disable-with" attribute', 7, function() {
       App.checkEnabledState(input, 'john');
       equal(data.params.user_name, 'john');
       start();
-    }, 13)
-  })
+    }, 13);
+  });
   form.trigger('submit');
 
   App.checkDisabledState(input, 'processing ...');
@@ -55,8 +54,8 @@ asyncTest('form button with "data-disable-with" attribute', 6, function() {
     setTimeout(function() {
       App.checkEnabledState(button, 'Submit');
       start();
-    }, 13)
-  })
+    }, 13);
+  });
   form.trigger('submit');
 
   App.checkDisabledState(button, 'submitting ...');
@@ -119,8 +118,8 @@ asyncTest('form[data-remote] textarea[data-disable-with] attribute', 3, function
     setTimeout(function() {
       equal(data.params.user_bio, 'born, lived, died.');
       start();
-    }, 13)
-  })
+    }, 13);
+  });
   form.trigger('submit');
 
   App.checkDisabledState(textarea, 'processing ...');
