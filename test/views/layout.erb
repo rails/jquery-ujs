@@ -5,11 +5,18 @@
     <link href="/vendor/qunit.css" media="screen" rel="stylesheet" type="text/css" media="screen, projection" />
     <style>
       #jquery-cdn, #jquery-version {
-        color: #8699A4; text-align: right; font-family: sans-serif; line-height: 1;
-        margin-top: -1.8em; padding: 0 2em .8em 0;
+        padding: 0 2em .8em 0;
+        text-align: right;
+        font-family: sans-serif;
+        line-height: 1;
+        color: #8699A4;
+        background-color: #0d3349;
       }
-      #jquery-cdn { margin-right: 550px; }
-      #jquery-cdn a, #jquery-version a { color: white; text-decoration: underline; }
+
+      #jquery-cdn a, #jquery-version a {
+        color: white;
+        text-decoration: underline;
+      }
     </style>
 
     <%= script_tag jquery_src %>
