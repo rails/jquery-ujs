@@ -37,10 +37,10 @@
     formInputClickSelector: 'form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])',
 
     // Form input elements disabled during form submission
-    disableSelector: 'input[data-disable-with], button[data-disable-with], textarea[data-disable-with]',
+    disableSelector: 'input[data-disable-with], button[data-disable-with], textarea[data-disable-with], a[data-disable-with]',
 
     // Form input elements re-enabled after form submission
-    enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled',
+    enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled, a[data-disable-with]:disabled',
 
     // Form required input elements
     requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
@@ -190,10 +190,15 @@
     */
     disableFormElements: function(form) {
       form.find(rails.disableSelector).each(function() {
-        var element = $(this), method = element.is('button') ? 'html' : 'val';
+        var element = $(this), method = (element.is('button') || element.is('a')) ? 'html' : 'val';
         element.data('ujs:enable-with', element[method]());
         element[method](element.data('disable-with'));
         element.prop('disabled', true);
+        if(element.is('a')) {
+          element.attr('disabled', true);
+        } else {
+          element.prop('disabled', true);
+        }
       });
     },
 
@@ -206,6 +211,11 @@
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
         element.prop('disabled', false);
+        if(element.is('a')) {
+          element.removeAttr('disabled');
+        } else {
+          element.prop('disabled', false);
+        }
       });
     },
 
@@ -271,6 +281,7 @@
     disableElement: function(element) {
       element.data('ujs:enable-with', element.html()); // store enabled state
       element.html(element.data('disable-with')); // set to disabled state
+      element.attr('disabled', true);
       element.bind('click.railsDisable', function(e) { // prevent further clicking
         return rails.stopEverything(e);
       });
@@ -282,6 +293,7 @@
         element.html(element.data('ujs:enable-with')); // set to old enabled state
         element.removeData('ujs:enable-with'); // clean up cache
       }
+      element.removeAttr('disabled');
       element.unbind('click.railsDisable'); // enable element
     }
 
