@@ -1,0 +1,30 @@
+<% @title = "jquery-ujs manual test" %>
+<h1 id="qunit-header"><%= @title %></h1>
+<div id="jquery-cdn">
+  CDN:
+  <%= cdn_link('jquery', '/manual') %> •
+  <%= cdn_link('googleapis', '/manual') %>
+</div>
+<div id="jquery-version">
+  jQuery version:
+
+  <% jquery_versions.each do |v| %>
+    <%= ' • ' if v != jquery_versions.first %>
+    <%= jquery_link(v, '/manual') %>
+  <% end %>
+ <%= (' • ' + jquery_link('edge', '/manual')) if File.exist?(settings.root + '/public/vendor/jquery.js') %>
+</div>
+<h2 id="qunit-banner"></h2>
+<p>We just haven't figured out how to automate these yet.</p>
+
+<h2>data-disable</h2>
+<p>Clicking these links will reload this page with a short delay. During the delay, each link should become disabled and its text should change to "Please wait..."</p>
+<ul>
+  <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="Please wait...">link</a></li>
+  <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="Please wait..."><div>div in link disabled with text</div></a></li>
+  <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="<div>Please wait...</div>"><div>div in link disabled with div</div></a></li>
+</ul>
+page loaded at: <span id="now"></span>
+<script type="text/javascript" charset="utf-8">
+  $("#now").html(new Date().getTime());
+</script>
