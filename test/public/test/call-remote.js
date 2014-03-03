@@ -96,7 +96,7 @@ asyncTest('allow empty form "action"', 1, function() {
         currentLocation.href = "";
         currentLocation = currentLocation.href;
       }
-      currentLocation = currentLocation.replace(/\?$/, '');
+      currentLocation = currentLocation.replace(/\??#?$/, '');
 
       // Actual location (strip out settings.data that jQuery serializes and appends)
       // HACK: can no longer use settings.data below to see what was appended to URL, as of

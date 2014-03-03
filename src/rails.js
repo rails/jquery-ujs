@@ -183,6 +183,19 @@
       form.submit();
     },
 
+    // Follow the href after a delay. To be used instead of the default handler to give the DOM a chance to render any changes
+    followLink: function(link) {
+      var href = rails.href(link),
+        target = $.trim(link.attr("target"));
+      setTimeout(function() {
+        if (target) {
+          open(href, target);
+        } else {
+          location = href;
+        }
+      }, 0);
+    },
+
     /* Disables form elements:
       - Caches element value in 'ujs:enable-with' data store
       - Replaces element text with value of 'data-disable-with' attribute
@@ -315,6 +328,9 @@
 
       } else if (link.data('method')) {
         rails.handleMethod(link);
+        return false;
+      } else {
+        rails.followLink(link);
         return false;
       }
     });

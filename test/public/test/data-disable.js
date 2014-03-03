@@ -18,7 +18,7 @@ module('data-disable', {
 
     $('#qunit-fixture').append($('<a />', {
       text: 'Click me',
-      href: '/echo',
+      href: '#',
       'data-disable-with': 'clicking...'
     }));
   },
