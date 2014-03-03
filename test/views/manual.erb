@@ -23,6 +23,8 @@
   <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="Please wait...">link</a></li>
   <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="Please wait..."><div>div in link disabled with text</div></a></li>
   <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="<div>Please wait...</div>"><div>div in link disabled with div</div></a></li>
+  <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="Please wait..." onclick="$('body').css('background-color', 'green')">link with inline handler which should turn body green</a></li>
+  <li><a href="/manual?sleep=1&<%= @extra_params %>" data-disable-with="Please wait..." target="_blank">link with _blank target (_top would be more realistic but is more effort to test) should open in new window</a></li>
 </ul>
 page loaded at: <span id="now"></span>
 <script type="text/javascript" charset="utf-8">
