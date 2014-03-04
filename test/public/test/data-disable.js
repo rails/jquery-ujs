@@ -159,7 +159,7 @@ asyncTest('a[data-remote][data-disable-with] disables and re-enables', 6, functi
   checkEnabledState(link, 'Click me');
 
   link
-    .bind('ajax:beforeSend', function() {
+    .bind('ajax:send', function() {
       checkDisabledState(link, 'clicking...');
     })
     .bind('ajax:complete', function() {
@@ -213,7 +213,7 @@ asyncTest('a[data-remote][data-disable-with] re-enables when `ajax:error` event 
   checkEnabledState(link, 'Click me');
 
   link
-    .bind('ajax:beforeSend', function() {
+    .bind('ajax:send', function() {
       checkDisabledState(link, 'clicking...');
     })
     .trigger('click');
