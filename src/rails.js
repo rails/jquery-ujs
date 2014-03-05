@@ -189,7 +189,8 @@
       - Sets disabled property to true
     */
     disableFormElements: function(form) {
-      form.find(rails.disableSelector).each(function() {
+      var elements = form.is('form') ? $(form[0].elements).filter(rails.disableSelector) : form.find(rails.disableSelector);
+      elements.each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         element.data('ujs:enable-with', element[method]());
         element[method](element.data('disable-with'));
@@ -202,7 +203,9 @@
       - Sets disabled property to false
     */
     enableFormElements: function(form) {
-      form.find(rails.enableSelector).each(function() {
+      var elements = form.is('form') ? $(form[0].elements).filter(rails.enableSelector) : form.find(rails.enableSelector);
+      elements.each(function() {
+      // form.find(rails.enableSelector).each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
         element.prop('disabled', false);
