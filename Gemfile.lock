@@ -4,6 +4,7 @@ GEM
     daemons (1.1.0)
     eventmachine (0.12.10)
     rack (1.2.1)
+    rake (10.1.1)
     shotgun (0.8)
       rack (>= 1.0)
     sinatra (1.1.2)
@@ -19,6 +20,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake
   shotgun
   sinatra (~> 1.0)
   thin
