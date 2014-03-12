@@ -225,7 +225,6 @@ asyncTest('form[data-remote] input|button|textarea[data-disable-with] does not d
   App.checkEnabledState(submit, 'Submit');
 
   start();
-
 });
 
 asyncTest('ctrl-clicking on a link does not disables the link', 6, function() {
