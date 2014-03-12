@@ -99,3 +99,28 @@ asyncTest('binding to confirm:complete event and returning false', 2, function()
     start();
   }, 50);
 });
+
+asyncTest('binding to confirm event and return "skip"', 4, function() {
+  // redefine confirm function so we can make sure it's not called
+  window.confirm = function(msg) {
+    ok(false, 'confirm dialog should not be called');
+  }
+
+  $('a[data-confirm]')
+    .bind('confirm', function() {
+      App.assert_callback_invoked('confirm');
+      return 'skip';
+    })
+    .bind('confirm:complete', function(e, data) {
+      App.assert_callback_not_invoked('confirm:complete')
+    })
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assert_callback_invoked('ajax:success');
+      App.assert_request_path(data, '/echo');
+      App.assert_get_request(data);
+    })
+    .trigger('click');
+  setTimeout(function() {
+    start();
+  }, 50);
+});
