@@ -185,13 +185,20 @@
       form.submit();
     },
 
+    // Helper function that returns form elements that match the specified CSS selector
+    // If form is actually a "form" element this will return associated elements outside the from that have
+    // the html form attribute set
+    formElements: function(form, selector) {
+      return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector)
+    },
+
     /* Disables form elements:
       - Caches element value in 'ujs:enable-with' data store
       - Replaces element text with value of 'data-disable-with' attribute
       - Sets disabled property to true
     */
     disableFormElements: function(form) {
-      form.find(rails.disableSelector).each(function() {
+      rails.formElements(form, rails.disableSelector).each(function() {
         var element, method, replacement;
 
         element = $(this);
@@ -212,7 +219,7 @@
       - Sets disabled property to false
     */
     enableFormElements: function(form) {
-      form.find(rails.enableSelector).each(function() {
+      rails.formElements(form, rails.enableSelector).each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
         element.prop('disabled', false);

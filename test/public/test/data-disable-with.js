@@ -10,7 +10,8 @@ module('data-disable-with', {
 
     $('#qunit-fixture').append($('<form />', {
       action: '/echo',
-      method: 'post'
+      method: 'post',
+      id: 'not_remote'
     }))
       .find('form:last')
       // WEEIRDD: the form won't submit to an iframe if the button is name="submit" (??!)
@@ -20,6 +21,15 @@ module('data-disable-with', {
       text: 'Click me',
       href: '/echo',
       'data-disable-with': 'clicking...'
+    }));
+
+
+    $('#qunit-fixture').append($('<input />', {
+      type: 'submit',
+      form: 'not_remote',
+      'data-disable-with': 'form attr submitting',
+      name: 'submit3',
+      value: 'Form Attr Submit'
     }));
   },
   teardown: function() {
@@ -108,6 +118,27 @@ asyncTest('form[data-remote] input[data-disable-with] is replaced with disabled 
       start();
     }, 30);
   }).trigger('submit');
+});
+
+asyncTest('form input[type=submit][data-disable-with] using "form" attribute disables', 6, function() {
+  var form = $('#not_remote'), input = $('input[form=not_remote]');
+  App.checkEnabledState(input, 'Form Attr Submit');
+
+  // WEEIRDD: attaching this handler makes the test work in IE7
+  $(document).bind('iframe:loading', function(e, form) {});
+
+  $(document).bind('iframe:loaded', function(e, data) {
+    setTimeout(function() {
+      App.checkDisabledState(input, 'form attr submitting');
+      start();
+    }, 30);
+  });
+  form.trigger('submit');
+
+  setTimeout(function() {
+    App.checkDisabledState(input, 'form attr submitting');
+  }, 30);
+
 });
 
 asyncTest('form[data-remote] textarea[data-disable-with] attribute', 3, function() {
