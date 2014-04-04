@@ -192,13 +192,17 @@
     */
     disableFormElements: function(form) {
       form.find(rails.disableSelector).each(function() {
-        var element, method, enabledState;
+        var element, method, replacement;
+
         element = $(this);
         method = element.is('button') ? 'html' : 'val';
-        enabledState = element[method]();
+        replacement = element.data('disable-with');
 
-        element.data('ujs:enable-with', enabledState);
-        element[method](element.data('disable-with') || enabledState);
+        element.data('ujs:enable-with', element[method]());
+        if (replacement !== undefined) {
+          element[method](replacement);
+        }
+
         element.prop('disabled', true);
       });
     },
@@ -275,9 +279,13 @@
     //  replace element's html with the 'data-disable-with' after storing original html
     //  and prevent clicking on it
     disableElement: function(element) {
-      var enabledState = element.html();
-      element.data('ujs:enable-with', enabledState); // store enabled state
-      element.html(element.data('disable-with') || enabledState); // set to disabled state
+      var replacement = element.data('disable-with');
+
+      element.data('ujs:enable-with', element.html()); // store enabled state
+      if (replacement !== undefined) {
+        element.html(replacement);
+      }
+
       element.bind('click.railsDisable', function(e) { // prevent further clicking
         return rails.stopEverything(e);
       });
