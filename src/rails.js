@@ -15,7 +15,7 @@
   if ( $.rails !== undefined ) {
     $.error('jquery-ujs has already been loaded!');
   }
-
+  
   // Shorthand to make it a little easier to call public rails functions from within rails.js
   var rails;
   var $document = $(document);
@@ -184,14 +184,21 @@
       form.hide().append(metadataInput).appendTo('body');
       form.submit();
     },
-
+    
+    // Helper function that returns form elements that match the specified CSS selector    
+    // If form is actually a "form" element this will return associated elements outside the from that have
+    // the html form attribute set
+    formElements: function(form, selector) {
+      return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector)
+    },
+    
     /* Disables form elements:
       - Caches element value in 'ujs:enable-with' data store
       - Replaces element text with value of 'data-disable-with' attribute
       - Sets disabled property to true
     */
     disableFormElements: function(form) {
-      form.find(rails.disableSelector).each(function() {
+      rails.formElements(form, rails.disableSelector).each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         element.data('ujs:enable-with', element[method]());
         element[method](element.data('disable-with'));
@@ -204,7 +211,7 @@
       - Sets disabled property to false
     */
     enableFormElements: function(form) {
-      form.find(rails.enableSelector).each(function() {
+      rails.formElements(form, rails.enableSelector).each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
         element.prop('disabled', false);
