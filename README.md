@@ -15,7 +15,7 @@ Full [documentation is on the wiki][wiki], including the [list of published Ajax
 Requirements
 ------------
 
-- [jQuery 1.8.x or higher and less than 2.0][jquery];
+- [jQuery 1.8.x or higher][jquery];
 - HTML5 doctype (optional).
 
 If you don't use HTML5, adding "data" attributes to your HTML4 or XHTML pages might make them fail [W3C markup validation][validator]. However, this shouldn't create any issues for web browsers or other user agents.
