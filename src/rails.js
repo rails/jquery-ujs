@@ -15,14 +15,14 @@
   if ( $.rails !== undefined ) {
     $.error('jquery-ujs has already been loaded!');
   }
-  
+
   // Shorthand to make it a little easier to call public rails functions from within rails.js
   var rails;
   var $document = $(document);
 
   $.rails = rails = {
     // Link elements bound by jquery-ujs
-    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with]',
+    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with], a[data-disable]',
 
     // Button elements bound by jquery-ujs
     buttonClickSelector: 'button[data-remote], button[data-confirm]',
@@ -37,10 +37,10 @@
     formInputClickSelector: 'form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])',
 
     // Form input elements disabled during form submission
-    disableSelector: 'input[data-disable-with], button[data-disable-with], textarea[data-disable-with]',
+    disableSelector: 'input[data-disable-with], button[data-disable-with], textarea[data-disable-with], input[data-disable], button[data-disable], textarea[data-disable]',
 
     // Form input elements re-enabled after form submission
-    enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled',
+    enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled, input[data-disable]:disabled, button[data-disable]:disabled, textarea[data-disable]:disabled',
 
     // Form required input elements
     requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
@@ -49,7 +49,7 @@
     fileInputSelector: 'input[type=file]',
 
     // Link onClick disable selector with possible reenable after remote submission
-    linkDisableSelector: 'a[data-disable-with]',
+    linkDisableSelector: 'a[data-disable-with], a[data-disable]',
 
     // Make sure that every Ajax request sends the CSRF token
     CSRFProtection: function(xhr) {
@@ -184,14 +184,14 @@
       form.hide().append(metadataInput).appendTo('body');
       form.submit();
     },
-    
-    // Helper function that returns form elements that match the specified CSS selector    
+
+    // Helper function that returns form elements that match the specified CSS selector
     // If form is actually a "form" element this will return associated elements outside the from that have
     // the html form attribute set
     formElements: function(form, selector) {
       return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector)
     },
-    
+
     /* Disables form elements:
       - Caches element value in 'ujs:enable-with' data store
       - Replaces element text with value of 'data-disable-with' attribute
@@ -199,9 +199,17 @@
     */
     disableFormElements: function(form) {
       rails.formElements(form, rails.disableSelector).each(function() {
-        var element = $(this), method = element.is('button') ? 'html' : 'val';
+        var element, method, replacement;
+
+        element = $(this);
+        method = element.is('button') ? 'html' : 'val';
+        replacement = element.data('disable-with');
+
         element.data('ujs:enable-with', element[method]());
-        element[method](element.data('disable-with'));
+        if (replacement !== undefined) {
+          element[method](replacement);
+        }
+
         element.prop('disabled', true);
       });
     },
@@ -278,8 +286,13 @@
     //  replace element's html with the 'data-disable-with' after storing original html
     //  and prevent clicking on it
     disableElement: function(element) {
+      var replacement = element.data('disable-with');
+
       element.data('ujs:enable-with', element.html()); // store enabled state
-      element.html(element.data('disable-with')); // set to disabled state
+      if (replacement !== undefined) {
+        element.html(replacement);
+      }
+
       element.bind('click.railsDisable', function(e) { // prevent further clicking
         return rails.stopEverything(e);
       });
