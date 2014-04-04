@@ -200,7 +200,7 @@
     disableFormElements: function(form) {
       rails.formElements(form, rails.disableSelector).each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
-        element.data('ujs:enable-with', element[method]());
+        if (!element.data('ujs:enable-with')) element.data('ujs:enable-with', element[method]());
         element[method](element.data('disable-with'));
         element.prop('disabled', true);
       });
@@ -213,7 +213,10 @@
     enableFormElements: function(form) {
       rails.formElements(form, rails.enableSelector).each(function() {
         var element = $(this), method = element.is('button') ? 'html' : 'val';
-        if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
+        if (element.data('ujs:enable-with')){
+            element[method](element.data('ujs:enable-with'));
+            element.data('ujs:enable-with', null);
+        }
         element.prop('disabled', false);
       });
     },
