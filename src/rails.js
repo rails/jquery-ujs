@@ -192,7 +192,7 @@
     // If form is actually a "form" element this will return associated elements outside the from that have
     // the html form attribute set
     formElements: function(form, selector) {
-      return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector)
+      return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector);
     },
     
     /* Disables form elements:
