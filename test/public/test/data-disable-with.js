@@ -31,6 +31,13 @@ module('data-disable-with', {
       name: 'submit3',
       value: 'Form Attr Submit'
     }));
+
+    $('#qunit-fixture').append($('<button />', {
+      text: 'Click me',
+      'data-remote': true,
+      'data-url': '/echo',
+      'data-disable-with': 'clicking...'
+    }));
   },
   teardown: function() {
     $(document).unbind('iframe:loaded');
@@ -274,4 +281,75 @@ asyncTest('ctrl-clicking on a link does not disables the link', 6, function() {
   link.trigger(e);
   App.checkEnabledState(link, 'Click me');
   start();
+});
+
+asyncTest('button[data-remote][data-disable-with] disables and re-enables', 6, function() {
+  var button = $('button[data-remote][data-disable-with]');
+
+  checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:send', function() {
+      checkDisabledState(button, 'clicking...');
+    })
+    .bind('ajax:complete', function() {
+      setTimeout( function() {
+        checkEnabledState(button, 'Click me');
+        start();
+      }, 15);
+    })
+    .trigger('click');
+});
+
+asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:before` event is cancelled', 6, function() {
+  var button = $('button[data-remote][data-disable-with]');
+
+  checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:before', function() {
+      checkDisabledState(button, 'clicking...');
+      return false;
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    checkEnabledState(button, 'Click me');
+    start();
+  }, 30);
+});
+
+asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:beforeSend` event is cancelled', 6, function() {
+  var button = $('button[data-remote][data-disable-with]');
+
+  checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:beforeSend', function() {
+      checkDisabledState(button, 'clicking...');
+      return false;
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    checkEnabledState(button, 'Click me');
+    start();
+  }, 30);
+});
+
+asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:error` event is triggered', 6, function() {
+  var button = $('a[data-disable-with]').attr('data-remote', true).attr('href', '/error');
+
+  checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:send', function() {
+      checkDisabledState(button, 'clicking...');
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    checkEnabledState(button, 'Click me');
+    start();
+  }, 30);
 });

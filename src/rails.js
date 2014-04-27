@@ -51,6 +51,9 @@
     // Link onClick disable selector with possible reenable after remote submission
     linkDisableSelector: 'a[data-disable-with], a[data-disable]',
 
+    // Button onClick disable selector with possible reenable after remote submission
+    buttonDisableSelector: 'button[data-remote][data-disable-with]',
+
     // Make sure that every Ajax request sends the CSRF token
     CSRFProtection: function(xhr) {
       var token = $('meta[name="csrf-token"]').attr('content');
@@ -189,7 +192,7 @@
     // If form is actually a "form" element this will return associated elements outside the from that have
     // the html form attribute set
     formElements: function(form, selector) {
-      return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector)
+      return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector);
     },
 
     /* Disables form elements:
@@ -199,19 +202,22 @@
     */
     disableFormElements: function(form) {
       rails.formElements(form, rails.disableSelector).each(function() {
-        var element, method, replacement;
-
-        element = $(this);
-        method = element.is('button') ? 'html' : 'val';
-        replacement = element.data('disable-with');
-
-        element.data('ujs:enable-with', element[method]());
-        if (replacement !== undefined) {
-          element[method](replacement);
-        }
-
-        element.prop('disabled', true);
+        rails.disableFormElement($(this));
       });
+    },
+
+    disableFormElement: function(element) {
+      var method, replacement;
+
+      method = element.is('button') ? 'html' : 'val';
+      replacement = element.data('disable-with');
+
+      element.data('ujs:enable-with', element[method]());
+      if (replacement !== undefined) {
+        element[method](replacement);
+      }
+
+      element.prop('disabled', true);
     },
 
     /* Re-enables disabled form elements:
@@ -220,10 +226,14 @@
     */
     enableFormElements: function(form) {
       rails.formElements(form, rails.enableSelector).each(function() {
-        var element = $(this), method = element.is('button') ? 'html' : 'val';
-        if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
-        element.prop('disabled', false);
+        rails.enableFormElement($(this));
       });
+    },
+
+    enableFormElement: function(element) {
+      var method = element.is('button') ? 'html' : 'val';
+      if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
+      element.prop('disabled', false);
     },
 
    /* For 'data-confirm' attribute:
@@ -306,7 +316,6 @@
       }
       element.unbind('click.railsDisable'); // enable element
     }
-
   };
 
   if (rails.fire($document, 'rails:attachBindings')) {
@@ -315,6 +324,10 @@
 
     $document.delegate(rails.linkDisableSelector, 'ajax:complete', function() {
         rails.enableElement($(this));
+    });
+
+    $document.delegate(rails.buttonDisableSelector, 'ajax:complete', function() {
+        rails.enableFormElement($(this));
     });
 
     $document.delegate(rails.linkClickSelector, 'click.rails', function(e) {
@@ -345,7 +358,15 @@
       var button = $(this);
       if (!rails.allowAction(button)) return rails.stopEverything(e);
 
-      rails.handleRemote(button);
+      if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
+
+      var handleRemote = rails.handleRemote(button);
+      // response from rails.handleRemote() will either be false or a deferred object promise.
+      if (handleRemote === false) {
+        rails.enableFormElement(button);
+      } else {
+        handleRemote.error( function() { rails.enableFormElement(button); } );
+      }
       return false;
     });
 

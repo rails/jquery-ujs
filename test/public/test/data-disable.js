@@ -21,6 +21,13 @@ module('data-disable', {
       href: '/echo',
       'data-disable': 'true'
     }));
+
+    $('#qunit-fixture').append($('<button />', {
+      text: 'Click me',
+      'data-remote': true,
+      'data-url': '/echo',
+      'data-disable-with': 'clicking...'
+    }));
   },
   teardown: function() {
     $(document).unbind('iframe:loaded');
