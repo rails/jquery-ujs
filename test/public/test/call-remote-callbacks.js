@@ -352,21 +352,23 @@ asyncTest('"ajax:beforeSend", "ajax:send", "ajax:success" and "ajax:complete" ar
   });
 });
 
-asyncTest('"ajax:beforeSend", "ajax:send", "ajax:error" and "ajax:complete" are triggered on error', 7, function() {
-  submit(function(form) {
-    form.attr('action', '/error');
-    form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
-    form.bind('ajax:send', function(arg) { ok(true, 'ajax:send') });
-    form.bind('ajax:error', function(e, xhr, status, error) {
-      ok(xhr.getResponseHeader, 'first argument to "ajax:error" should be an XHR object');
-      equal(status, 'error', 'second argument to ajax:error should be a status string');
-      // Firefox 8 returns "Forbidden " with trailing space
-      equal($.trim(error), 'Forbidden', 'third argument to ajax:error should be an HTTP status response');
-      // Opera returns "0" for HTTP code
-      equal(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
+if(window.phantom !== undefined) {
+  asyncTest('"ajax:beforeSend", "ajax:send", "ajax:error" and "ajax:complete" are triggered on error', 7, function() {
+    submit(function(form) {
+      form.attr('action', '/error');
+      form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
+      form.bind('ajax:send', function(arg) { ok(true, 'ajax:send') });
+      form.bind('ajax:error', function(e, xhr, status, error) {
+        ok(xhr.getResponseHeader, 'first argument to "ajax:error" should be an XHR object');
+        equal(status, 'error', 'second argument to ajax:error should be a status string');
+        // Firefox 8 returns "Forbidden " with trailing space
+        equal($.trim(error), 'Forbidden', 'third argument to ajax:error should be an HTTP status response');
+        // Opera returns "0" for HTTP code
+        equal(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
+      });
     });
   });
-});
+}
 
 // IF THIS TEST IS FAILING, TRY INCREASING THE TIMEOUT AT THE BOTTOM TO > 100
 asyncTest('binding to ajax callbacks via .delegate() triggers handlers properly', 4, function() {

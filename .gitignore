@@ -1,4 +1,5 @@
 test/public/vendor/jquery.js
+node_modules
 *.swp
 *.swo
 .#*
