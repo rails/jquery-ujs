@@ -6,7 +6,7 @@
   "main": "src/rails.js",
   "license": "MIT",
   "dependencies": {
-    "jquery": ">1.7.* <2.0.0"
+    "jquery": ">1.8.*"
   },
   "ignore": [
     "**/.*",
