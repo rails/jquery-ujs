@@ -26,7 +26,7 @@ module('data-disable', {
       text: 'Click me',
       'data-remote': true,
       'data-url': '/echo',
-      'data-disable-with': 'clicking...'
+      'data-disable': 'true'
     }));
   },
   teardown: function() {
@@ -250,4 +250,75 @@ asyncTest('ctrl-clicking on a link does not disables the link', 6, function() {
   link.trigger(e);
   App.checkEnabledState(link, 'Click me');
   start();
+});
+
+asyncTest('button[data-remote][data-disable] disables and re-enables', 6, function() {
+  var button = $('button[data-remote][data-disable]');
+
+  App.checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:send', function() {
+      App.checkDisabledState(button, 'Click me');
+    })
+    .bind('ajax:complete', function() {
+      setTimeout( function() {
+        App.checkEnabledState(button, 'Click me');
+        start();
+      }, 15);
+    })
+    .trigger('click');
+});
+
+asyncTest('button[data-remote][data-disable] re-enables when `ajax:before` event is cancelled', 6, function() {
+  var button = $('button[data-remote][data-disable]');
+
+  App.checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:before', function() {
+      App.checkDisabledState(button, 'Click me');
+      return false;
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    App.checkEnabledState(button, 'Click me');
+    start();
+  }, 30);
+});
+
+asyncTest('button[data-remote][data-disable] re-enables when `ajax:beforeSend` event is cancelled', 6, function() {
+  var button = $('button[data-remote][data-disable]');
+
+  App.checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:beforeSend', function() {
+      App.checkDisabledState(button, 'Click me');
+      return false;
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    App.checkEnabledState(button, 'Click me');
+    start();
+  }, 30);
+});
+
+asyncTest('button[data-remote][data-disable] re-enables when `ajax:error` event is triggered', 6, function() {
+  var button = $('a[data-disable]').attr('data-remote', true).attr('href', '/error');
+
+  App.checkEnabledState(button, 'Click me');
+
+  button
+    .bind('ajax:send', function() {
+      App.checkDisabledState(button, 'Click me');
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    App.checkEnabledState(button, 'Click me');
+    start();
+  }, 30);
 });

@@ -52,7 +52,7 @@
     linkDisableSelector: 'a[data-disable-with], a[data-disable]',
 
     // Button onClick disable selector with possible reenable after remote submission
-    buttonDisableSelector: 'button[data-remote][data-disable-with]',
+    buttonDisableSelector: 'button[data-remote][data-disable-with], button[data-remote][data-disable]',
 
     // Make sure that every Ajax request sends the CSRF token
     CSRFProtection: function(xhr) {
