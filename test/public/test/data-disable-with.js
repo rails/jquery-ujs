@@ -286,15 +286,15 @@ asyncTest('ctrl-clicking on a link does not disables the link', 6, function() {
 asyncTest('button[data-remote][data-disable-with] disables and re-enables', 6, function() {
   var button = $('button[data-remote][data-disable-with]');
 
-  checkEnabledState(button, 'Click me');
+  App.checkEnabledState(button, 'Click me');
 
   button
     .bind('ajax:send', function() {
-      checkDisabledState(button, 'clicking...');
+      App.checkDisabledState(button, 'clicking...');
     })
     .bind('ajax:complete', function() {
       setTimeout( function() {
-        checkEnabledState(button, 'Click me');
+        App.checkEnabledState(button, 'Click me');
         start();
       }, 15);
     })
@@ -304,17 +304,17 @@ asyncTest('button[data-remote][data-disable-with] disables and re-enables', 6, f
 asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:before` event is cancelled', 6, function() {
   var button = $('button[data-remote][data-disable-with]');
 
-  checkEnabledState(button, 'Click me');
+  App.checkEnabledState(button, 'Click me');
 
   button
     .bind('ajax:before', function() {
-      checkDisabledState(button, 'clicking...');
+      App.checkDisabledState(button, 'clicking...');
       return false;
     })
     .trigger('click');
 
   setTimeout(function() {
-    checkEnabledState(button, 'Click me');
+    App.checkEnabledState(button, 'Click me');
     start();
   }, 30);
 });
@@ -322,17 +322,17 @@ asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:before` 
 asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:beforeSend` event is cancelled', 6, function() {
   var button = $('button[data-remote][data-disable-with]');
 
-  checkEnabledState(button, 'Click me');
+  App.checkEnabledState(button, 'Click me');
 
   button
     .bind('ajax:beforeSend', function() {
-      checkDisabledState(button, 'clicking...');
+      App.checkDisabledState(button, 'clicking...');
       return false;
     })
     .trigger('click');
 
   setTimeout(function() {
-    checkEnabledState(button, 'Click me');
+    App.checkEnabledState(button, 'Click me');
     start();
   }, 30);
 });
@@ -340,16 +340,16 @@ asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:beforeSe
 asyncTest('button[data-remote][data-disable-with] re-enables when `ajax:error` event is triggered', 6, function() {
   var button = $('a[data-disable-with]').attr('data-remote', true).attr('href', '/error');
 
-  checkEnabledState(button, 'Click me');
+  App.checkEnabledState(button, 'Click me');
 
   button
     .bind('ajax:send', function() {
-      checkDisabledState(button, 'clicking...');
+      App.checkDisabledState(button, 'clicking...');
     })
     .trigger('click');
 
   setTimeout(function() {
-    checkEnabledState(button, 'Click me');
+    App.checkEnabledState(button, 'Click me');
     start();
   }, 30);
 });
