@@ -13,6 +13,7 @@
     "Gemfile*",
     "Rakefile",
     "bower_components",
+    "script",
     "test"
   ]
 }
