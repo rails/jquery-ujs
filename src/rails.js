@@ -4,7 +4,7 @@
  * Unobtrusive scripting adapter for jQuery
  * https://github.com/rails/jquery-ujs
  *
- * Requires jQuery 1.7.0 or later.
+ * Requires jQuery 1.8.0 or later.
  *
  * Released under the MIT license
  *
