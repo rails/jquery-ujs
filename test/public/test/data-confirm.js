@@ -14,6 +14,18 @@ module('data-confirm', {
       text: 'Click me'
     }));
 
+    $('#qunit-fixture').append($('<form />', {
+      id: 'confirm',
+      action: '/echo',
+      'data-remote': 'true'
+    }));
+
+    $('#qunit-fixture').append($('<input />', {
+      type: 'submit',
+      form: 'confirm',
+      'data-confirm': 'Are you absolutely sure?'
+    }));
+
     this.windowConfirm = window.confirm;
   },
   teardown: function() {
@@ -90,6 +102,27 @@ asyncTest('clicking on a button with data-confirm attribute. Confirm No.', 3, fu
   window.confirm = function(msg) { message = msg; return false };
 
   $('button[data-confirm]')
+    .bind('confirm:complete', function(e, data) {
+      App.assertCallbackInvoked('confirm:complete');
+      ok(data == false, 'confirm:complete passes in confirm answer (false)');
+    })
+    .bind('ajax:beforeSend', function(e, data, status, xhr) {
+      App.assertCallbackNotInvoked('ajax:beforeSend');
+    })
+    .trigger('click');
+
+  setTimeout(function() {
+    equal(message, 'Are you absolutely sure?');
+    start();
+  }, 50);
+});
+
+asyncTest('clicking on a submit button with form and data-confirm attributes. Confirm No.', 3, function() {
+  var message;
+  // auto-decline:
+  window.confirm = function(msg) { message = msg; return false };
+
+  $('input[type=submit][form]')
     .bind('confirm:complete', function(e, data) {
       App.assertCallbackInvoked('confirm:complete');
       ok(data == false, 'confirm:complete passes in confirm answer (false)');
