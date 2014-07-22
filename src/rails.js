@@ -1,5 +1,3 @@
-(function($, undefined) {
-
 /**
  * Unobtrusive scripting adapter for jQuery
  * https://github.com/rails/jquery-ujs
@@ -9,6 +7,18 @@
  * Released under the MIT license
  *
  */
+
+(function(root, factory) {
+
+  if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['jquery'], factory);
+  } else {
+    // Browser
+    factory(root.jQuery || root.$);
+  }
+
+})(this, function($, undefined) {
 
   // Cut down on the number of issues from people inadvertently including jquery_ujs twice
   // by detecting and raising an error when it happens.
@@ -442,4 +452,4 @@
     });
   }
 
-})( jQuery );
+});
