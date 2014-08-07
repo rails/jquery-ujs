@@ -223,3 +223,22 @@ asyncTest('binding to confirm:complete event of a button and returning false', 2
     start();
   }, 50);
 });
+
+asyncTest('a button inside a form only confirms once', 1, function() {
+  var confirmations = 0;
+  window.confirm = function(msg) {
+    confirmations++;
+    return true;
+  };
+
+  $('#qunit-fixture').append($('<form />').append($('<button />', {
+    'data-remote': 'true',
+    'data-confirm': 'Are you absolutely sure?',
+    text: 'Click me'
+  })));
+
+  $('form > button[data-confirm]').trigger('click');
+
+  ok(confirmations === 1, 'confirmation counter should be 1, but it was ' + confirmations);
+  start();
+});

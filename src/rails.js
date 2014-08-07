@@ -25,7 +25,7 @@
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with], a[data-disable]',
 
     // Button elements bound by jquery-ujs
-    buttonClickSelector: 'button[data-remote], button[data-confirm]',
+    buttonClickSelector: 'button[data-remote]:not(form button), button[data-confirm]:not(form button)',
 
     // Select elements bound by jquery-ujs
     inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
@@ -356,6 +356,7 @@
 
     $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
       var button = $(this);
+
       if (!rails.allowAction(button)) return rails.stopEverything(e);
 
       if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
