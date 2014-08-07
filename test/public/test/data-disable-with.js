@@ -99,6 +99,24 @@ asyncTest('form input[type=submit][data-disable-with] disables', 6, function(){
   }, 30);
 });
 
+test('form input[type=submit][data-disable-with] re-enables when `pageshow` event is triggered', function(){
+  var form = $('form:not([data-remote])'), input = form.find('input[type=submit]');
+
+  App.checkEnabledState(input, 'Submit');
+
+  // Emulate the disabled state without submitting the form at all, what is the
+  // state after going back on firefox after submitting a form.
+  //
+  // See https://github.com/rails/jquery-ujs/issues/357
+  $.rails.disableFormElements(form);
+
+  App.checkDisabledState(input, 'submitting ...');
+
+  $(window).trigger('pageshow');
+
+  App.checkEnabledState(input, 'Submit');
+});
+
 asyncTest('form[data-remote] input[type=submit][data-disable-with] is replaced in ajax callback', 2, function(){
   var form = $('form:not([data-remote])').attr('data-remote', 'true'), origFormContents = form.html();
 
@@ -171,6 +189,18 @@ asyncTest('a[data-disable-with] disables', 4, function() {
   link.trigger('click');
   App.checkDisabledState(link, 'clicking...');
   start();
+});
+
+test('a[data-disable-with] re-enables when `pageshow` event is triggered', function() {
+  var link = $('a[data-disable-with]');
+
+  App.checkEnabledState(link, 'Click me');
+
+  link.trigger('click');
+  App.checkDisabledState(link, 'clicking...');
+
+  $(window).trigger('pageshow');
+  App.checkEnabledState(link, 'Click me');
 });
 
 asyncTest('a[data-remote][data-disable-with] disables and re-enables', 6, function() {
