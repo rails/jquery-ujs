@@ -26,7 +26,7 @@ Installation
 For automated installation in Rails, use the "jquery-rails" gem. Place this in your Gemfile:
 
 ```ruby
-gem 'jquery-rails', '~> 2.1'
+gem 'jquery-rails'
 ```
 
 And run:
