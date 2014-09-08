@@ -31,33 +31,19 @@ gem 'jquery-rails'
 
 And run:
 
-    $ bundle install
-
-This next step depends on your version of Rails.
-
-a. For Rails 3.1, add these lines to the top of your app/assets/javascripts/application.js file:
-
-```javascript
-//= require jquery
-//= require jquery_ujs
+```shell
+$ bundle install
 ```
-
-b. For Rails 3.0, run this command:
-
-*Be sure to get rid of the rails.js file if it exists, and instead use
-the new jquery_ujs.js file that gets copied to the public directory.
-Choose to overwrite jquery_ujs.js if prompted.*
-
-    $ rails generate jquery:install
-
-c. For Rails 2.x and for manual installation follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Manual-installing-and-Rails-2) .
 
 Installation using Bower
 ------------
 
 Run `bower install jquery-ujs --save` to install the jquery-ujs package.
 
-For Rails 3.1 and above, add these lines to the top of your app/assets/javascripts/application.js file:
+Usage
+------------
+
+Require both `jquery` and `jquery-ujs` into your application.js manifest.
 
 ```javascript
 //= require jquery
