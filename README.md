@@ -20,7 +20,7 @@ Requirements
 
 If you don't use HTML5, adding "data" attributes to your HTML4 or XHTML pages might make them fail [W3C markup validation][validator]. However, this shouldn't create any issues for web browsers or other user agents.
 
-Installation using the jQuery-Rails Gem
+Installation using the jquery-rails gem
 ------------
 
 For automated installation in Rails, use the "jquery-rails" gem. Place this in your Gemfile:
@@ -55,24 +55,13 @@ c. For Rails 2.x and for manual installation follow [this wiki](https://github.c
 Installation using Bower
 ------------
 
-Modify your bower.json file and add jQuery-UJS as a dependency as follows:
-
-```javascript
-{
-    "dependencies": {
-        /* include jQuery-UJS as below */
-        "jquery-ujs": "git@github.com:rails/jquery-ujs.git"
-    }
-}
-```
-
-Then run `bower install jquery-ujs` to install the jQuery-UJS package.
+Run `bower install jquery-ujs --save` to install the jquery-ujs package.
 
 For Rails 3.1 and above, add these lines to the top of your app/assets/javascripts/application.js file:
 
 ```javascript
 //= require jquery
-//= require jquery-ujs/src/rails
+//= require jquery-ujs
 ```
 
 How to run tests
