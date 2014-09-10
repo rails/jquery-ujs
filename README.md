@@ -35,6 +35,13 @@ And run:
 $ bundle install
 ```
 
+Require both `jquery` and `jquery_ujs` into your application.js manifest.
+
+```javascript
+//= require jquery
+//= require jquery_ujs
+```
+
 Installation using Bower
 ------------
 
