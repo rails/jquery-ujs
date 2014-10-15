@@ -98,6 +98,7 @@
         crossDomain = elCrossDomain === undefined ? null : elCrossDomain;
         withCredentials = element.data('with-credentials') || null;
         dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
+        cache = element.data('cache') || false
 
         if (element.is('form')) {
           method = element.attr('method');
@@ -124,9 +125,8 @@
           url = rails.href(element);
           data = element.data('params') || null;
         }
-
         options = {
-          type: method || 'GET', data: data, dataType: dataType,
+          type: method || 'GET', data: data, dataType: dataType, cache: cache,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
             if (settings.dataType === undefined) {
