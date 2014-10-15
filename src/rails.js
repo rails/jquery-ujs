@@ -371,7 +371,7 @@
         }
         return false;
 
-      } else if (link.data('method')) {
+      } else if (method) {
         rails.handleMethod(link);
         return false;
       }
