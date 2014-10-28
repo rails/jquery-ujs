@@ -29,6 +29,31 @@ asyncTest('link with "data-method" set to "delete"', 3, function() {
   });
 });
 
+var escapeMap = {
+  '<': '&lt;',
+  '>': '&gt;'
+};
+function escapeReplacer (entity) { return escapeMap[entity] || entity; }
+function escapeHTML(str) { return String(str).replace(/<|>/g, escapeReplacer); }
+
+asyncTest('link with "data-method" set to "post" and "data-params"', 4, function() {
+  var value1 = 0,
+    value2 = '\'quoted"/>&<\'value"',
+    value3 = {foo: {bar: {baz: value2}}},
+    params = {
+      data1: value1,
+      data2: value2,
+      data3: value3
+    };
+  $('a[data-method]').attr({'data-method': 'post', 'data-params': JSON.stringify(params)});
+  submit(function(data) {
+    equal(data.REQUEST_METHOD, 'POST');
+    equal(data.params.data1, escapeHTML(value1), 'params should have key data1 with right value');
+    equal(data.params.data2, escapeHTML(value2), 'params should have key data2 with right value');
+    propEqual(data.params.data3, {foo: {bar: {baz: escapeHTML(value2)}}}, 'params should have key data3 with right value');
+  });
+});
+
 asyncTest('link with "data-method" and CSRF', 1, function() {
   $('#qunit-fixture')
     .append('<meta name="csrf-param" content="authenticity_token"/>')
