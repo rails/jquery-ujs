@@ -84,6 +84,29 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
     .trigger('click');
 });
 
+asyncTest('clicking on a link with data-remote attribute and data-params as JSON', 6, function() {
+  var value1 = 0,
+    value2 = '\'quoted"/>&<\'value"',
+    value3 = {foo: {bar: {baz: value2}}},
+    params = {
+      data1: value1,
+      data2: value2,
+      data3: value3
+    };
+  $('a[data-remote]')
+    .attr('data-params', JSON.stringify(params))
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      App.assertRequestPath(data, '/echo');
+      equal(data.params.data1, value1, 'params should have key data1 with right value');
+      equal(data.params.data2, value2, 'params should have key data2 with right value');
+      propEqual(data.params.data3, {foo: {bar: {baz: value2}}}, 'params should have key data3 with right value');
+      App.assertGetRequest(data);
+    })
+    .bind('ajax:complete', function() { start() })
+    .trigger('click');
+});
+
 asyncTest('clicking on a button with data-remote attribute', 5, function() {
   $('button[data-remote]')
     .bind('ajax:success', function(e, data, status, xhr) {
