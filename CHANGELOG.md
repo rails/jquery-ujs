@@ -1,4 +1,4 @@
-## Unreleased
+## v1.0.2
 
 * Re-enables buttons and links after going back through the `pageshow` event.
 
