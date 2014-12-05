@@ -100,8 +100,8 @@
         dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
         if (element.is('form')) {
-          method = element.attr('method');
-          url = element.attr('action');
+          method = element.data('ujs:submit-button-formmethod') || element.attr('method');
+          url = element.data('ujs:submit-button-formaction') || element.attr('action');
           data = element.serializeArray();
           // memoized value from clicked submit button
           var button = element.data('ujs:submit-button');
@@ -109,6 +109,8 @@
             data.push(button);
             element.data('ujs:submit-button', null);
           }
+          element.data('ujs:submit-button-formmethod', null)
+          element.data('ujs:submit-button-formaction', null)
         } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
           url = element.data('url');
@@ -450,7 +452,10 @@
       var name = button.attr('name'),
         data = name ? {name:name, value:button.val()} : null;
 
-      button.closest('form').data('ujs:submit-button', data);
+      button.closest('form')
+        .data('ujs:submit-button', data)
+        .data('ujs:submit-button-formaction', button.attr('formaction'))
+        .data('ujs:submit-button-formmethod', button.attr('formmethod'));
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function(event) {

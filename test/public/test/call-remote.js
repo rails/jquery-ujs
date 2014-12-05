@@ -32,6 +32,19 @@ asyncTest('form method is not read from "data-method" attribute in case of missi
   });
 });
 
+asyncTest('form method is read from submit button "formmethod" if submit is triggered by that button', 1, function() {
+  var submitButton = $('<input type="submit" formmethod="get">')
+  buildForm({ method: 'post' });
+
+  $('#qunit-fixture').find('form').append(submitButton)
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertGetRequest(data);
+    })
+    .bind('ajax:complete', function() { start() });
+
+  submitButton.trigger('click');
+});
+
 asyncTest('form default method is GET', 1, function() {
   buildForm();
 
@@ -54,6 +67,19 @@ asyncTest('form url is read from "action" not "href"', 1, function() {
   submit(function(e, data, status, xhr) {
     App.assertRequestPath(data, '/echo');
   });
+});
+
+asyncTest('form url is read from submit button "formaction" if submit is triggered by that button', 1, function() {
+  var submitButton = $('<input type="submit" formaction="/echo">')
+  buildForm({ method: 'post', href: '/echo2' });
+
+  $('#qunit-fixture').find('form').append(submitButton)
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertRequestPath(data, '/echo');
+    })
+    .bind('ajax:complete', function() { start() });
+
+  submitButton.trigger('click');
 });
 
 asyncTest('prefer JS, but accept any format', 1, function() {
