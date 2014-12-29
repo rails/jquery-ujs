@@ -1,3 +1,8 @@
+## v1.0.3
+
+* Replace deprecated `deferred.error()` with `fail()`.
+
+  *Carlos Antonio da Silva*
 ## v1.0.2
 
 * Re-enables buttons and links after going back through the `pageshow` event.
