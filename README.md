@@ -1,3 +1,11 @@
+
+http://brainhouse.ru/training/index.html
+http://brainhouse.ru/training/index.html
+http://www.luxoft-training.ru/timetable/ 
+http://enjoy-job.ru/kursy-programming/ruby/#msk
+https://toster.ru/q/82300
+
+
 Unobtrusive scripting adapter for jQuery
 ========================================
 
