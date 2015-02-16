@@ -54,6 +54,9 @@
     // Button onClick disable selector with possible reenable after remote submission
     buttonDisableSelector: 'button[data-remote][data-disable-with], button[data-remote][data-disable]',
 
+    // Whitelisted domains when using data-method='post' usages
+    csrfWhitelistedDomains: null,
+
     // Make sure that every Ajax request sends the CSRF token
     CSRFProtection: function(xhr) {
       var token = $('meta[name="csrf-token"]').attr('content');
@@ -173,12 +176,13 @@
       var href = rails.href(link),
         method = link.data('method'),
         target = link.attr('target'),
+        domain = link[0].hostname,
         csrfToken = $('meta[name=csrf-token]').attr('content'),
         csrfParam = $('meta[name=csrf-param]').attr('content'),
         form = $('<form method="post" action="' + href + '"></form>'),
         metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
 
-      if (rails.isCsrfHrefWhitelisted(href) && csrfParam !== undefined && csrfToken !== undefined) {
+      if (rails.isCsrfDomainWhitelisted(domain) && csrfParam !== undefined && csrfToken !== undefined) {
         metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
       }
 
@@ -258,9 +262,9 @@
       return answer && callback;
     },
 
-    // Verify, when configured, that the href passes the whitelist for CSRF token usage.
-    isCsrfHrefWhitelisted: function(href){
-      return rails.csrfWhitelistedHrefs ? rails.csrfWhitelistedHrefs.test(href) : true;
+    // Verify, when configured, that the href passes the whitelist and should send the CSRF token.
+    isCsrfDomainWhitelisted: function(domain){
+      return rails.csrfWhitelistedDomains ? rails.csrfWhitelistedDomains.test(domain) : true;
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
