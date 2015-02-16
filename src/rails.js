@@ -178,7 +178,7 @@
         form = $('<form method="post" action="' + href + '"></form>'),
         metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
 
-      if (csrfParam !== undefined && csrfToken !== undefined) {
+      if (rails.isCsrfHrefWhitelisted(href) && csrfParam !== undefined && csrfToken !== undefined) {
         metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
       }
 
@@ -256,6 +256,11 @@
         callback = rails.fire(element, 'confirm:complete', [answer]);
       }
       return answer && callback;
+    },
+
+    // Verify, when configured, that the href passes the whitelist for CSRF token usage.
+    isCsrfHrefWhitelisted: function(href){
+      return rails.csrfWhitelistedHrefs ? rails.csrfWhitelistedHrefs.test(href) : true;
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
