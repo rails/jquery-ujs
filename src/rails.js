@@ -103,6 +103,18 @@
           method = element.attr('method');
           url = element.attr('action');
           data = element.serializeArray();
+
+          if(element.data("params")){
+            var paramList = element.data("params").split("&")
+            paramList.forEach(function(item){ 
+              var parts = item.split("=");
+              var obj = {}
+              obj["name"] = parts[0]
+              obj["value"] = parts[1]
+              data.push(obj)
+            })
+          }
+
           // memoized value from clicked submit button
           var button = element.data('ujs:submit-button');
           if (button) {

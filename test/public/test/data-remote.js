@@ -16,6 +16,7 @@ module('data-remote', {
       .append($('<form />', {
         action: '/echo',
         'data-remote': 'true',
+        'data-params': "save=auto&data1=value1",
         method: 'post'
       }))
       .find('form').append($('<input type="text" name="user_name" value="john">'));
@@ -123,12 +124,14 @@ asyncTest('changing a select option with data-remote attribute', 5, function() {
     .trigger('change');
 });
 
-asyncTest('submitting form with data-remote attribute', 4, function() {
+asyncTest('submitting form with data-remote attribute', 6, function() {
   $('form[data-remote]')
     .bind('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
+      equal(data.params.save, 'auto', 'ajax arguments should have key save with right value');
+      equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
       App.assertPostRequest(data);
     })
     .bind('ajax:complete', function() { start() })
