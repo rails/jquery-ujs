@@ -40,7 +40,7 @@ asyncTest('link with "data-method" and CSRF', 1, function() {
 });
 
 asyncTest('whitelisted links with "data-method" get CSRF', 1, function() {
-  $.rails.csrfWhitelistedDomains = /localhost/
+  $.rails.csrfWhitelistedDomains = /^localhost$/
 
   $('#qunit-fixture')
     .append('<meta name="csrf-param" content="authenticity_token"/>')
@@ -52,7 +52,7 @@ asyncTest('whitelisted links with "data-method" get CSRF', 1, function() {
 });
 
 asyncTest('non whitelisted links with "data-method" get no CSRF', 2, function() {
-  $.rails.csrfWhitelistedDomains = /http:\/\/rubyonrails.org/
+  $.rails.csrfWhitelistedDomains = /^rubyonrails.org$/
 
   $('#qunit-fixture')
     .append('<meta name="csrf-param" content="authenticity_token"/>')
