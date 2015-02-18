@@ -179,16 +179,19 @@
         domain = link[0].hostname,
         csrfToken = $('meta[name=csrf-token]').attr('content'),
         csrfParam = $('meta[name=csrf-param]').attr('content'),
-        form = $('<form method="post" action="' + href + '"></form>'),
-        metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
+        form = $('<form method="post"></form>').attr('action', href),
+        methodInput = $('<input name="_method" type="hidden" />').attr('value', method);
 
       if (rails.isCsrfDomainWhitelisted(domain) && csrfParam !== undefined && csrfToken !== undefined) {
-        metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
+        csrfInput = $('<input type="hidden" />')
+          .attr('name', csrfParam)
+          .attr('value', csrfToken);
+        form.append(csrfInput);
       }
 
       if (target) { form.attr('target', target); }
 
-      form.hide().append(metadataInput).appendTo('body');
+      form.hide().append(methodInput).appendTo('body');
       form.submit();
     },
 
