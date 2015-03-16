@@ -181,18 +181,43 @@
       var href = rails.href(link),
         method = link.data('method'),
         target = link.attr('target'),
+        params = link.data('params'),
         csrfToken = $('meta[name=csrf-token]').attr('content'),
         csrfParam = $('meta[name=csrf-param]').attr('content'),
         form = $('<form method="post" action="' + href + '"></form>'),
-        metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
+        dataInputs = '<input name="_method" value="' + method + '" type="hidden" />';
 
       if (csrfParam !== undefined && csrfToken !== undefined) {
-        metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
+        dataInputs += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
+      }
+
+      if (params) {
+
+        function buildParamsInputs(key, value) {
+          switch (typeof value) {
+            case 'array':
+              var result = [];
+              for (var i = 0, l = value.length; i < l; i++) {
+                result.push( buildParamsInputs(key === null ? i : key + '[' + i + ']', value[i]) );
+              }
+              return result.join('');
+            case 'object':
+              var result = [];
+              for (var i in value) {
+                result.push( buildParamsInputs(key === null ? i : key + '[' + i + ']', value[i]) );
+              }
+              return result.join('');
+            default:
+              return '<input name="' + key + '" value="' + String(value).replace(/"/g, '&quot;') + '" type="hidden" />';
+          }
+        }
+
+        dataInputs += buildParamsInputs(null, params);
       }
 
       if (target) { form.attr('target', target); }
 
-      form.hide().append(metadataInput).appendTo('body');
+      form.hide().append(dataInputs).appendTo('body');
       form.submit();
     },
 
