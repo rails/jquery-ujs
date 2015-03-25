@@ -64,20 +64,6 @@ asyncTest('modifying data("type") with "ajax:before" requests new dataType in re
   });
 });
 
-asyncTest('setting data("cross-domain",true) with "ajax:before" uses new setting in request', 2, function(){
-  $('form[data-remote]').data('cross-domain',false)
-    .bind('ajax:before', function() {
-      var form = $(this);
-      form.data('cross-domain',true);
-    });
-
-  submit(function(form) {
-    form.bind('ajax:beforeSend', function(e, xhr, settings) {
-      equal(settings.crossDomain, true, 'setting modified in ajax:before should have forced cross-domain request');
-    });
-  });
-});
-
 asyncTest('setting data("with-credentials",true) with "ajax:before" uses new setting in request', 2, function(){
   $('form[data-remote]').data('with-credentials',false)
     .bind('ajax:before', function() {
