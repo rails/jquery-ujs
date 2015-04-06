@@ -181,8 +181,8 @@
       var href = rails.href(link),
         method = link.data('method'),
         target = link.attr('target'),
-        csrfToken = $('meta[name=csrf-token]').attr('content'),
-        csrfParam = $('meta[name=csrf-param]').attr('content'),
+        csrfToken = rails.csrfToken(),
+        csrfParam = rails.csrfParam(),
         form = $('<form method="post" action="' + href + '"></form>'),
         metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
 
