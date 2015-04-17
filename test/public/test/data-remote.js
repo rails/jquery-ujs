@@ -18,6 +18,12 @@ module('data-remote', {
         'data-remote': 'true',
         method: 'post'
       }))
+      .append($('<a />', {
+        href: '/echo',
+        'data-remote': 'true',
+        disabled: 'disabled',
+        text: 'Disabed link'
+      }))
       .find('form').append($('<input type="text" name="user_name" value="john">'));
 
   }
@@ -82,6 +88,19 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
     })
     .bind('ajax:complete', function() { start() })
     .trigger('click');
+});
+
+asyncTest('clicking on a link with disabled attribute', 0, function() {
+  $('a[disabled]')
+  .bind("ajax:before", function(e, data, status, xhr) {
+    App.assertCallbackNotInvoked('ajax:success')
+  })
+  .bind('ajax:complete', function() { start() })
+  .trigger('click')
+
+  setTimeout(function() {
+    start();
+  }, 13);
 });
 
 asyncTest('clicking on a button with data-remote attribute', 5, function() {

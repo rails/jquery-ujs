@@ -22,7 +22,7 @@
 
   $.rails = rails = {
     // Link elements bound by jquery-ujs
-    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with], a[data-disable]',
+    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote]:not([disabled]), a[data-disable-with], a[data-disable]',
 
     // Button elements bound by jquery-ujs
     buttonClickSelector: 'button[data-remote]:not(form button), button[data-confirm]:not(form button)',
