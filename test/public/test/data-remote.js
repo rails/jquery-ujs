@@ -18,6 +18,12 @@ module('data-remote', {
         'data-remote': 'true',
         method: 'post'
       }))
+      .append($('<a />', {
+        href: '/echo',
+        'data-remote': 'true',
+        disabled: 'disabled',
+        text: 'Disabed link'
+      }))
       .find('form').append($('<input type="text" name="user_name" value="john">'));
 
   }
@@ -71,8 +77,8 @@ asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for li
   setTimeout(function(){ start(); }, 13);
 });
 
-asyncTest('clicking on a link with data-remote attribute', 5, function() {
-  $('a[data-remote]')
+asyncTest('clicking on a button with data-remote attribute', 5, function() {
+  $('button[data-remote]:not([disabled])')
     .bind('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
@@ -84,17 +90,13 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
     .trigger('click');
 });
 
-asyncTest('clicking on a button with data-remote attribute', 5, function() {
-  $('button[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) {
-      App.assertCallbackInvoked('ajax:success');
-      App.assertRequestPath(data, '/echo');
-      equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
-      equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
-      App.assertGetRequest(data);
+asyncTest('clicking on a link with disabled attribute', 0, function() {
+  $('a[disabled]')
+    .bind("ajax:before", function(e, data, status, xhr) {
+      App.assertCallbackNotInvoked('ajax:success')
     })
-    .bind('ajax:complete', function() { start() })
-    .trigger('click');
+    .trigger('click')
+  setTimeout(function(){ start(); }, 13);
 });
 
 asyncTest('changing a select option with data-remote attribute', 5, function() {
