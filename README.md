@@ -15,42 +15,47 @@ Full [documentation is on the wiki][wiki], including the [list of published Ajax
 Requirements
 ------------
 
-- [jQuery 1.7.x or higher][jquery];
+- [jQuery 1.8.x or higher][jquery];
 - HTML5 doctype (optional).
 
 If you don't use HTML5, adding "data" attributes to your HTML4 or XHTML pages might make them fail [W3C markup validation][validator]. However, this shouldn't create any issues for web browsers or other user agents.
 
-Installation
+Installation using the jquery-rails gem
 ------------
 
 For automated installation in Rails, use the "jquery-rails" gem. Place this in your Gemfile:
 
 ```ruby
-gem 'jquery-rails', '~> 2.1'
+gem 'jquery-rails'
 ```
 
 And run:
 
-    $ bundle install
+```shell
+$ bundle install
+```
 
-This next step depends on your version of Rails.
-
-a. For Rails 3.1, add these lines to the top of your app/assets/javascripts/application.js file:
+Require both `jquery` and `jquery_ujs` into your application.js manifest.
 
 ```javascript
 //= require jquery
 //= require jquery_ujs
 ```
 
-b. For Rails 3.0, run this command (add `--ui` if you want jQuery UI):
+Installation using Bower
+------------
 
-*Be sure to get rid of the rails.js file if it exists, and instead use
-the new jquery_ujs.js file that gets copied to the public directory.
-Choose to overwrite jquery_ujs.js if prompted.*
+Run `bower install jquery-ujs --save` to install the jquery-ujs package.
 
-    $ rails generate jquery:install
+Usage
+------------
 
-c. For Rails 2.x and for manual installation follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Manual-installing-and-Rails-2) .
+Require both `jquery` and `jquery-ujs` into your application.js manifest.
+
+```javascript
+//= require jquery
+//= require jquery-ujs
+```
 
 How to run tests
 ------------
@@ -58,7 +63,7 @@ How to run tests
 Follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing) to run tests .
 
 
-[data]: http://dev.w3.org/html5/spec/elements.html#embedding-custom-non-visible-data-with-the-data-attributes "Embedding custom non-visible data with the data-* attributes"
+[data]: http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes "Embedding custom non-visible data with the data-* attributes"
 [wiki]: https://github.com/rails/jquery-ujs/wiki
 [events]: https://github.com/rails/jquery-ujs/wiki/ajax
 [jquery]: http://docs.jquery.com/Downloading_jQuery

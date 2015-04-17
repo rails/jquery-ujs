@@ -1,0 +1,40 @@
+#!/bin/bash
+
+port=4567
+
+start_server() {
+  mkdir -p log
+  bundle exec ruby test/server.rb > log/test.log 2>&1 &
+}
+
+run_tests() {
+  phantomjs script/runner.js http://localhost:$port/
+}
+
+server_started() {
+  lsof -i :${1?} >/dev/null
+}
+
+timestamp() {
+  date +%s
+}
+
+wait_for_server() {
+  timeout=$(( `timestamp` + $1 ))
+  while true; do
+    if server_started "$2"; then
+      break
+    elif [ `timestamp` -gt "$timeout" ]; then
+      echo "timed out after $1 seconds" >&2
+      exit 1
+    fi
+  done
+}
+
+start_server
+server_pid=$!
+wait_for_server 5 $port
+run_tests
+result=$?
+kill $server_pid
+exit $result

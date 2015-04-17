@@ -9,6 +9,7 @@ module('call-remote-callbacks', {
   teardown: function() {
     $(document).undelegate('form[data-remote]', 'ajax:beforeSend');
     $(document).undelegate('form[data-remote]', 'ajax:before');
+    $(document).undelegate('form[data-remote]', 'ajax:send');
     $(document).undelegate('form[data-remote]', 'ajax:complete');
     $(document).undelegate('form[data-remote]', 'ajax:success');
     $(document).unbind('ajaxStop');
@@ -53,7 +54,7 @@ asyncTest('modifying data("type") with "ajax:before" requests new dataType in re
   $('form[data-remote]').data('type','html')
     .bind('ajax:before', function() {
       var form = $(this);
-      form.data('type','xml')
+      form.data('type','xml');
     });
 
   submit(function(form) {
@@ -67,7 +68,7 @@ asyncTest('setting data("cross-domain",true) with "ajax:before" uses new setting
   $('form[data-remote]').data('cross-domain',false)
     .bind('ajax:before', function() {
       var form = $(this);
-      form.data('cross-domain',true)
+      form.data('cross-domain',true);
     });
 
   submit(function(form) {
@@ -94,8 +95,11 @@ asyncTest('setting data("with-credentials",true) with "ajax:before" uses new set
 asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function() {
   submit(function(form) {
     form.bind('ajax:beforeSend', function() {
-      ok(true, 'aborting request in ajax:beforeSend')
+      ok(true, 'aborting request in ajax:beforeSend');
       return false;
+    });
+    form.unbind('ajax:send').bind('ajax:send', function() {
+      ok(false, 'ajax:send should not run');
     });
     form.unbind('ajax:complete').bind('ajax:complete', function() {
       ok(false, 'ajax:complete should not run');
@@ -315,6 +319,9 @@ asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation',
   });
 
   submit(function(form) {
+    form.unbind('ajax:send').bind('ajax:send', function() {
+      ok(false, 'ajax:send should not run');
+    });
     form.unbind('ajax:complete').bind('ajax:complete', function() {
       ok(false, 'ajax:complete should not run');
     });
@@ -324,11 +331,14 @@ asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation',
   });
 });
 
-asyncTest('"ajax:beforeSend", "ajax:success" and "ajax:complete" are triggered', 8, function() {
+asyncTest('"ajax:beforeSend", "ajax:send", "ajax:success" and "ajax:complete" are triggered', 9, function() {
   submit(function(form) {
     form.bind('ajax:beforeSend', function(e, xhr, settings) {
       ok(xhr.setRequestHeader, 'first argument to "ajax:beforeSend" should be an XHR object');
       equal(settings.url, '/echo', 'second argument to "ajax:beforeSend" should be a settings object');
+    });
+    form.bind('ajax:send', function(e, xhr) {
+      ok(xhr.abort, 'first argument to "ajax:send" should be an XHR object');
     });
     form.bind('ajax:success', function(e, data, status, xhr) {
       ok(data.REQUEST_METHOD, 'first argument to ajax:success should be a data object');
@@ -342,26 +352,32 @@ asyncTest('"ajax:beforeSend", "ajax:success" and "ajax:complete" are triggered',
   });
 });
 
-asyncTest('"ajax:beforeSend", "ajax:error" and "ajax:complete" are triggered on error', 6, function() {
-  submit(function(form) {
-    form.attr('action', '/error');
-    form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
-    form.bind('ajax:error', function(e, xhr, status, error) {
-      ok(xhr.getResponseHeader, 'first argument to "ajax:error" should be an XHR object');
-      equal(status, 'error', 'second argument to ajax:error should be a status string');
-      // Firefox 8 returns "Forbidden " with trailing space
-      equal($.trim(error), 'Forbidden', 'third argument to ajax:error should be an HTTP status response');
-      // Opera returns "0" for HTTP code
-      equal(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
+if(window.phantom !== undefined) {
+  asyncTest('"ajax:beforeSend", "ajax:send", "ajax:error" and "ajax:complete" are triggered on error', 7, function() {
+    submit(function(form) {
+      form.attr('action', '/error');
+      form.bind('ajax:beforeSend', function(arg) { ok(true, 'ajax:beforeSend') });
+      form.bind('ajax:send', function(arg) { ok(true, 'ajax:send') });
+      form.bind('ajax:error', function(e, xhr, status, error) {
+        ok(xhr.getResponseHeader, 'first argument to "ajax:error" should be an XHR object');
+        equal(status, 'error', 'second argument to ajax:error should be a status string');
+        // Firefox 8 returns "Forbidden " with trailing space
+        equal($.trim(error), 'Forbidden', 'third argument to ajax:error should be an HTTP status response');
+        // Opera returns "0" for HTTP code
+        equal(xhr.status, window.opera ? 0 : 403, 'status code should be 403');
+      });
     });
   });
-});
+}
 
 // IF THIS TEST IS FAILING, TRY INCREASING THE TIMEOUT AT THE BOTTOM TO > 100
-asyncTest('binding to ajax callbacks via .delegate() triggers handlers properly', 3, function() {
+asyncTest('binding to ajax callbacks via .delegate() triggers handlers properly', 4, function() {
   $(document)
     .delegate('form[data-remote]', 'ajax:beforeSend', function() {
       ok(true, 'ajax:beforeSend handler is triggered');
+    })
+    .delegate('form[data-remote]', 'ajax:send', function() {
+      ok(true, 'ajax:send handler is triggered');
     })
     .delegate('form[data-remote]', 'ajax:complete', function() {
       ok(true, 'ajax:complete handler is triggered');
