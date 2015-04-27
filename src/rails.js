@@ -327,7 +327,7 @@
   };
 
   $.rails.handlers = {
-    pageshow: function(){
+    pageshow: function() {
       $($.rails.enableSelector).each(function () {
         var element = $(this);
 
@@ -345,7 +345,7 @@
       });
     },
 
-    submit: function(e){
+    submit: function(e) {
       var form = $(e.currentTarget),
         remote = form.data('remote') !== undefined,
         blankRequiredInputs,
@@ -384,23 +384,23 @@
       }
     },
 
-    ajaxCompleteLink: function($el){
-      rails.enableElement($el);
+    ajaxCompleteLink: function(el) {
+      rails.enableElement($(el));
     },
 
-    ajaxCompleteButton: function($el){
-      rails.enableFormElement($el);
+    ajaxCompleteButton: function(el) {
+      rails.enableFormElement($(el));
     },
 
-    ajaxCompleteForm: function(e, ctx){
+    ajaxCompleteForm: function(e, ctx) {
       if (ctx == e.target) rails.enableFormElements($(ctx));
     },
 
-    ajaxSendForm: function(e, ctx){
+    ajaxSendForm: function(e, ctx) {
       if (ctx == e.target) rails.disableFormElements($(ctx));
     },
 
-    clickLink: function(e){
+    clickLink: function(e) {
       var link = $(e.currentTarget), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey;
       if (!rails.allowAction(link)) return rails.stopEverything(e);
 
@@ -424,7 +424,7 @@
       }
     },
 
-    clickButton: function(e){
+    clickButton: function(e) {
       var button = $(e.currentTarget);
 
       if (!rails.allowAction(button)) return rails.stopEverything(e);
@@ -441,7 +441,7 @@
       return false;
     },
 
-    clickInput: function(e){
+    clickInput: function(e) {
       var button = $(e.currentTarget);
 
       if (!rails.allowAction(button)) return rails.stopEverything(e);
@@ -453,7 +453,7 @@
       button.closest('form').data('ujs:submit-button', data);
     },
 
-    change: function(e){
+    change: function(e) {
       var link = $(e.currentTarget);
       if (!rails.allowAction(link)) return rails.stopEverything(e);
 
@@ -464,23 +464,23 @@
 
   if (rails.fire($document, 'rails:attachBindings')) {
 
-    $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
+    $.ajaxPrefilter(function(options, originalOptions, xhr) { if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
 
     // This event works the same as the load event, except that it fires every
     // time the page is loaded.
     //
     // See https://github.com/rails/jquery-ujs/issues/357
     // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
-    $(window).on("pageshow.rails", function(){
+    $(window).on("pageshow.rails", function() {
       $.rails.handlers.pageshow();
     });
 
     $document.delegate(rails.linkDisableSelector, 'ajax:complete', function() {
-      $.rails.handlers.ajaxCompleteLink($(this));
+      $.rails.handlers.ajaxCompleteLink(this);
     });
 
     $document.delegate(rails.buttonDisableSelector, 'ajax:complete', function() {
-      $.rails.handlers.ajaxCompleteButton($(this));
+      $.rails.handlers.ajaxCompleteButton(this);
     });
 
     $document.delegate(rails.linkClickSelector, 'click.rails', function(e) {
