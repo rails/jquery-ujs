@@ -366,11 +366,11 @@
         if (nonBlankFileInputs) {
           // slight timeout so that the submit button gets properly serialized
           // (make it easy for event handler to serialize form without disabled values)
-          setTimeout(function(){ rails.disableFormElements(form); }, 13);
+          setTimeout(function() { rails.disableFormElements(form); }, 13);
           var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
 
           // re-enable form elements if event bindings return false (canceling normal form submission)
-          if (!aborted) { setTimeout(function(){ rails.enableFormElements(form); }, 13); }
+          if (!aborted) { setTimeout(function() { rails.enableFormElements(form); }, 13); }
 
           return aborted;
         }
