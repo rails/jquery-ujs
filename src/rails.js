@@ -380,7 +380,7 @@
 
       } else {
         // slight timeout so that the submit button gets properly serialized
-        setTimeout(function(){ rails.disableFormElements(form); }, 13);
+        setTimeout(function() { rails.disableFormElements(form); }, 13);
       }
     },
 
