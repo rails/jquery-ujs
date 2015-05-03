@@ -50,11 +50,11 @@ Run `bower install jquery-ujs --save` to install the jquery-ujs package.
 Usage
 ------------
 
-Require both `jquery` and `jquery_ujs` into your application.js manifest.
+Require both `jquery` and `jquery-ujs` into your application.js manifest.
 
 ```javascript
 //= require jquery
-//= require jquery_ujs
+//= require jquery-ujs
 ```
 
 How to run tests
