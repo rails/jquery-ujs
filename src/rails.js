@@ -260,7 +260,11 @@
       if (!message) { return true; }
 
       if (rails.fire(element, 'confirm')) {
-        answer = rails.confirm(message);
+        try {
+          answer = rails.confirm(message);
+        } catch (e) {
+          (console.error || console.log).call(console, e.stack || e);
+        }
         callback = rails.fire(element, 'confirm:complete', [answer]);
       }
       return answer && callback;
