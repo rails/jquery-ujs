@@ -5,7 +5,6 @@
   "description": "Ruby on Rails unobtrusive scripting adapter for jQuery",
   "main": "src/rails.js",
   "license": "MIT",
-  "version": "1.0.3",
   "dependencies": {
     "jquery": ">1.8.*"
   },
