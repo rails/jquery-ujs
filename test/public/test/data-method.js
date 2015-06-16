@@ -46,4 +46,30 @@ asyncTest('link "target" should be carried over to generated form', 1, function(
   });
 });
 
+asyncTest('link with "data-method" and cross origin', 1, function() {
+  var data = {};
+
+  $('#qunit-fixture')
+    .append('<meta name="csrf-param" content="authenticity_token"/>')
+    .append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae"/>');
+
+  $(document).on('submit', 'form', function(e) {
+    $(e.currentTarget).serializeArray().map(function(item) {
+      data[item.name] = item.value;
+    });
+
+    return false;
+  });
+
+  var link = $('#qunit-fixture').find('a');
+
+  link.attr('href', 'http://www.alfajango.com');
+
+  link.trigger('click');
+
+  start();
+
+  notEqual(data.authenticity_token, 'cf50faa3fe97702ca1ae');
+});
+
 })();

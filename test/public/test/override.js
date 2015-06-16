@@ -32,7 +32,7 @@ asyncTest("the getter for an element's href is overridable", 1, function() {
 
 asyncTest("the getter for an element's href works normally if not overridden", 1, function() {
   $.rails.ajax = function(options) {
-    equal('/real/href', options.url);
+    equal(location.protocol + '//' + location.host + '/real/href', options.url);
   }
   $.rails.handleRemote($('#qunit-fixture').find('a'));
   start();

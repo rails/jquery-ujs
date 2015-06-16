@@ -1,3 +1,11 @@
+## v1.0.4
+
+* Fix CSP bypass vulnerability.
+
+  CVE-2015-1840.
+
+  *Rafael Mendonça França*
+
 ## v1.0.3
 
 * Replace deprecated `deferred.error()` with `fail()`.
