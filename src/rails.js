@@ -349,16 +349,8 @@
     }
   };
 
-  if (rails.fire($document, 'rails:attachBindings')) {
-
-    $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
-
-    // This event works the same as the load event, except that it fires every
-    // time the page is loaded.
-    //
-    // See https://github.com/rails/jquery-ujs/issues/357
-    // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
-    $(window).on("pageshow.rails", function () {
+  $.rails.handlers = {
+    pageshow: function() {
       $($.rails.enableSelector).each(function () {
         var element = $(this);
 
@@ -374,18 +366,65 @@
           $.rails.enableElement(element);
         }
       });
-    });
+    },
 
-    $document.delegate(rails.linkDisableSelector, 'ajax:complete', function() {
-        rails.enableElement($(this));
-    });
+    submit: function(e) {
+      var form = $(e.currentTarget),
+        remote = form.data('remote') !== undefined,
+        blankRequiredInputs,
+        nonBlankFileInputs;
 
-    $document.delegate(rails.buttonDisableSelector, 'ajax:complete', function() {
-        rails.enableFormElement($(this));
-    });
+      if (!rails.allowAction(form)) return rails.stopEverything(e);
 
-    $document.delegate(rails.linkClickSelector, 'click.rails', function(e) {
-      var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey;
+      // skip other logic when required values are missing or file upload is present
+      if (form.attr('novalidate') == undefined) {
+        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector);
+        if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
+          return rails.stopEverything(e);
+        }
+      }
+
+      if (remote) {
+        nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
+        if (nonBlankFileInputs) {
+          // slight timeout so that the submit button gets properly serialized
+          // (make it easy for event handler to serialize form without disabled values)
+          setTimeout(function() { rails.disableFormElements(form); }, 13);
+          var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
+
+          // re-enable form elements if event bindings return false (canceling normal form submission)
+          if (!aborted) { setTimeout(function() { rails.enableFormElements(form); }, 13); }
+
+          return aborted;
+        }
+
+        rails.handleRemote(form);
+        return false;
+
+      } else {
+        // slight timeout so that the submit button gets properly serialized
+        setTimeout(function() { rails.disableFormElements(form); }, 13);
+      }
+    },
+
+    ajaxCompleteLink: function(el) {
+      rails.enableElement($(el));
+    },
+
+    ajaxCompleteButton: function(el) {
+      rails.enableFormElement($(el));
+    },
+
+    ajaxCompleteForm: function(e, ctx) {
+      if (ctx == e.target) rails.enableFormElements($(ctx));
+    },
+
+    ajaxSendForm: function(e, ctx) {
+      if (ctx == e.target) rails.disableFormElements($(ctx));
+    },
+
+    clickLink: function(e) {
+      var link = $(e.currentTarget), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey;
       if (!rails.allowAction(link)) return rails.stopEverything(e);
 
       if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
@@ -406,10 +445,10 @@
         rails.handleMethod(link);
         return false;
       }
-    });
+    },
 
-    $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
-      var button = $(this);
+    clickButton: function(e) {
+      var button = $(e.currentTarget);
 
       if (!rails.allowAction(button)) return rails.stopEverything(e);
 
@@ -423,73 +462,76 @@
         handleRemote.fail( function() { rails.enableFormElement(button); } );
       }
       return false;
-    });
+    },
 
-    $document.delegate(rails.inputChangeSelector, 'change.rails', function(e) {
-      var link = $(this);
-      if (!rails.allowAction(link)) return rails.stopEverything(e);
+    clickInput: function(e) {
+      var button = $(e.currentTarget);
 
-      rails.handleRemote(link);
-      return false;
-    });
-
-    $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e) {
-      var form = $(this),
-        remote = form.data('remote') !== undefined,
-        blankRequiredInputs,
-        nonBlankFileInputs;
-
-      if (!rails.allowAction(form)) return rails.stopEverything(e);
-
-      // skip other logic when required values are missing or file upload is present
-      if (form.attr('novalidate') == undefined) {
-        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector);
-        if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
-          return rails.stopEverything(e);
-        }
-      }
-
-      if (remote) {
-        nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
-        if (nonBlankFileInputs) {
-          // slight timeout so that the submit button gets properly serialized
-          // (make it easy for event handler to serialize form without disabled values)
-          setTimeout(function(){ rails.disableFormElements(form); }, 13);
-          var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
-
-          // re-enable form elements if event bindings return false (canceling normal form submission)
-          if (!aborted) { setTimeout(function(){ rails.enableFormElements(form); }, 13); }
-
-          return aborted;
-        }
-
-        rails.handleRemote(form);
-        return false;
-
-      } else {
-        // slight timeout so that the submit button gets properly serialized
-        setTimeout(function(){ rails.disableFormElements(form); }, 13);
-      }
-    });
-
-    $document.delegate(rails.formInputClickSelector, 'click.rails', function(event) {
-      var button = $(this);
-
-      if (!rails.allowAction(button)) return rails.stopEverything(event);
+      if (!rails.allowAction(button)) return rails.stopEverything(e);
 
       // register the pressed submit button
       var name = button.attr('name'),
         data = name ? {name:name, value:button.val()} : null;
 
       button.closest('form').data('ujs:submit-button', data);
+    },
+
+    change: function(e) {
+      var link = $(e.currentTarget);
+      if (!rails.allowAction(link)) return rails.stopEverything(e);
+
+      rails.handleRemote(link);
+      return false;
+    }
+  }
+
+  if (rails.fire($document, 'rails:attachBindings')) {
+
+    $.ajaxPrefilter(function(options, originalOptions, xhr) { if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
+
+    // This event works the same as the load event, except that it fires every
+    // time the page is loaded.
+    //
+    // See https://github.com/rails/jquery-ujs/issues/357
+    // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
+    $(window).on("pageshow.rails", function() {
+      $.rails.handlers.pageshow();
+    });
+
+    $document.delegate(rails.linkDisableSelector, 'ajax:complete', function() {
+      $.rails.handlers.ajaxCompleteLink(this);
+    });
+
+    $document.delegate(rails.buttonDisableSelector, 'ajax:complete', function() {
+      $.rails.handlers.ajaxCompleteButton(this);
+    });
+
+    $document.delegate(rails.linkClickSelector, 'click.rails', function(e) {
+      return $.rails.handlers.clickLink(e);
+    });
+
+    $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
+      return $.rails.handlers.clickButton(e);
+    });
+
+    $document.delegate(rails.inputChangeSelector, 'change.rails', function(e) {
+      return $.rails.handlers.change(e);
+    });
+
+    $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e){
+      return $.rails.handlers.submit(e);
+    });
+
+    $document.delegate(rails.formInputClickSelector, 'click.rails', function(event) {
+      $.rails.handlers.clickInput(event);
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function(event) {
-      if (this == event.target) rails.disableFormElements($(this));
+      $.rails.handlers.ajaxSendForm(event, this);
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:complete.rails', function(event) {
-      if (this == event.target) rails.enableFormElements($(this));
+      $.rails.handlers.ajaxCompleteForm(event, this);
     });
 
     $(function(){
