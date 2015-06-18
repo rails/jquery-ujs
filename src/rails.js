@@ -94,7 +94,7 @@
 
     // Default way to get an element's href. May be overridden at $.rails.href.
     href: function(element) {
-      return element[0].href;
+      return element.attr("href");
     },
 
     // Submits "remote" forms and links with ajax
