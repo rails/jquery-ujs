@@ -97,9 +97,7 @@
       return element.attr('href');
     },
 
-    // Checks whether "data-remote" is falsy or not to prevent remote submission if "data-remote"="false"
-    // because jQuery(selector).data("remote") === "false" if data attribute is string "false",
-    // e.g. <input id="id" data-remote="false" />
+    // Checks "data-remote" if true to handle the request through a XHR request.
     isRemote: function(element) {
       return element.data('remote') !== undefined && element.data('remote') !== false;
     },
@@ -395,9 +393,7 @@
     $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
       var button = $(this);
       
-      if (! rails.isRemote(button)) return false;
-
-      if (!rails.allowAction(button)) return rails.stopEverything(e);
+      if (!rails.allowAction(button) || !rails.isRemote(button)) return rails.stopEverything(e);
 
       if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
 
@@ -413,7 +409,7 @@
 
     $document.delegate(rails.inputChangeSelector, 'change.rails', function(e) {
       var link = $(this);
-      if (! rails.isRemote(link)) return false;
+      if (! rails.isRemote(link)) return rails.stopEverything(e);
       if (!rails.allowAction(link)) return rails.stopEverything(e);
 
       rails.handleRemote(link);

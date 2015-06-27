@@ -187,7 +187,7 @@ asyncTest('returning false in form\'s submit bindings in non-submit-bubbling bro
     setTimeout(function(){ start(); }, 13);
 });
 
-asyncTest('clicking on a link with falsy "data-remote" attribute does not fire ajaxyness ', 0, function() {
+asyncTest('clicking on a link with falsy "data-remote" attribute does not fire ajaxyness', 0, function() {
   $('a[data-remote]')
     .attr('data-remote', 'false')
     .bind('ajax:beforeSend', function() {
@@ -201,7 +201,7 @@ asyncTest('clicking on a link with falsy "data-remote" attribute does not fire a
   setTimeout(function(){ start(); }, 20);
 });
 
-asyncTest('ctrl-clicking on a link with falsy "data-remote" attribute does not fire ajaxyness  even if "data-params" present', 0, function() {
+asyncTest('ctrl-clicking on a link with falsy "data-remote" attribute does not fire ajaxyness even if "data-params" present', 0, function() {
   var link = $('a[data-remote]'), e;
   e = $.Event('click');
   e.metaKey = true;
