@@ -97,6 +97,11 @@
       return element[0].href;
     },
 
+    // Checks "data-remote" if true to handle the request through a XHR request.
+    isRemote: function(element) {
+      return element.data('remote') !== undefined && element.data('remote') !== false;
+    },
+
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
       var method, url, data, withCredentials, dataType, options;
@@ -390,7 +395,7 @@
 
       if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
 
-      if (link.data('remote') !== undefined) {
+      if (rails.isRemote(link)) {
         if (metaClick && (!method || method === 'GET') && !data) { return true; }
 
         var handleRemote = rails.handleRemote(link);
@@ -410,8 +415,8 @@
 
     $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
       var button = $(this);
-
-      if (!rails.allowAction(button)) return rails.stopEverything(e);
+      
+      if (!rails.allowAction(button) || !rails.isRemote(button)) return rails.stopEverything(e);
 
       if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
 
@@ -427,6 +432,7 @@
 
     $document.delegate(rails.inputChangeSelector, 'change.rails', function(e) {
       var link = $(this);
+      if (! rails.isRemote(link)) return rails.stopEverything(e);
       if (!rails.allowAction(link)) return rails.stopEverything(e);
 
       rails.handleRemote(link);
@@ -435,7 +441,7 @@
 
     $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e) {
       var form = $(this),
-        remote = form.data('remote') !== undefined,
+        remote = rails.isRemote(form),
         blankRequiredInputs,
         nonBlankFileInputs;
 
