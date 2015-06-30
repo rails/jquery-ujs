@@ -124,12 +124,12 @@
           method = element.data('method');
           url = element.data('url');
           data = element.serialize();
-          if (element.data('params')) data = data + "&" + element.data('params');
+          if (element.data('params')) data = data + '&' + element.data('params');
         } else if (element.is(rails.buttonClickSelector)) {
           method = element.data('method') || 'get';
           url = element.data('url');
           data = element.serialize();
-          if (element.data('params')) data = data + "&" + element.data('params');
+          if (element.data('params')) data = data + '&' + element.data('params');
         } else {
           method = element.data('method');
           url = rails.href(element);
@@ -180,9 +180,9 @@
 
     // Determines if the request is a cross domain request.
     isCrossDomain: function(url) {
-      var originAnchor = document.createElement("a");
+      var originAnchor = document.createElement('a');
       originAnchor.href = location.href;
-      var urlAnchor = document.createElement("a");
+      var urlAnchor = document.createElement('a');
 
       try {
         urlAnchor.href = url;
@@ -191,8 +191,8 @@
 
         // Make sure that the browser parses the URL and that the protocols and hosts match.
         return !urlAnchor.protocol || !urlAnchor.host ||
-          (originAnchor.protocol + "//" + originAnchor.host !==
-            urlAnchor.protocol + "//" + urlAnchor.host);
+          (originAnchor.protocol + '//' + originAnchor.host !==
+            urlAnchor.protocol + '//' + urlAnchor.host);
       } catch (e) {
         // If there is an error parsing the URL, assume it is crossDomain.
         return true;
@@ -363,11 +363,11 @@
     //
     // See https://github.com/rails/jquery-ujs/issues/357
     // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
-    $(window).on("pageshow.rails", function () {
+    $(window).on('pageshow.rails', function () {
       $($.rails.enableSelector).each(function () {
         var element = $(this);
 
-        if (element.data("ujs:enable-with")) {
+        if (element.data('ujs:enable-with')) {
           $.rails.enableFormElement(element);
         }
       });
@@ -375,7 +375,7 @@
       $($.rails.linkDisableSelector).each(function () {
         var element = $(this);
 
-        if (element.data("ujs:enable-with")) {
+        if (element.data('ujs:enable-with')) {
           $.rails.enableElement(element);
         }
       });
