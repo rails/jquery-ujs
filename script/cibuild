@@ -8,7 +8,7 @@ start_server() {
 }
 
 run_tests() {
-  phantomjs script/runner.js http://localhost:$port/
+  jshint src/*.js && phantomjs script/runner.js http://localhost:$port/
 }
 
 server_started() {

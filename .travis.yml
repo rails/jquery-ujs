@@ -1,5 +1,7 @@
 language: ruby
 script: ./script/cibuild
+before_install:
+  - "npm install jshint -g"
 env:
   - JQUERY_VERSION: 1.8.0
   - JQUERY_VERSION: 1.8.1
