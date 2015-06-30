@@ -122,16 +122,35 @@ asyncTest('sends CSRF token in custom header', 1, function() {
   });
 });
 
-asyncTest('intelligently guesses crossDomain behavior when target URL is a different domain', 1, function(e, xhr) {
+asyncTest('intelligently guesses crossDomain behavior when target URL has a protocol and hostname', 1, function(e, xhr) {
 
   // Don't set data-cross-domain here, just set action to be a different domain than localhost
-  buildForm({ action: 'http://www.alfajango.com' });
+  buildForm({ action: 'http://www.alfajango.com/' });
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
 
   $('#qunit-fixture').find('form')
     .bind('ajax:beforeSend', function(e, xhr, settings) {
 
       equal(settings.crossDomain, true, 'crossDomain should be set to true');
+
+      // prevent request from actually getting sent off-domain
+      return false;
+    })
+    .trigger('submit');
+
+  setTimeout(function() { start(); }, 13);
+});
+
+asyncTest('intelligently guesses crossDomain behavior when target URL consists of only a path', 1, function(e, xhr) {
+
+  // Don't set data-cross-domain here, just set action to be a different domain than localhost
+  buildForm({ action: '/just/a/path' });
+  $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
+
+  $('#qunit-fixture').find('form')
+    .bind('ajax:beforeSend', function(e, xhr, settings) {
+
+      equal(settings.crossDomain, false, 'crossDomain should be set to false');
 
       // prevent request from actually getting sent off-domain
       return false;
