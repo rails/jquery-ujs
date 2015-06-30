@@ -447,7 +447,7 @@
       if (!rails.allowAction(form)) return rails.stopEverything(e);
 
       // skip other logic when required values are missing or file upload is present
-      if (form.attr('novalidate') == undefined) {
+      if (form.attr('novalidate') === undefined) {
         blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector);
         if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
           return rails.stopEverything(e);
@@ -490,11 +490,11 @@
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function(event) {
-      if (this == event.target) rails.disableFormElements($(this));
+      if (this === event.target) rails.disableFormElements($(this));
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:complete.rails', function(event) {
-      if (this == event.target) rails.enableFormElements($(this));
+      if (this === event.target) rails.enableFormElements($(this));
     });
 
     $(function(){
