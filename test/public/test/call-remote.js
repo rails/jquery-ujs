@@ -122,7 +122,7 @@ asyncTest('sends CSRF token in custom header', 1, function() {
   });
 });
 
-asyncTest('intelligently guesses crossDomain behavior when target URL has a protocol and hostname', 1, function(e, xhr) {
+asyncTest('intelligently guesses crossDomain behavior when target URL has a different protocol and/or hostname', 1, function(e, xhr) {
 
   // Don't set data-cross-domain here, just set action to be a different domain than localhost
   buildForm({ action: 'http://www.alfajango.com/' });
