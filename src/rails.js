@@ -12,6 +12,8 @@
 
   // Cut down on the number of issues from people inadvertently including jquery_ujs twice
   // by detecting and raising an error when it happens.
+  'use strict';
+
   if ( $.rails !== undefined ) {
     $.error('jquery-ujs has already been loaded!');
   }
@@ -124,12 +126,12 @@
           method = element.data('method');
           url = element.data('url');
           data = element.serialize();
-          if (element.data('params')) data = data + "&" + element.data('params');
+          if (element.data('params')) data = data + '&' + element.data('params');
         } else if (element.is(rails.buttonClickSelector)) {
           method = element.data('method') || 'get';
           url = element.data('url');
           data = element.serialize();
-          if (element.data('params')) data = data + "&" + element.data('params');
+          if (element.data('params')) data = data + '&' + element.data('params');
         } else {
           method = element.data('method');
           url = rails.href(element);
@@ -180,9 +182,9 @@
 
     // Determines if the request is a cross domain request.
     isCrossDomain: function(url) {
-      var originAnchor = document.createElement("a");
+      var originAnchor = document.createElement('a');
       originAnchor.href = location.href;
-      var urlAnchor = document.createElement("a");
+      var urlAnchor = document.createElement('a');
 
       try {
         urlAnchor.href = url;
@@ -191,8 +193,8 @@
 
         // Make sure that the browser parses the URL and that the protocols and hosts match.
         return !urlAnchor.protocol || !urlAnchor.host ||
-          (originAnchor.protocol + "//" + originAnchor.host !==
-            urlAnchor.protocol + "//" + urlAnchor.host);
+          (originAnchor.protocol + '//' + originAnchor.host !==
+            urlAnchor.protocol + '//' + urlAnchor.host);
       } catch (e) {
         // If there is an error parsing the URL, assume it is crossDomain.
         return true;
@@ -302,9 +304,8 @@
 
       allInputs.each(function() {
         input = $(this);
-        valueToCheck = input.is('input[type=checkbox],input[type=radio]') ? input.is(':checked') : input.val();
-        // If nonBlank and valueToCheck are both truthy, or nonBlank and valueToCheck are both falsey
-        if (!valueToCheck === !nonBlank) {
+        valueToCheck = input.is('input[type=checkbox],input[type=radio]') ? input.is(':checked') : !!input.val();
+        if (valueToCheck === nonBlank) {
 
           // Don't count unchecked required radio if other radio with same name is checked
           if (input.is('input[type=radio]') && allInputs.filter('input[type=radio]:checked[name="' + input.attr('name') + '"]').length) {
@@ -363,11 +364,11 @@
     //
     // See https://github.com/rails/jquery-ujs/issues/357
     // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
-    $(window).on("pageshow.rails", function () {
+    $(window).on('pageshow.rails', function () {
       $($.rails.enableSelector).each(function () {
         var element = $(this);
 
-        if (element.data("ujs:enable-with")) {
+        if (element.data('ujs:enable-with')) {
           $.rails.enableFormElement(element);
         }
       });
@@ -375,7 +376,7 @@
       $($.rails.linkDisableSelector).each(function () {
         var element = $(this);
 
-        if (element.data("ujs:enable-with")) {
+        if (element.data('ujs:enable-with')) {
           $.rails.enableElement(element);
         }
       });
@@ -447,8 +448,8 @@
       if (!rails.allowAction(form)) return rails.stopEverything(e);
 
       // skip other logic when required values are missing or file upload is present
-      if (form.attr('novalidate') == undefined) {
-        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector);
+      if (form.attr('novalidate') === undefined) {
+        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector, false);
         if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
           return rails.stopEverything(e);
         }
@@ -490,11 +491,11 @@
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function(event) {
-      if (this == event.target) rails.disableFormElements($(this));
+      if (this === event.target) rails.disableFormElements($(this));
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:complete.rails', function(event) {
-      if (this == event.target) rails.enableFormElements($(this));
+      if (this === event.target) rails.enableFormElements($(this));
     });
 
     $(function(){
