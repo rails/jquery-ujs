@@ -182,14 +182,17 @@
 
     // Determines if the request is a cross domain request.
     isCrossDomain: function(url) {
+      var regexp = new RegExp('^\\s*(?:[a-z]+:)?//', 'i');
+      if(!regexp.test(url)) {
+        return false;
+      }
+
       var originAnchor = document.createElement('a');
       originAnchor.href = location.href;
       var urlAnchor = document.createElement('a');
 
       try {
         urlAnchor.href = url;
-        // This is a workaround to a IE bug.
-        urlAnchor.href = urlAnchor.href;
 
         // Make sure that the browser parses the URL and that the protocols and hosts match.
         return !urlAnchor.protocol || !urlAnchor.host ||
