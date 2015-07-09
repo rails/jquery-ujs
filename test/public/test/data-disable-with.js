@@ -61,6 +61,24 @@ asyncTest('form input field with "data-disable-with" attribute', 7, function() {
   App.checkDisabledState(input, 'processing ...');
 });
 
+asyncTest('blank form input field with "data-disable-with" attribute', 7, function() {
+  var form = $('form[data-remote]'), input = form.find('input[type=text]');
+
+  input.val('');
+  App.checkEnabledState(input, '');
+
+  form.bind('ajax:success', function(e, data) {
+    setTimeout(function() {
+      App.checkEnabledState(input, '');
+      equal(data.params.user_name, '');
+      start();
+    }, 13);
+  });
+  form.trigger('submit');
+
+  App.checkDisabledState(input, 'processing ...');
+});
+
 asyncTest('form button with "data-disable-with" attribute', 6, function() {
   var form = $('form[data-remote]'), button = $('<button data-disable-with="submitting ..." name="submit2">Submit</button>');
   form.append(button);
