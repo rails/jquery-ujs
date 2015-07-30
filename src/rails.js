@@ -189,11 +189,12 @@
         // This is a workaround to a IE bug.
         urlAnchor.href = urlAnchor.href;
 
-	// If URL protocol *and* host are false, assume it is not a
-	// cross-domain request (should only be the case for IE7 and IE
-	// compatibility mode).  Otherwise, evaluate protocol and host of the
-	// URL against the origin protocol and host
-        return !((!urlAnchor.protocol && !urlAnchor.host) ||
+	// If URL protocol is false or is a string containing a single colon
+	// *and* host are false, assume it is not a cross-domain request
+	// (should only be the case for IE7 and IE compatibility mode).
+	// Otherwise, evaluate protocol and host of the URL against the origin
+	// protocol and host
+        return !(((!urlAnchor.protocol || urlAnchor.protocol === ':') && !urlAnchor.host) ||
 		 (originAnchor.protocol + "//" + originAnchor.host ===
 		  urlAnchor.protocol + "//" + urlAnchor.host));
       } catch (e) {
