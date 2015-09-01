@@ -270,7 +270,7 @@
 
     enableFormElement: function(element) {
       var method = element.is('button') ? 'html' : 'val';
-      if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
+      if (typeof element.data('ujs:enable-with') !== 'undefined') element[method](element.data('ujs:enable-with'));
       element.prop('disabled', false);
     },
 
