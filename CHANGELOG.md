@@ -1,3 +1,15 @@
+## v1.1.0
+
+* Extract `$.rails.csrfToken` and `$.rails.csrfParam` functions to allow external usage.
+
+* Treat exception in `$.rails.confirm` as a false answer.
+
+* Don't fire Ajax requests if `data-remote` is `false`.
+
+* Fix IE7 bug with the cross domain check.
+
+* Ignore disabled file inputs when submitting the form.
+
 ## v1.0.4
 
 * Fix CSP bypass vulnerability.
