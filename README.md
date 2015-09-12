@@ -60,8 +60,17 @@ Require both `jquery` and `jquery-ujs` into your application.js manifest.
 How to run tests
 ------------
 
-Follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing) to run tests .
+Follow [this wiki](https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing) to run tests.
 
+## Contributing to jquery-ujs
+
+jquery-ujs is work of many contributors. You're encouraged to submit pull requests, propose
+features and discuss issues.
+
+See [CONTRIBUTING](CONTRIBUTING.md).
+
+## License
+jquery-ujs is released under the [MIT License](MIT-LICENSE).
 
 [data]: http://www.w3.org/TR/html5/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes "Embedding custom non-visible data with the data-* attributes"
 [wiki]: https://github.com/rails/jquery-ujs/wiki
