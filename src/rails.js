@@ -291,7 +291,7 @@
 
     formDataWithFiles: function (form, data) {
       var formData = new FormData();
-      $.each(form.find("input[type='file']"), function (i, tag) {
+      $.each(form.find('input[type="file"]'), function (i, tag) {
         $.each($(tag)[0].files, function (i, file) {
           formData.append(tag.name, file);
         });
