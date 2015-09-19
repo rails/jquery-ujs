@@ -106,7 +106,7 @@
 
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
-      var method, url, data, withCredentials, dataType, options;
+      var method, url, data, withCredentials, dataType, options, isFormWithFileInputs = false;
 
       if (rails.fire(element, 'ajax:before')) {
         withCredentials = element.data('with-credentials') || null;
@@ -121,6 +121,11 @@
           if (button) {
             data.push(button);
             element.data('ujs:submit-button', null);
+          }
+          // detect if there is file upload and add files content to the serialized data
+          isFormWithFileInputs = rails.nonBlankInputs(element, rails.fileInputSelector);
+          if (isFormWithFileInputs) {
+            data = rails.formDataWithFiles(element, data);
           }
         } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
@@ -173,6 +178,13 @@
 
         // Only pass url to `ajax` options if not blank
         if (url) { options.url = url; }
+
+        // options needed for Ajax file upload
+        if (isFormWithFileInputs) {
+          options.cache = false;
+          options.contentType = false;
+          options.processData = false;
+        }
 
         return rails.ajax(options);
       } else {
@@ -272,6 +284,22 @@
       var method = element.is('button') ? 'html' : 'val';
       if (typeof element.data('ujs:enable-with') !== 'undefined') element[method](element.data('ujs:enable-with'));
       element.prop('disabled', false);
+    },
+
+    /* Serialize file input and append form inputs serialized data
+     */
+
+    formDataWithFiles: function (form, data) {
+      var formData = new FormData();
+      $.each(form.find('input[type="file"]'), function (i, tag) {
+        $.each($(tag)[0].files, function (i, file) {
+          formData.append(tag.name, file);
+        });
+      });
+      $.each(data, function (i, val) {
+        formData.append(val.name, val.value);
+      });
+      return formData;
     },
 
    /* For 'data-confirm' attribute:
@@ -446,12 +474,11 @@
     $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e) {
       var form = $(this),
         remote = rails.isRemote(form),
-        blankRequiredInputs,
-        nonBlankFileInputs;
+        blankRequiredInputs;
 
       if (!rails.allowAction(form)) return rails.stopEverything(e);
 
-      // skip other logic when required values are missing or file upload is present
+      // skip other logic when required values are missing
       if (form.attr('novalidate') === undefined) {
         blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector, false);
         if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
@@ -460,19 +487,6 @@
       }
 
       if (remote) {
-        nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
-        if (nonBlankFileInputs) {
-          // slight timeout so that the submit button gets properly serialized
-          // (make it easy for event handler to serialize form without disabled values)
-          setTimeout(function(){ rails.disableFormElements(form); }, 13);
-          var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
-
-          // re-enable form elements if event bindings return false (canceling normal form submission)
-          if (!aborted) { setTimeout(function(){ rails.enableFormElements(form); }, 13); }
-
-          return aborted;
-        }
-
         rails.handleRemote(form);
         return false;
 
