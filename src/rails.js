@@ -453,9 +453,15 @@
 
       // Skip other logic when required values are missing or file upload is present
       if (form.attr('novalidate') === undefined) {
-        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector, false);
-        if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
-          return rails.stopEverything(e);
+        if (form.data('ujs:formnovalidate-button') === undefined) {
+          blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector, false);
+          if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
+            return rails.stopEverything(e);
+          }
+        } else {
+          // Clear the formnovalidate in case the next button click is not on a formnovalidate button
+          // Not strictly necessary to do here, since it is also reset on each button click, but just to be certain
+          form.data('ujs:formnovalidate-button', undefined);
         }
       }
 
@@ -491,7 +497,11 @@
       var name = button.attr('name'),
         data = name ? {name:name, value:button.val()} : null;
 
-      button.closest('form').data('ujs:submit-button', data);
+      var form = button.closest('form');
+      form.data('ujs:submit-button', data);
+
+      // Save formnovalidate attribute from button
+      form.data('ujs:formnovalidate-button', button.attr('formnovalidate'));
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function(event) {

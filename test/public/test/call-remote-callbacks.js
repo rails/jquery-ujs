@@ -17,15 +17,26 @@ module('call-remote-callbacks', {
   }
 });
 
+function start_after_submit(form) {
+  form.bind('ajax:complete', function() {
+    ok(true, 'ajax:complete');
+    start();
+  });
+}
+
 function submit(fn) {
-  var form = $('form')
-    .bind('ajax:complete', function(){
-      ok(true, 'ajax:complete');
-      start();
-    });
+  var form = $('form');
+  start_after_submit(form);
 
   if (fn) fn(form);
   form.trigger('submit');
+}
+
+function submit_with_button(submit_button) {
+  var form = $('form');
+  start_after_submit(form);
+
+  submit_button.trigger('click');
 }
 
 asyncTest('modifying form fields with "ajax:before" sends modified data in request', 4, function(){
@@ -181,6 +192,21 @@ asyncTest('form should be submitted with blank required fields if it has the "no
     });
 
   submit();
+});
+
+asyncTest('form should be submitted with blank required fields if the button has the "formnovalidate" attribute', 2, function(){
+  var submit_button = $('<input type="submit" formnovalidate>');
+  var form = $('form[data-remote]')
+    .append($('<input type="text" name="user_name" required="required">'))
+    .append(submit_button)
+    .bind('ajax:beforeSend', function() {
+      ok(true, 'ajax:beforeSend should run');
+    })
+    .bind('ajax:aborted:required', function() {
+      ok(false, 'ajax:aborted:required should not run');
+    });
+
+  submit_with_button(submit_button);
 });
 
 asyncTest('blank required form input for non-remote form with "novalidate" attribute should not abort normal submission', 1, function() {
