@@ -115,7 +115,7 @@
         if (element.is('form')) {
           method = element.attr('method');
           url = element.attr('action');
-          data = data = $(element[0].elements).serializeArray();
+          data = $(element[0].elements).serializeArray();
           // memoized value from clicked submit button
           var button = element.data('ujs:submit-button');
           if (button) {
