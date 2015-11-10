@@ -25,7 +25,7 @@ App.getVal = function(el) {
 };
 
 App.disabled = function(el) {
-  return el.is('input,textarea,select,button') ? el.is(':disabled') : el.data('ujs:enable-with');
+  return el.is('input,textarea,select,button') ? (el.is(':disabled') && el.data('ujs:disabled')) : el.data('ujs:disabled');
 };
 
 App.checkEnabledState = function(el, text) {

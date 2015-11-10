@@ -250,12 +250,13 @@
       method = element.is('button') ? 'html' : 'val';
       replacement = element.data('disable-with');
 
-      element.data('ujs:enable-with', element[method]());
       if (replacement !== undefined) {
+        element.data('ujs:enable-with', element[method]());
         element[method](replacement);
       }
 
       element.prop('disabled', true);
+      element.data('ujs:disabled', true);
     },
 
     /* Re-enables disabled form elements:
@@ -270,8 +271,12 @@
 
     enableFormElement: function(element) {
       var method = element.is('button') ? 'html' : 'val';
-      if (typeof element.data('ujs:enable-with') !== 'undefined') element[method](element.data('ujs:enable-with'));
+      if (element.data('ujs:enable-with') !== undefined) {
+        element[method](element.data('ujs:enable-with'));
+        element.removeData('ujs:enable-with'); // clean up cache
+      }
       element.prop('disabled', false);
+      element.removeData('ujs:disabled');
     },
 
    /* For 'data-confirm' attribute:
@@ -339,14 +344,15 @@
     disableElement: function(element) {
       var replacement = element.data('disable-with');
 
-      element.data('ujs:enable-with', element.html()); // store enabled state
       if (replacement !== undefined) {
+        element.data('ujs:enable-with', element.html()); // store enabled state
         element.html(replacement);
       }
 
       element.bind('click.railsDisable', function(e) { // prevent further clicking
         return rails.stopEverything(e);
       });
+      element.data('ujs:disabled', true);
     },
 
     // Restore element to its original state which was disabled by 'disableElement' above
@@ -356,6 +362,7 @@
         element.removeData('ujs:enable-with'); // clean up cache
       }
       element.unbind('click.railsDisable'); // enable element
+      element.removeData('ujs:disabled');
     }
   };
 
@@ -372,7 +379,7 @@
       $($.rails.enableSelector).each(function () {
         var element = $(this);
 
-        if (element.data('ujs:enable-with')) {
+        if (element.data('ujs:disabled')) {
           $.rails.enableFormElement(element);
         }
       });
@@ -380,7 +387,7 @@
       $($.rails.linkDisableSelector).each(function () {
         var element = $(this);
 
-        if (element.data('ujs:enable-with')) {
+        if (element.data('ujs:disabled')) {
           $.rails.enableElement(element);
         }
       });
