@@ -122,6 +122,8 @@
             data.push(button);
             element.data('ujs:submit-button', null);
           }
+          // get target node selector
+          var target = element.data('target');
         } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
           url = element.data('url');
@@ -152,6 +154,7 @@
             }
           },
           success: function(data, status, xhr) {
+            if (dataType == 'html' && target) { $(target).html(data); }
             element.trigger('ajax:success', [data, status, xhr]);
           },
           complete: function(xhr, status) {
