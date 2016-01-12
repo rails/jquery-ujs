@@ -122,8 +122,8 @@
             data.push(button);
             element.data('ujs:submit-button', null);
           }
-          element.data('ujs:submit-button-formmethod', null)
-          element.data('ujs:submit-button-formaction', null)
+          element.data('ujs:submit-button-formmethod', null);
+          element.data('ujs:submit-button-formaction', null);
         } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
           url = element.data('url');
@@ -514,7 +514,7 @@
 
       // Save attributes from button
       form.data('ujs:formnovalidate-button', button.attr('formnovalidate'));
-      form.data('ujs:submit-button-formaction', button.attr('formaction'))
+      form.data('ujs:submit-button-formaction', button.attr('formaction'));
       form.data('ujs:submit-button-formmethod', button.attr('formmethod'));
     });
 
