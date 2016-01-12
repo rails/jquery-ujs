@@ -1,4 +1,7 @@
 language: ruby
+sudo: false
+cache:
+  - bundler
 script: ./script/cibuild
 before_install:
   - "npm install jshint -g"
