@@ -2,6 +2,8 @@ language: ruby
 sudo: false
 cache:
   - bundler
+  - directories:
+    - $HOME/.npm
 script: ./script/cibuild
 before_install:
   - "npm install jshint -g"
