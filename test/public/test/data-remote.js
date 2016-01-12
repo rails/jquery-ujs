@@ -16,7 +16,8 @@ module('data-remote', {
       .append($('<form />', {
         action: '/echo',
         'data-remote': 'true',
-        method: 'post'
+        method: 'post',
+        id: 'my-remote-form'
       }))
       .find('form').append($('<input type="text" name="user_name" value="john">'));
 
@@ -133,6 +134,51 @@ asyncTest('submitting form with data-remote attribute', 4, function() {
     })
     .bind('ajax:complete', function() { start() })
     .trigger('submit');
+});
+
+asyncTest('submitting form with data-remote attribute submits input with matching [form] attribute', 5, function() {
+  $('#qunit-fixture')
+    .append($('<input type="text" name="user_data" value="value1" form="my-remote-form">'));
+
+  $('form[data-remote]')
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      App.assertRequestPath(data, '/echo');
+      equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
+      equal(data.params.user_data, 'value1', 'ajax arguments should have key user_data with right value');
+      App.assertPostRequest(data);
+    })
+    .bind('ajax:complete', function() { start() })
+    .trigger('submit');
+});
+
+asyncTest('submitting form with data-remote attribute by clicking button with matching [form] attribute', 5, function() {
+  $('form[data-remote]')
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      App.assertRequestPath(data, '/echo');
+      equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
+      equal(data.params.user_data, 'value2', 'ajax arguments should have key user_data with right value');
+      App.assertPostRequest(data);
+    })
+    .bind('ajax:complete', function() { start() });
+
+  $('<button />', {
+        type: "submit",
+        name: "user_data",
+        value: "value1",
+        form: "my-remote-form"
+      })
+    .appendTo($('#qunit-fixture'));
+
+  $('<button />', {
+      type: "submit",
+      name: "user_data",
+      value: "value2",
+      form: "my-remote-form"
+    })
+    .appendTo($('#qunit-fixture'))
+    .trigger('click');
 });
 
 asyncTest('form\'s submit bindings in browsers that don\'t support submit bubbling', 5, function() {

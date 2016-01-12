@@ -27,7 +27,7 @@
     linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with], a[data-disable]',
 
     // Button elements bound by jquery-ujs
-    buttonClickSelector: 'button[data-remote]:not(form button), button[data-confirm]:not(form button)',
+    buttonClickSelector: 'button[data-remote]:not([form]):not(form button), button[data-confirm]:not([form]):not(form button)',
 
     // Select elements bound by jquery-ujs
     inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
@@ -115,7 +115,7 @@
         if (element.is('form')) {
           method = element.attr('method');
           url = element.attr('action');
-          data = element.serializeArray();
+          data = $(element[0].elements).serializeArray();
           // memoized value from clicked submit button
           var button = element.data('ujs:submit-button');
           if (button) {
@@ -505,6 +505,9 @@
         data = name ? {name:name, value:button.val()} : null;
 
       var form = button.closest('form');
+      if (form.length === 0) {
+        form = $('#' + button.attr('form'));
+      }
       form.data('ujs:submit-button', data);
 
       // Save formnovalidate attribute from button
