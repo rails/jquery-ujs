@@ -27,12 +27,11 @@ git checkout -b my-feature-branch
 
 #### Bundle Install and Test
 
-Ensure that you can build the project and run tests. Run rake test first, and then run the web tests. Visit [[http://localhost:4567]] in your browser. Click the version links at the top right of the page to run the test suite with the different supported versions of jQuery.
+Ensure that you can build the project and run tests. Run `rake test:server` first, and then run the web tests by visiting [[http://localhost:4567]] in your browser. Click the version links at the top right of the page to run the test suite with the different supported versions of jQuery.
 
 ```
 bundle install
-rake test
-ruby test/server.rb
+rake test:server
 ```
 
 #### Write Tests
