@@ -155,6 +155,21 @@ asyncTest('submitting form with data-remote attribute', 4, function() {
     .trigger('submit');
 });
 
+asyncTest('submitting form with data-remote attribute should include inputs in a fieldset only once', 3, function() {
+  $('form[data-remote]')
+    .append('<fieldset><input name="items[]" value="Item" /></fieldset>')
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      equal(data.params.items.length, 1, 'ajax arguments should only have the item once')
+      App.assertPostRequest(data);
+    })
+    .bind('ajax:complete', function() {
+      $('form[data-remote], fieldset').remove()
+      start()
+    })
+    .trigger('submit');
+});
+
 asyncTest('submitting form with data-remote attribute submits input with matching [form] attribute', 5, function() {
   $('#qunit-fixture')
     .append($('<input type="text" name="user_data" value="value1" form="my-remote-form">'));
