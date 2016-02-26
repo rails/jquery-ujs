@@ -241,8 +241,8 @@ asyncTest('unchecked required checkbox should abort form submission', 1, functio
 
 asyncTest('unchecked required radio should abort form submission', 1, function() {
   var form = $('form[data-remote]')
-    .append($('<input type="radio" name="yes_no" required="required" value=1>'))
-    .append($('<input type="radio" name="yes_no" required="required" value=2>'))
+    .append($('<input type="radio" name="yes_no_none" required="required" value=1>'))
+    .append($('<input type="radio" name="yes_no_none" required="required" value=2>'))
     .removeAttr('data-remote')
     .bind('ujs:everythingStopped', function() {
       ok(true, 'ujs:everythingStopped should run');
@@ -262,6 +262,31 @@ asyncTest('required radio should only require one to be checked', 1, function() 
   var form = $('form[data-remote]')
     .append($('<input type="radio" name="yes_no" required="required" value=1 id="checkme">'))
     .append($('<input type="radio" name="yes_no" required="required" value=2>'))
+    .removeAttr('data-remote')
+    .bind('ujs:everythingStopped', function() {
+      ok(false, 'ujs:everythingStopped should not run');
+    })
+    .find('#checkme').prop('checked', true)
+    .end()
+    .trigger('submit');
+
+  setTimeout(function() {
+    start();
+  }, 13);
+});
+
+asyncTest('required radio should only require one to be checked if not all radios are required', 1, function() {
+  $(document).bind('iframe:loading', function() {
+    ok(true, 'form should get submitted');
+  });
+
+  var form = $('form[data-remote]')
+    // Check the radio that is not required
+    .append($('<input type="radio" name="yes_no_maybe" value=1 >'))
+    // Check the radio that is not required
+    .append($('<input type="radio" name="yes_no_maybe" value=2 id="checkme">'))
+    // Only one needs to be required
+    .append($('<input type="radio" name="yes_no_maybe" required="required" value=3>'))
     .removeAttr('data-remote')
     .bind('ujs:everythingStopped', function() {
       ok(false, 'ujs:everythingStopped should not run');
