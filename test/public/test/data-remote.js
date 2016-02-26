@@ -169,7 +169,7 @@ asyncTest('submitting form with data-remote attribute should include inputs in a
 
 asyncTest('form fields from disabled fieldsets will not be included', 4, function() {
   $('form[data-remote]')
-    .append('<fieldset disabled="disabled"><input name="not_here" value="wont_show_up" /></fieldset>')
+    .append('<fieldset disabled="disabled"><input required name="not_here" value="wont_show_up" /></fieldset>')
     .bind('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
