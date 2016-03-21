@@ -3,7 +3,7 @@ require 'json'
 
 JQUERY_VERSIONS = %w[ 1.8.0 1.8.1 1.8.2 1.8.3 1.9.0 1.9.1 1.10.0 1.10.1 1.10.2 1.11.0 2.0.0 2.1.0].freeze
 
-use Rack::Static, :urls => ["/src"], :root => File.expand_path('..', settings.root)
+use Rack::Static, :urls => ["/src", "/bower_components"], :root => File.expand_path('..', settings.root)
 
 helpers do
   def jquery_link version

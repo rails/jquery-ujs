@@ -1,0 +1,32 @@
+{
+  "name": "simple-dialog",
+  "version": "1.1.12",
+  "homepage": "https://github.com/mycolorway/simple-dialog",
+  "authors": [
+    "tinyfive <wls860801@gmail.com>",
+    "kshift <kshift.lv@gmail.com>"
+  ],
+  "description": "a customizable dialog widget",
+  "main": "lib/dialog.js",
+  "keywords": [
+    "dialog"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "vendor",
+    "Gruntfile.coffee",
+    "Gemfile",
+    "Gemfile.lock",
+    "package.json",
+    "circle.yml",
+    "LICENSE",
+    "umd.hbs",
+    "README.md"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "simple-module": "~2.0.6"
+  }
+}

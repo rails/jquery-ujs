@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Dialog Sample</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link media="all" rel="stylesheet" type="text/css" href="styles/dialog.css" />
+	<style type="text/css" media="all">
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.wrapper {
+			margin: 80px auto;
+		}
+	</style>
+
+	<script type="text/javascript" src="vendor/bower/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="vendor/bower/simple-module/lib/module.js"></script>
+	<script type="text/javascript" src="lib/dialog.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$("#showDialog").on("click", function(e) {
+				simple.dialog({
+					content: "<h3>hello dialog</h3><p>this is a demo</p>",
+					modal: true
+				});
+			});
+
+			$("#showMessage").on("click", function(e) {
+				simple.dialog.message({
+					content: "hello message",
+					modal: true,
+					clickModalRemove: false
+				});
+			});
+
+			$("#showConfirm").on("click", function(e) {
+				simple.dialog.confirm({
+					content: "hello confirm"
+				});
+			});
+		});
+	</script>
+
+</head>
+<body>
+  <div class="wrapper">
+    <button type="button" id="showDialog">show dialog</button>
+    <button type="button" id="showMessage">show message</button>
+    <button type="button" id="showConfirm">show confirm</button>
+  </div>
+</body>
+</html>
