@@ -40,6 +40,7 @@ asyncTest('form input field with "data-disable" attribute', 7, function() {
   App.checkEnabledState(input, 'john');
 
   form.bind('ajax:success', function(e, data) {
+    App.checkDisabledState(input, 'john');
     setTimeout(function() {
       App.checkEnabledState(input, 'john');
       equal(data.params.user_name, 'john');
@@ -47,8 +48,6 @@ asyncTest('form input field with "data-disable" attribute', 7, function() {
     }, 13)
   })
   form.trigger('submit');
-
-  App.checkDisabledState(input, 'john');
 });
 
 asyncTest('form button with "data-disable" attribute', 7, function() {
@@ -58,15 +57,14 @@ asyncTest('form button with "data-disable" attribute', 7, function() {
   App.checkEnabledState(button, 'Submit');
 
   form.bind('ajax:success', function(e, data) {
+    App.checkDisabledState(button, 'Submit');
+    equal(button.data('ujs:enable-with'), undefined);
     setTimeout(function() {
       App.checkEnabledState(button, 'Submit');
       start();
     }, 13)
   })
   form.trigger('submit');
-
-  App.checkDisabledState(button, 'Submit');
-  equal(button.data('ujs:enable-with'), undefined);
 });
 
 asyncTest('form input[type=submit][data-disable] disables', 6, function(){
@@ -139,8 +137,10 @@ asyncTest('a[data-disable] disables', 5, function() {
   App.checkEnabledState(link, 'Click me');
 
   link.trigger('click');
-  App.checkDisabledState(link, 'Click me');
-  equal(link.data('ujs:enable-with'), undefined);
+  setTimeout(function() {
+    App.checkDisabledState(link, 'Click me');
+    equal(link.data('ujs:enable-with'), undefined);
+  }, 13)
   start();
 });
 

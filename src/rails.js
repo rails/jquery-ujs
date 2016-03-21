@@ -309,15 +309,13 @@
           return resolve(true);
         }
         if (rails.fire(element, 'confirm')) {
-          try {
-            rails.confirm(message)
-              .then(function(answer) {
-                var callback = rails.fire(element, 'confirm:complete', [answer]);
-                resolve(answer && callback)
-              });
-          } catch(e) {
-            reject(e);
-          }
+          rails.confirm(message)
+            .then(function(answer) {
+              var callback = rails.fire(element, 'confirm:complete', [answer]);
+              resolve(answer && callback)
+            });
+        } else {
+          reject(false);
         }
       });
     },
@@ -458,13 +456,12 @@
             } else {
               handleRemote.fail( function() { rails.enableElement(link); } );
             }
-            return false;
-
           } else if (method) {
             rails.handleMethod(link);
-            return false;
           }
         });
+
+      return false;
     });
 
     $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
@@ -526,7 +523,6 @@
               form.data('ujs:formnovalidate-button', undefined);
             }
           }
-
           if (remote) {
             nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
             if (nonBlankFileInputs) {
@@ -549,6 +545,8 @@
             setTimeout(function(){ rails.disableFormElements(form); }, 13);
           }
         });
+
+      return false;
     });
 
     $document.delegate(rails.formInputClickSelector, 'click.rails', function(event) {
@@ -572,6 +570,8 @@
           form.data('ujs:submit-button-formaction', button.attr('formaction'));
           form.data('ujs:submit-button-formmethod', button.attr('formmethod'));
         });
+        
+      return false;
     });
 
     $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function(event) {
