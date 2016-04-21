@@ -327,6 +327,27 @@ function skipIt() {
     }, 13);
   });
 
+  asyncTest('file form input field should not abort remote request if file form input does not have a name attribute', 5, function() {
+    var form = $('form[data-remote]')
+          .append($('<input type="file" value="default.png">'))
+          .bind('ajax:beforeSend', function() {
+            ok(true, 'ajax:beforeSend should run');
+          })
+          .bind('iframe:loading', function() {
+            ok(true, 'form should get submitted');
+          })
+          .bind('ajax:aborted:file', function(e,data) {
+            ok(false, 'ajax:aborted:file should not run');
+          })
+          .trigger('submit');
+
+    setTimeout(function() {
+      form.find('input[type="file"]').val('');
+      form.unbind('ajax:beforeSend');
+      submit();
+    }, 13);
+  });
+
   asyncTest('blank file input field should abort request entirely if handler bound to "ajax:aborted:file" event that returns false', 1, function() {
     var form = $('form[data-remote]')
           .append($('<input type="file" name="attachment" value="default.png">'))
