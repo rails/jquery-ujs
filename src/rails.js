@@ -416,15 +416,15 @@
       });
     });
 
-    $document.delegate(rails.linkDisableSelector, 'ajax:complete', function() {
+    $document.on('ajax:complete', rails.linkDisableSelector, function() {
         rails.enableElement($(this));
     });
 
-    $document.delegate(rails.buttonDisableSelector, 'ajax:complete', function() {
+    $document.on('ajax:complete', rails.buttonDisableSelector, function() {
         rails.enableFormElement($(this));
     });
 
-    $document.delegate(rails.linkClickSelector, 'click.rails', function(e) {
+    $document.on('click.rails', rails.linkClickSelector, function(e) {
       var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey;
       if (!rails.allowAction(link)) return rails.stopEverything(e);
 
@@ -448,7 +448,7 @@
       }
     });
 
-    $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
+    $document.on('click.rails', rails.buttonClickSelector, function(e) {
       var button = $(this);
 
       if (!rails.allowAction(button) || !rails.isRemote(button)) return rails.stopEverything(e);
@@ -465,7 +465,7 @@
       return false;
     });
 
-    $document.delegate(rails.inputChangeSelector, 'change.rails', function(e) {
+    $document.on('change.rails', rails.inputChangeSelector, function(e) {
       var link = $(this);
       if (!rails.allowAction(link) || !rails.isRemote(link)) return rails.stopEverything(e);
 
@@ -473,7 +473,7 @@
       return false;
     });
 
-    $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e) {
+    $document.on('submit.rails', rails.formSubmitSelector, function(e) {
       var form = $(this),
         remote = rails.isRemote(form),
         blankRequiredInputs,
@@ -518,7 +518,7 @@
       }
     });
 
-    $document.delegate(rails.formInputClickSelector, 'click.rails', function(event) {
+    $document.on('click.rails', rails.formInputClickSelector, function(event) {
       var button = $(this);
 
       if (!rails.allowAction(button)) return rails.stopEverything(event);
@@ -539,11 +539,11 @@
       form.data('ujs:submit-button-formmethod', button.attr('formmethod'));
     });
 
-    $document.delegate(rails.formSubmitSelector, 'ajax:send.rails', function(event) {
+    $document.on('ajax:send.rails', rails.formSubmitSelector, function(event) {
       if (this === event.target) rails.disableFormElements($(this));
     });
 
-    $document.delegate(rails.formSubmitSelector, 'ajax:complete.rails', function(event) {
+    $document.on('ajax:complete.rails', rails.formSubmitSelector, function(event) {
       if (this === event.target) rails.enableFormElements($(this));
     });
 
