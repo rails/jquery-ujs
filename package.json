@@ -1,0 +1,30 @@
+{
+  "name": "rails-ujs",
+  "version": "0.0.1",
+  "description": "Unobtrusive JavaScript used in Rails",
+  "main": "dist/rails.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "rake",
+    "dev": "webpack -d --watch",
+    "build": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liudangyi/jquery-ujs.git"
+  },
+  "author": {
+    "name": "All contributors",
+    "url": "https://github.com/liudangyi/jquery-ujs/graphs/contributors"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liudangyi/jquery-ujs/issues"
+  },
+  "homepage": "https://github.com/liudangyi/jquery-ujs#readme",
+  "devDependencies": {
+    "webpack": "^1.13.1"
+  }
+}

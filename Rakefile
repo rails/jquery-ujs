@@ -1,5 +1,18 @@
 desc %(Starts the test server and opens it in a web browser)
-multitask :default => ['test:server', 'test:open']
+multitask :default => ['webpack:build', 'test:server', 'test:open']
+multitask :develop => ['webpack:reloadable', 'test:server', 'test:open']
+
+namespace :webpack do
+  desc %(Build source files into dist/rails.js)
+  task :build do
+    system "npm run build"
+  end
+
+  desc %(Build dist/rails.js with reloading, for development purpose)
+  task :reloadable do
+    system "npm run dev"
+  end
+end
 
 PORT = 4567
 
