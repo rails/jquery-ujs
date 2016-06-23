@@ -11,7 +11,7 @@ namespace :test do
 
   desc %(Starts the test server which reloads everything on each refresh)
   task :reloadable do
-    exec "bundle exec shotgun test/config.ru -p #{PORT} --server thin"
+    system "bundle exec shotgun test/config.ru -p #{PORT} --server thin"
   end
 
   task :open do
