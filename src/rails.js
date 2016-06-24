@@ -211,12 +211,12 @@
     // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
     handleMethod: function(link) {
       var href = rails.href(link),
-        method = link.data('method'),
-        target = link.attr('target'),
-        csrfToken = rails.csrfToken(),
-        csrfParam = rails.csrfParam(),
-        form = $('<form method="post" action="' + href + '"></form>'),
-        metadataInput = '<input name="_method" value="' + method + '" type="hidden" />'
+          method = link.data('method'),
+          target = link.attr('target'),
+          csrfToken = rails.csrfToken(),
+          csrfParam = rails.csrfParam(),
+          form = $('<form method="post" action="' + href + '"></form>'),
+          metadataInput = '<input name="_method" value="' + method + '" type="hidden" />'
 
       if (csrfParam !== undefined && csrfToken !== undefined && !rails.isCrossDomain(href)) {
         metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />'
@@ -293,7 +293,7 @@
    */
     allowAction: function(element) {
       var message = element.data('confirm'),
-        answer = false, callback
+          answer = false, callback
       if (!message) { return true }
 
       if (rails.fire(element, 'confirm')) {
@@ -310,13 +310,13 @@
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
     blankInputs: function(form, specifiedSelector, nonBlank) {
       var foundInputs = $(),
-        input,
-        valueToCheck,
-        radiosForNameWithNoneSelected,
-        radioName,
-        selector = specifiedSelector || 'input,textarea',
-        requiredInputs = form.find(selector),
-        checkedRadioButtonNames = {}
+          input,
+          valueToCheck,
+          radiosForNameWithNoneSelected,
+          radioName,
+          selector = specifiedSelector || 'input,textarea',
+          requiredInputs = form.find(selector),
+          checkedRadioButtonNames = {}
 
       requiredInputs.each(function() {
         input = $(this)
@@ -475,9 +475,9 @@
 
     $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e) {
       var form = $(this),
-        remote = rails.isRemote(form),
-        blankRequiredInputs,
-        nonBlankFileInputs
+          remote = rails.isRemote(form),
+          blankRequiredInputs,
+          nonBlankFileInputs
 
       if (!rails.allowAction(form)) return rails.stopEverything(e)
 
@@ -525,7 +525,7 @@
 
       // Register the pressed submit button
       var name = button.attr('name'),
-        data = name ? {name: name, value: button.val()} : null
+          data = name ? {name: name, value: button.val()} : null
 
       var form = button.closest('form')
       if (form.length === 0) {

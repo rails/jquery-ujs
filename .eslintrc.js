@@ -9,7 +9,7 @@ module.exports = {
     'sourceType': 'module'
   },
   'rules': {
-    'indent': ['error', 2],
+    'indent': ['error', 2, { 'VariableDeclarator': { 'var': 2, 'let': 2, 'const': 3 } }],
     'linebreak-style': ['error', 'unix'],
     'quotes': ['error', 'single'],
     'semi': ['error', 'never'],
@@ -17,7 +17,7 @@ module.exports = {
     // Styles
     'space-before-function-paren': ['error', 'never'],
     'space-before-blocks': 'error',
-    'brace-style': ['error', "1tbs", { "allowSingleLine": true }],
+    'brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
     'key-spacing': 'error',
     'array-bracket-spacing': 'error',
     'comma-spacing': 'error',
