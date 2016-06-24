@@ -1,4 +1,4 @@
-(function(){
+(function() {
 
 module('call-remote-callbacks', {
   setup: function() {
@@ -39,14 +39,14 @@ function submit_with_button(submit_button) {
   submit_button.trigger('click')
 }
 
-asyncTest('modifying form fields with "ajax:before" sends modified data in request', 4, function(){
+asyncTest('modifying form fields with "ajax:before" sends modified data in request', 4, function() {
   $('form[data-remote]')
     .append($('<input type="text" name="user_name" value="john">'))
     .append($('<input type="text" name="removed_user_name" value="john">'))
     .bind('ajax:before', function() {
       var form = $(this)
       form
-        .append($('<input />',{name: 'other_user_name',value: 'jonathan'}))
+        .append($('<input />', {name: 'other_user_name', value: 'jonathan'}))
         .find('input[name="removed_user_name"]').remove()
       form
         .find('input[name="user_name"]').val('steve')
@@ -61,11 +61,11 @@ asyncTest('modifying form fields with "ajax:before" sends modified data in reque
   })
 })
 
-asyncTest('modifying data("type") with "ajax:before" requests new dataType in request', 2, function(){
-  $('form[data-remote]').data('type','html')
+asyncTest('modifying data("type") with "ajax:before" requests new dataType in request', 2, function() {
+  $('form[data-remote]').data('type', 'html')
     .bind('ajax:before', function() {
       var form = $(this)
-      form.data('type','xml')
+      form.data('type', 'xml')
     })
 
   submit(function(form) {
@@ -75,11 +75,11 @@ asyncTest('modifying data("type") with "ajax:before" requests new dataType in re
   })
 })
 
-asyncTest('setting data("with-credentials",true) with "ajax:before" uses new setting in request', 2, function(){
-  $('form[data-remote]').data('with-credentials',false)
+asyncTest('setting data("with-credentials",true) with "ajax:before" uses new setting in request', 2, function() {
+  $('form[data-remote]').data('with-credentials', false)
     .bind('ajax:before', function() {
       var form = $(this)
-      form.data('with-credentials',true)
+      form.data('with-credentials', true)
     })
 
   submit(function(form) {
@@ -121,9 +121,9 @@ asyncTest('blank required form input field should abort request and trigger "aja
     .bind('ajax:beforeSend', function() {
       ok(false, 'ajax:beforeSend should not run')
     })
-    .bind('ajax:aborted:required', function(e,data){
+    .bind('ajax:aborted:required', function(e, data) {
       ok(data.length == 2, 'ajax:aborted:required event is passed all blank required inputs (jQuery objects)')
-      ok(data.first().is('input[name="user_name"]') , 'ajax:aborted:required adds blank required input to data')
+      ok(data.first().is('input[name="user_name"]'), 'ajax:aborted:required adds blank required input to data')
       ok(data.last().is('textarea[name="user_bio"]'), 'ajax:aborted:required adds blank required textarea to data')
       ok(true, 'ajax:aborted:required should run')
     })
@@ -150,7 +150,7 @@ asyncTest('blank required form input for non-remote form should abort normal sub
   }, 13)
 })
 
-asyncTest('form should be submitted with blank required fields if handler is bound to "ajax:aborted:required" event that returns false', 1, function(){
+asyncTest('form should be submitted with blank required fields if handler is bound to "ajax:aborted:required" event that returns false', 1, function() {
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
     .bind('ajax:beforeSend', function() {
@@ -180,10 +180,10 @@ asyncTest('disabled fields should not be included in blank required check', 2, f
   submit()
 })
 
-asyncTest('form should be submitted with blank required fields if it has the "novalidate" attribute', 2, function(){
+asyncTest('form should be submitted with blank required fields if it has the "novalidate" attribute', 2, function() {
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
-    .attr("novalidate", "novalidate")
+    .attr('novalidate', 'novalidate')
     .bind('ajax:beforeSend', function() {
       ok(true, 'ajax:beforeSend should run')
     })
@@ -194,7 +194,7 @@ asyncTest('form should be submitted with blank required fields if it has the "no
   submit()
 })
 
-asyncTest('form should be submitted with blank required fields if the button has the "formnovalidate" attribute', 2, function(){
+asyncTest('form should be submitted with blank required fields if the button has the "formnovalidate" attribute', 2, function() {
   var submit_button = $('<input type="submit" formnovalidate>')
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
@@ -217,7 +217,7 @@ asyncTest('blank required form input for non-remote form with "novalidate" attri
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
     .removeAttr('data-remote')
-    .attr("novalidate","novalidate")
+    .attr('novalidate', 'novalidate')
     .trigger('submit')
 
   setTimeout(function() {
@@ -313,9 +313,9 @@ function skipIt() {
           .bind('iframe:loading', function() {
             ok(true, 'form should get submitted')
           })
-          .bind('ajax:aborted:file', function(e,data) {
+          .bind('ajax:aborted:file', function(e, data) {
             ok(data.length == 1, 'ajax:aborted:file event is passed all non-blank file inputs (jQuery objects)')
-            ok(data.first().is('input[name="attachment"]') , 'ajax:aborted:file adds non-blank file input to data')
+            ok(data.first().is('input[name="attachment"]'), 'ajax:aborted:file adds non-blank file input to data')
             ok(true, 'ajax:aborted:file event should run')
           })
           .trigger('submit')
@@ -336,7 +336,7 @@ function skipIt() {
           .bind('iframe:loading', function() {
             ok(true, 'form should get submitted')
           })
-          .bind('ajax:aborted:file', function(e,data) {
+          .bind('ajax:aborted:file', function(e, data) {
             ok(false, 'ajax:aborted:file should not run')
           })
           .trigger('submit')
@@ -459,7 +459,7 @@ asyncTest('binding to ajax:send event to call jquery methods on ajax object', 2,
     })
     .trigger('submit')
 
-    setTimeout(function() { start() }, 35)
+  setTimeout(function() { start() }, 35)
 })
 
 })()

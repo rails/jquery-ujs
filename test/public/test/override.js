@@ -1,4 +1,4 @@
-(function(){
+(function() {
 
 module('override', {
   setup: function() {
@@ -16,12 +16,12 @@ module('override', {
   }
 })
 
-asyncTest("the getter for an element's href is publicly accessible", 1, function() {
+asyncTest('the getter for an element\'s href is publicly accessible', 1, function() {
   ok($.rails.href)
   start()
 })
 
-asyncTest("the getter for an element's href is overridable", 1, function() {
+asyncTest('the getter for an element\'s href is overridable', 1, function() {
   $.rails.href = function(element) { return element.data('href') }
   $.rails.ajax = function(options) {
     equal('/data/href', options.url)
@@ -30,7 +30,7 @@ asyncTest("the getter for an element's href is overridable", 1, function() {
   start()
 })
 
-asyncTest("the getter for an element's href works normally if not overridden", 1, function() {
+asyncTest('the getter for an element\'s href works normally if not overridden', 1, function() {
   $.rails.ajax = function(options) {
     equal(location.protocol + '//' + location.host + '/real/href', options.url)
   }
@@ -38,7 +38,7 @@ asyncTest("the getter for an element's href works normally if not overridden", 1
   start()
 })
 
-asyncTest("the event selector strings are overridable", 2, function() {
+asyncTest('the event selector strings are overridable', 2, function() {
   var documentClickBindings = $._data(document, 'events').click,
       linkClickBinding = $.grep(documentClickBindings, function(a) {
         return a.selector && a.selector.indexOf('a[data-remote]') != -1

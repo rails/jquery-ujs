@@ -1,4 +1,4 @@
-(function(){
+(function() {
 
 function buildForm(attrs) {
   attrs = $.extend({ action: '/echo', 'data-remote': 'true' }, attrs)
@@ -118,8 +118,8 @@ asyncTest('allow empty form "action"', 1, function() {
       try {
         currentLocation = location.href
       } catch(e) {
-        currentLocation = document.createElement( "a" )
-        currentLocation.href = ""
+        currentLocation = document.createElement( 'a' )
+        currentLocation.href = ''
         currentLocation = currentLocation.href
       }
       currentLocation = currentLocation.replace(/\?$/, '')
@@ -127,7 +127,7 @@ asyncTest('allow empty form "action"', 1, function() {
       // Actual location (strip out settings.data that jQuery serializes and appends)
       // HACK: can no longer use settings.data below to see what was appended to URL, as of
       // jQuery 1.6.3 (see http://bugs.jquery.com/ticket/10202 and https://github.com/jquery/jquery/pull/544)
-      ajaxLocation = settings.url.replace("user_name=john","").replace(/&$/, "").replace(/\?$/, "")
+      ajaxLocation = settings.url.replace('user_name=john', '').replace(/&$/, '').replace(/\?$/, '')
       equal(ajaxLocation.match(/^(.*)/)[1], currentLocation, 'URL should be current page by default')
 
       // Prevent the request from actually getting sent to the current page and

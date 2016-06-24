@@ -8,11 +8,11 @@ App.assertCallbackNotInvoked = function(callbackName) {
   ok(false, callbackName + ' callback should not have been invoked')
 }
 
-App.assertGetRequest = function(requestEnv){
+App.assertGetRequest = function(requestEnv) {
   equal(requestEnv['REQUEST_METHOD'], 'GET', 'request type should be GET')
 }
 
-App.assertPostRequest = function(requestEnv){
+App.assertPostRequest = function(requestEnv) {
   equal(requestEnv['REQUEST_METHOD'], 'POST', 'request type should be POST')
 }
 

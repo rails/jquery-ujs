@@ -69,7 +69,7 @@ asyncTest('form button with "data-disable" attribute', 7, function() {
   equal(button.data('ujs:enable-with'), undefined)
 })
 
-asyncTest('form input[type=submit][data-disable] disables', 6, function(){
+asyncTest('form input[type=submit][data-disable] disables', 6, function() {
   var form = $('form:not([data-remote])'), input = form.find('input[type=submit]')
 
   App.checkEnabledState(input, 'Submit')
@@ -90,13 +90,13 @@ asyncTest('form input[type=submit][data-disable] disables', 6, function(){
   }, 30)
 })
 
-asyncTest('form[data-remote] input[type=submit][data-disable] is replaced in ajax callback', 2, function(){
+asyncTest('form[data-remote] input[type=submit][data-disable] is replaced in ajax callback', 2, function() {
   var form = $('form:not([data-remote])').attr('data-remote', 'true'), origFormContents = form.html()
 
-  form.bind('ajax:success', function(){
+  form.bind('ajax:success', function() {
     form.html(origFormContents)
 
-    setTimeout(function(){
+    setTimeout(function() {
       var input = form.find('input[type=submit]')
       App.checkEnabledState(input, 'Submit')
       start()
@@ -104,14 +104,14 @@ asyncTest('form[data-remote] input[type=submit][data-disable] is replaced in aja
   }).trigger('submit')
 })
 
-asyncTest('form[data-remote] input[data-disable] is replaced with disabled field in ajax callback', 2, function(){
+asyncTest('form[data-remote] input[data-disable] is replaced with disabled field in ajax callback', 2, function() {
   var form = $('form:not([data-remote])').attr('data-remote', 'true'), input = form.find('input[type=submit]'),
       newDisabledInput = input.clone().attr('disabled', 'disabled')
 
-  form.bind('ajax:success', function(){
+  form.bind('ajax:success', function() {
     input.replaceWith(newDisabledInput)
 
-    setTimeout(function(){
+    setTimeout(function() {
       App.checkEnabledState(newDisabledInput, 'Submit')
       start()
     }, 30)

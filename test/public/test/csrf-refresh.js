@@ -1,9 +1,9 @@
-(function(){
+(function() {
 
 module('csrf-refresh', {})
 
 asyncTest('refresh all csrf tokens', 1, function() {
-  var correctToken = "cf50faa3fe97702ca1ae"
+  var correctToken = 'cf50faa3fe97702ca1ae'
 
   var form = $('<form />')
   var input = $('<input>').attr({ type: 'hidden', name: 'authenticity_token', id: 'authenticity_token', value: 'foo' })

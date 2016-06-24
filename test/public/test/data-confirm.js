@@ -120,7 +120,7 @@ asyncTest('clicking on a button with data-confirm attribute. Confirm No.', 3, fu
 asyncTest('clicking on a button with data-confirm attribute. Confirm error.', 3, function() {
   var message
   // auto-decline:
-  window.confirm = function(msg) { message = msg; throw "some random error" }
+  window.confirm = function(msg) { message = msg; throw 'some random error' }
 
   $('button[data-confirm]')
     .bind('confirm:complete', function(e, data) {

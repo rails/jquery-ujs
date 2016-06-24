@@ -51,7 +51,7 @@ asyncTest('ctrl-clicking on a link does not fire ajaxyness', 0, function() {
   e.ctrlKey = true
   link.trigger(e)
 
-  setTimeout(function(){ start() }, 13)
+  setTimeout(function() { start() }, 13)
 })
 
 asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for links with "data-params"', 2, function() {
@@ -75,7 +75,7 @@ asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for li
     .attr('data-params', 'name=steve')
     .trigger(e)
 
-  setTimeout(function(){ start() }, 13)
+  setTimeout(function() { start() }, 13)
 })
 
 asyncTest('clicking on a link with data-remote attribute', 5, function() {
@@ -93,7 +93,7 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
 
 asyncTest('clicking on a link with disabled attribute', 0, function() {
   $('a[disabled]')
-  .bind("ajax:before", function(e, data, status, xhr) {
+  .bind('ajax:before', function(e, data, status, xhr) {
     App.assertCallbackNotInvoked('ajax:success')
   })
   .bind('ajax:complete', function() { start() })
@@ -198,18 +198,18 @@ asyncTest('submitting form with data-remote attribute by clicking button with ma
     .bind('ajax:complete', function() { start() })
 
   $('<button />', {
-        type: "submit",
-        name: "user_data",
-        value: "value1",
-        form: "my-remote-form"
+        type: 'submit',
+        name: 'user_data',
+        value: 'value1',
+        form: 'my-remote-form'
       })
     .appendTo($('#qunit-fixture'))
 
   $('<button />', {
-      type: "submit",
-      name: "user_data",
-      value: "value2",
-      form: "my-remote-form"
+      type: 'submit',
+      name: 'user_data',
+      value: 'value2',
+      form: 'my-remote-form'
     })
     .appendTo($('#qunit-fixture'))
     .trigger('click')
@@ -222,16 +222,16 @@ asyncTest('form\'s submit bindings in browsers that don\'t support submit bubbli
 
   form
     .append($('<input type="submit" />'))
-    .bind('submit', function(event){
+    .bind('submit', function(event) {
       ok(event.type == 'submit', 'submit event handlers are called with submit event')
       ok(true, 'binding handler is called')
       directBindingCalled = true
     })
-    .bind('ajax:beforeSend', function(){
+    .bind('ajax:beforeSend', function() {
       ok(true, 'form being submitted via ajax')
       ok(directBindingCalled, 'binding handler already called')
     })
-    .bind('ajax:complete', function(){
+    .bind('ajax:complete', function() {
       start()
     })
 
@@ -244,16 +244,16 @@ asyncTest('form\'s submit bindings in browsers that don\'t support submit bubbli
     }
 })
 
-asyncTest('returning false in form\'s submit bindings in non-submit-bubbling browsers', 1, function(){
+asyncTest('returning false in form\'s submit bindings in non-submit-bubbling browsers', 1, function() {
   var form = $('form[data-remote]')
 
   form
     .append($('<input type="submit" />'))
-    .bind('submit', function(){
+    .bind('submit', function() {
       ok(true, 'binding handler is called')
       return false
     })
-    .bind('ajax:beforeSend', function(){
+    .bind('ajax:beforeSend', function() {
       ok(false, 'form should not be submitted')
     })
 
@@ -264,7 +264,7 @@ asyncTest('returning false in form\'s submit bindings in non-submit-bubbling bro
       form.trigger('submit')
     }
 
-    setTimeout(function(){ start() }, 13)
+    setTimeout(function() { start() }, 13)
 })
 
 asyncTest('clicking on a link with falsy "data-remote" attribute does not fire ajaxyness', 0, function() {
@@ -278,7 +278,7 @@ asyncTest('clicking on a link with falsy "data-remote" attribute does not fire a
     })
     .trigger('click')
 
-  setTimeout(function(){ start() }, 20)
+  setTimeout(function() { start() }, 20)
 })
 
 asyncTest('ctrl-clicking on a link with falsy "data-remote" attribute does not fire ajaxyness even if "data-params" present', 0, function() {
@@ -306,7 +306,7 @@ asyncTest('ctrl-clicking on a link with falsy "data-remote" attribute does not f
     .attr('data-params', 'name=steve')
     .trigger(e)
 
-  setTimeout(function(){ start() }, 20)
+  setTimeout(function() { start() }, 20)
 })
 
 asyncTest('clicking on a button with falsy "data-remote" attribute', 0, function() {
@@ -320,7 +320,7 @@ asyncTest('clicking on a button with falsy "data-remote" attribute', 0, function
     })
     .trigger('click')
 
-  setTimeout(function(){ start() }, 20)
+  setTimeout(function() { start() }, 20)
 })
 
 asyncTest('submitting a form with falsy "data-remote" attribute', 0, function() {
@@ -334,7 +334,7 @@ asyncTest('submitting a form with falsy "data-remote" attribute', 0, function() 
     })
     .trigger('submit')
 
-  setTimeout(function(){ start() }, 20)
+  setTimeout(function() { start() }, 20)
 })
 
 asyncTest('changing a select option with falsy "data-remote" attribute', 0, function() {
@@ -357,5 +357,5 @@ asyncTest('changing a select option with falsy "data-remote" attribute', 0, func
     .val('optionValue2')
     .trigger('change')
 
-  setTimeout(function(){ start() }, 20)
+  setTimeout(function() { start() }, 20)
 })

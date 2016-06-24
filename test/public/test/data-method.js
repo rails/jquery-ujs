@@ -1,4 +1,4 @@
-(function(){
+(function() {
 
 module('data-method', {
   setup: function() {
