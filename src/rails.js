@@ -58,12 +58,12 @@
 
     // Up-to-date Cross-Site Request Forgery token
     csrfToken: function() {
-     return $('meta[name=csrf-token]').attr('content')
+      return $('meta[name=csrf-token]').attr('content')
     },
 
     // URL param that must contain the CSRF token
     csrfParam: function() {
-     return $('meta[name=csrf-param]').attr('content')
+      return $('meta[name=csrf-param]').attr('content')
     },
 
     // Make sure that every Ajax request sends the CSRF token
@@ -73,7 +73,7 @@
     },
 
     // Make sure that all forms have actual up-to-date tokens (cached forms contain old ones)
-    refreshCSRFTokens: function(){
+    refreshCSRFTokens: function() {
       $('form input[name="' + rails.csrfParam() + '"]').val(rails.csrfToken())
     },
 
@@ -293,7 +293,7 @@
    */
     allowAction: function(element) {
       var message = element.data('confirm'),
-          answer = false, callback
+        answer = false, callback
       if (!message) { return true }
 
       if (rails.fire(element, 'confirm')) {
@@ -391,15 +391,15 @@
 
   if (rails.fire($document, 'rails:attachBindings')) {
 
-    $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr) }})
+    $.ajaxPrefilter(function(options, originalOptions, xhr) { if ( !options.crossDomain ) { rails.CSRFProtection(xhr) }})
 
     // This event works the same as the load event, except that it fires every
     // time the page is loaded.
     //
     // See https://github.com/rails/jquery-ujs/issues/357
     // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
-    $(window).on('pageshow.rails', function () {
-      $($.rails.enableSelector).each(function () {
+    $(window).on('pageshow.rails', function() {
+      $($.rails.enableSelector).each(function() {
         var element = $(this)
 
         if (element.data('ujs:disabled')) {
@@ -407,7 +407,7 @@
         }
       })
 
-      $($.rails.linkDisableSelector).each(function () {
+      $($.rails.linkDisableSelector).each(function() {
         var element = $(this)
 
         if (element.data('ujs:disabled')) {
@@ -417,11 +417,11 @@
     })
 
     $document.delegate(rails.linkDisableSelector, 'ajax:complete', function() {
-        rails.enableElement($(this))
+      rails.enableElement($(this))
     })
 
     $document.delegate(rails.buttonDisableSelector, 'ajax:complete', function() {
-        rails.enableFormElement($(this))
+      rails.enableFormElement($(this))
     })
 
     $document.delegate(rails.linkClickSelector, 'click.rails', function(e) {
@@ -500,11 +500,11 @@
         if (nonBlankFileInputs) {
           // Slight timeout so that the submit button gets properly serialized
           // (make it easy for event handler to serialize form without disabled values)
-          setTimeout(function(){ rails.disableFormElements(form) }, 13)
+          setTimeout(function() { rails.disableFormElements(form) }, 13)
           var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs])
 
           // Re-enable form elements if event bindings return false (canceling normal form submission)
-          if (!aborted) { setTimeout(function(){ rails.enableFormElements(form) }, 13) }
+          if (!aborted) { setTimeout(function() { rails.enableFormElements(form) }, 13) }
 
           return aborted
         }
@@ -514,7 +514,7 @@
 
       } else {
         // Slight timeout so that the submit button gets properly serialized
-        setTimeout(function(){ rails.disableFormElements(form) }, 13)
+        setTimeout(function() { rails.disableFormElements(form) }, 13)
       }
     })
 
@@ -525,7 +525,7 @@
 
       // Register the pressed submit button
       var name = button.attr('name'),
-        data = name ? {name:name, value:button.val()} : null
+        data = name ? {name: name, value: button.val()} : null
 
       var form = button.closest('form')
       if (form.length === 0) {
@@ -547,9 +547,9 @@
       if (this === event.target) rails.enableFormElements($(this))
     })
 
-    $(function(){
+    $(function() {
       rails.refreshCSRFTokens()
     })
   }
 
-})( jQuery )
+})( window.jQuery )

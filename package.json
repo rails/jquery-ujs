@@ -9,6 +9,7 @@
   "scripts": {
     "test": "rake",
     "dev": "webpack -d --watch",
+    "lint": "eslint src",
     "build": "webpack -p"
   },
   "repository": {
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/liudangyi/jquery-ujs#readme",
   "devDependencies": {
+    "eslint": "^2.13.1",
     "webpack": "^1.13.1"
   }
 }
