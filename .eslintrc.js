@@ -13,6 +13,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     'quotes': ['error', 'single'],
     'semi': ['error', 'never'],
+    'no-shadow': ['error'], // Prevent potential errors
     'no-console': 'off',
     // Styles
     'space-before-function-paren': ['error', 'never'],
@@ -21,6 +22,10 @@ module.exports = {
     'key-spacing': 'error',
     'array-bracket-spacing': 'error',
     'comma-spacing': 'error',
+    'comma-dangle': 'off',
     'eol-last': 'error'
+  },
+  globals: {
+    $: true, // Temporarily add $ to global for developing purpose
   }
 }
