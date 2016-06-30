@@ -1,5 +1,3 @@
-import config from '../config'
-
 // Helper function that returns form elements that match the specified CSS selector
 // If form is actually a "form" element this will return associated elements outside the from that have
 // the html form attribute set
@@ -12,12 +10,6 @@ export function formElements(form, selector) {
   - Replaces element text with value of 'data-disable-with' attribute
   - Sets disabled property to true
 */
-export function disableFormElements(form) {
-  formElements(form, config.disableSelector).each(function() {
-    disableFormElement($(this))
-  })
-}
-
 export function disableFormElement(element) {
   var method, replacement
 
@@ -37,12 +29,6 @@ export function disableFormElement(element) {
   - Replaces element text with cached value from 'ujs:enable-with' data store (created in `disableFormElements`)
   - Sets disabled property to false
 */
-export function enableFormElements(form) {
-  formElements(form, config.enableSelector).each(function() {
-    enableFormElement($(this))
-  })
-}
-
 export function enableFormElement(element) {
   var method = element.is('button') ? 'html' : 'val'
   if (element.data('ujs:enable-with') !== undefined) {

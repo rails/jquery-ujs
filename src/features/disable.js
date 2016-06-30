@@ -1,4 +1,6 @@
+import config from '../config'
 import { stopEverything } from '../utils/event'
+import { formElements, enableFormElement, disableFormElement } from '../utils/form'
 
 //  Replace element's html with the 'data-disable-with' after storing original html
 //  and prevent clicking on it
@@ -24,4 +26,16 @@ export function enableElement(element) {
   }
   element.unbind('click.railsDisable') // enable element
   element.removeData('ujs:disabled')
+}
+
+export function disableFormElements(form) {
+  formElements(form, config.disableSelector).each(function() {
+    disableFormElement($(this))
+  })
+}
+
+export function enableFormElements(form) {
+  formElements(form, config.enableSelector).each(function() {
+    enableFormElement($(this))
+  })
 }
