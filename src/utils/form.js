@@ -5,40 +5,6 @@ export function formElements(form, selector) {
   return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector)
 }
 
-/* Disables form elements:
-  - Caches element value in 'ujs:enable-with' data store
-  - Replaces element text with value of 'data-disable-with' attribute
-  - Sets disabled property to true
-*/
-export function disableFormElement(element) {
-  var method, replacement
-
-  method = element.is('button') ? 'html' : 'val'
-  replacement = element.data('disable-with')
-
-  if (replacement !== undefined) {
-    element.data('ujs:enable-with', element[method]())
-    element[method](replacement)
-  }
-
-  element.prop('disabled', true)
-  element.data('ujs:disabled', true)
-}
-
-/* Re-enables disabled form elements:
-  - Replaces element text with cached value from 'ujs:enable-with' data store (created in `disableFormElements`)
-  - Sets disabled property to false
-*/
-export function enableFormElement(element) {
-  var method = element.is('button') ? 'html' : 'val'
-  if (element.data('ujs:enable-with') !== undefined) {
-    element[method](element.data('ujs:enable-with'))
-    element.removeData('ujs:enable-with') // clean up cache
-  }
-  element.prop('disabled', false)
-  element.removeData('ujs:disabled')
-}
-
 // Helper function which checks for blank inputs in a form that match the specified CSS selector
 export function blankInputs(form, specifiedSelector, nonBlank) {
   var foundInputs = $(),
