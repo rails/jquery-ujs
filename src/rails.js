@@ -14,7 +14,7 @@ import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils
 import { enableFormElement, disableFormElement, blankInputs, nonBlankInputs } from './utils/form'
 import { href, ajax } from './utils/ajax'
 import { enableElement, disableElement, enableFormElements, disableFormElements } from './features/disable'
-import { allowAction } from './features/confirm'
+import { setup as setupConfirm } from './features/confirm'
 import { isRemote, handleRemote } from './features/remote'
 import { handleMethod } from './features/method'
 
@@ -33,6 +33,12 @@ var $document = $(document)
 if (fire($document, 'rails:attachBindings')) {
 
   $.ajaxPrefilter(function(options, originalOptions, xhr) { if ( !options.crossDomain ) { CSRFProtection(xhr) }})
+
+  setupConfirm(config.linkClickSelector, 'click.rails')
+  setupConfirm(config.buttonClickSelector, 'click.rails')
+  setupConfirm(config.inputChangeSelector, 'change.rails')
+  setupConfirm(config.formSubmitSelector, 'submit.rails')
+  setupConfirm(config.formInputClickSelector, 'click.rails')
 
   // This event works the same as the load event, except that it fires every
   // time the page is loaded.
@@ -67,7 +73,6 @@ if (fire($document, 'rails:attachBindings')) {
 
   $document.delegate(config.linkClickSelector, 'click.rails', function(e) {
     var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey
-    if (!allowAction(link)) return stopEverything(e)
 
     if (!metaClick && link.is(config.linkDisableSelector)) disableElement(link)
 
@@ -92,7 +97,7 @@ if (fire($document, 'rails:attachBindings')) {
   $document.delegate(config.buttonClickSelector, 'click.rails', function(e) {
     var button = $(this)
 
-    if (!allowAction(button) || !isRemote(button)) return stopEverything(e)
+    if (!isRemote(button)) return stopEverything(e)
 
     if (button.is(config.buttonDisableSelector)) disableFormElement(button)
 
@@ -108,7 +113,7 @@ if (fire($document, 'rails:attachBindings')) {
 
   $document.delegate(config.inputChangeSelector, 'change.rails', function(e) {
     var link = $(this)
-    if (!allowAction(link) || !isRemote(link)) return stopEverything(e)
+    if (!isRemote(link)) return stopEverything(e)
 
     handleRemote(link)
     return false
@@ -119,8 +124,6 @@ if (fire($document, 'rails:attachBindings')) {
         remote = isRemote(form),
         blankRequiredInputs,
         nonBlankFileInputs
-
-    if (!allowAction(form)) return stopEverything(e)
 
     // Skip other logic when required values are missing or file upload is present
     if (form.attr('novalidate') === undefined) {
@@ -159,10 +162,8 @@ if (fire($document, 'rails:attachBindings')) {
     }
   })
 
-  $document.delegate(config.formInputClickSelector, 'click.rails', function(event) {
+  $document.delegate(config.formInputClickSelector, 'click.rails', function() {
     var button = $(this)
-
-    if (!allowAction(button)) return stopEverything(event)
 
     // Register the pressed submit button
     var name = button.attr('name'),

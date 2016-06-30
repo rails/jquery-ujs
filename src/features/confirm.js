@@ -1,7 +1,13 @@
-import { fire } from '../utils/event'
+import { fire, stopEverything } from '../utils/event'
+
+export function setup(selector, event) {
+  $(document).delegate(selector, event, e => {
+    if (!allowAction($(e.target))) return stopEverything(e)
+  })
+}
 
 // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
-export function confirm(message) {
+function confirm(message) {
   return window.confirm(message)
 }
 
@@ -15,7 +21,7 @@ export function confirm(message) {
    Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
    return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
 */
-export function allowAction(element) {
+function allowAction(element) {
   var message = element.data('confirm'),
       answer = false, callback
   if (!message) { return true }
