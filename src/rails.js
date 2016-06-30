@@ -16,7 +16,7 @@ import { href, ajax } from './utils/ajax'
 import { enableElement, disableElement, enableFormElement, disableFormElement, enableFormElements, disableFormElements } from './features/disable'
 import { setup as setupConfirm } from './features/confirm'
 import { isRemote, handleRemote } from './features/remote'
-import { handleMethod } from './features/method'
+import { setup as setupMethod } from './features/method'
 
 // Cut down on the number of issues from people inadvertently including jquery_ujs twice
 // by detecting and raising an error when it happens.
@@ -86,13 +86,12 @@ if (fire($document, 'rails:attachBindings')) {
       } else {
         handleResult.fail( function() { enableElement(link) } )
       }
-      return false
-
-    } else if (method) {
-      handleMethod(link)
-      return false
+      return stopEverything(e)
     }
+    return false
   })
+
+  setupMethod(config.linkClickSelector, 'click.rails')
 
   $document.delegate(config.buttonClickSelector, 'click.rails', function(e) {
     var button = $(this)

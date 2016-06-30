@@ -1,9 +1,17 @@
 import * as csrf from '../utils/csrf'
 import * as ajax from '../utils/ajax'
 
+export function setup(selector, event) {
+  $(document).delegate(selector, event, e => {
+    var link = $(e.target)
+    if (link.data('method')) handleMethod(link)
+    return false
+  })
+}
+
 // Handles "data-method" on links such as:
 // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
-export function handleMethod(link) {
+function handleMethod(link) {
   var href = ajax.href(link),
       method = link.data('method'),
       target = link.attr('target'),
