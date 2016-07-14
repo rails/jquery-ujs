@@ -13,7 +13,7 @@ import { fire, stopEverything } from './utils/event'
 import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
 import { blankInputs, nonBlankInputs } from './utils/form'
 import { href, ajax } from './utils/ajax'
-import { enableElement, disableElement, enableFormElement, disableFormElement, enableFormElements, disableFormElements } from './features/disable'
+import { enableLinkElement, disableLinkElement, enableFormElement, disableFormElement, enableFormElements, disableFormElements } from './features/disable'
 import { setup as setupConfirm } from './features/confirm'
 import { isRemote, handleRemote } from './features/remote'
 import { setup as setupMethod } from './features/method'
@@ -58,13 +58,13 @@ if (fire($document, 'rails:attachBindings')) {
       var element = $(this)
 
       if (element.data('ujs:disabled')) {
-        enableElement(element)
+        enableLinkElement(element)
       }
     })
   })
 
   $document.delegate(config.linkDisableSelector, 'ajax:complete', function() {
-    enableElement($(this))
+    enableLinkElement($(this))
   })
 
   $document.delegate(config.buttonDisableSelector, 'ajax:complete', function() {
@@ -74,7 +74,7 @@ if (fire($document, 'rails:attachBindings')) {
   $document.delegate(config.linkClickSelector, 'click.rails', function(e) {
     var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey
 
-    if (!metaClick && link.is(config.linkDisableSelector)) disableElement(link)
+    if (!metaClick && link.is(config.linkDisableSelector)) disableLinkElement(link)
 
     if (isRemote(link)) {
       if (metaClick && (!method || method === 'GET') && !data) { return true }
@@ -82,9 +82,9 @@ if (fire($document, 'rails:attachBindings')) {
       var handleResult = handleRemote(link)
       // Response from handleRemote() will either be false or a deferred object promise.
       if (handleResult === false) {
-        enableElement(link)
+        enableLinkElement(link)
       } else {
-        handleResult.fail( function() { enableElement(link) } )
+        handleResult.fail( function() { enableLinkElement(link) } )
       }
       return stopEverything(e)
     }

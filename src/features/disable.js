@@ -4,7 +4,7 @@ import { formElements } from '../utils/form'
 
 //  Replace element's html with the 'data-disable-with' after storing original html
 //  and prevent clicking on it
-export function disableElement(element) {
+export function disableLinkElement(element) {
   var replacement = element.data('disable-with')
 
   if (replacement !== undefined) {
@@ -18,8 +18,8 @@ export function disableElement(element) {
   element.data('ujs:disabled', true)
 }
 
-// Restore element to its original state which was disabled by 'disableElement' above
-export function enableElement(element) {
+// Restore element to its original state which was disabled by 'disableLinkElement' above
+export function enableLinkElement(element) {
   if (element.data('ujs:enable-with') !== undefined) {
     element.html(element.data('ujs:enable-with')) // set to old enabled state
     element.removeData('ujs:enable-with') // clean up cache
