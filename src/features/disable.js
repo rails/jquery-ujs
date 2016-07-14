@@ -34,7 +34,7 @@ export function enableLinkElement(element) {
   - Sets disabled property to true
 */
 export function disableFormElements(form) {
-  formElements(form, config.disableSelector).each(function() {
+  formElements(form, config.formDisableSelector).each(function() {
     disableFormElement($(this))
   })
 }
@@ -59,7 +59,7 @@ export function disableFormElement(element) {
   - Sets disabled property to false
 */
 export function enableFormElements(form) {
-  formElements(form, config.enableSelector).each(function() {
+  formElements(form, config.formEnableSelector).each(function() {
     enableFormElement($(this))
   })
 }

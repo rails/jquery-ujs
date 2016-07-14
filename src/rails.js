@@ -46,7 +46,7 @@ if (fire($document, 'rails:attachBindings')) {
   // See https://github.com/rails/jquery-ujs/issues/357
   // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
   $(window).on('pageshow.rails', function() {
-    $(config.enableSelector).each(function() {
+    $(config.formEnableSelector).each(function() {
       var element = $(this)
 
       if (element.data('ujs:disabled')) {
