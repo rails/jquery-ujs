@@ -2,9 +2,31 @@ import config from '../config'
 import { stopEverything } from '../utils/event'
 import { formElements } from '../utils/form'
 
+// Unified function to enable an element (link, button and form)
+export function enableElement(element) {
+  if (element.is(config.linkDisableSelector)) {
+    enableLinkElement(element)
+  } else if (element.is(config.buttonDisableSelector) || element.is(config.formEnableSelector)) {
+    enableFormElement(element)
+  } else if (element.is(config.formSubmitSelector)) {
+    enableFormElements(element)
+  }
+}
+
+// Unified function to disable an element (link, button and form)
+export function disableElement(element) {
+  if (element.is(config.linkDisableSelector)) {
+    disableLinkElement(element)
+  } else if (element.is(config.buttonDisableSelector) || element.is(config.formDisableSelector)) {
+    disableFormElement(element)
+  } else if (element.is(config.formSubmitSelector)) {
+    disableFormElements(element)
+  }
+}
+
 //  Replace element's html with the 'data-disable-with' after storing original html
 //  and prevent clicking on it
-export function disableLinkElement(element) {
+function disableLinkElement(element) {
   var replacement = element.data('disable-with')
 
   if (replacement !== undefined) {
@@ -19,7 +41,7 @@ export function disableLinkElement(element) {
 }
 
 // Restore element to its original state which was disabled by 'disableLinkElement' above
-export function enableLinkElement(element) {
+function enableLinkElement(element) {
   if (element.data('ujs:enable-with') !== undefined) {
     element.html(element.data('ujs:enable-with')) // set to old enabled state
     element.removeData('ujs:enable-with') // clean up cache
@@ -33,13 +55,13 @@ export function enableLinkElement(element) {
   - Replaces element text with value of 'data-disable-with' attribute
   - Sets disabled property to true
 */
-export function disableFormElements(form) {
+function disableFormElements(form) {
   formElements(form, config.formDisableSelector).each(function() {
     disableFormElement($(this))
   })
 }
 
-export function disableFormElement(element) {
+function disableFormElement(element) {
   var method, replacement
 
   method = element.is('button') ? 'html' : 'val'
@@ -58,13 +80,13 @@ export function disableFormElement(element) {
   - Replaces element text with cached value from 'ujs:enable-with' data store (created in `disableFormElements`)
   - Sets disabled property to false
 */
-export function enableFormElements(form) {
+function enableFormElements(form) {
   formElements(form, config.formEnableSelector).each(function() {
     enableFormElement($(this))
   })
 }
 
-export function enableFormElement(element) {
+function enableFormElement(element) {
   var method = element.is('button') ? 'html' : 'val'
   if (element.data('ujs:enable-with') !== undefined) {
     element[method](element.data('ujs:enable-with'))

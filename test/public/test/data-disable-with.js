@@ -100,9 +100,6 @@ asyncTest('form input[type=submit][data-disable-with] disables', 6, function() {
 
   App.checkEnabledState(input, 'Submit')
 
-  // WEEIRDD: attaching this handler makes the test work in IE7
-  $(document).bind('iframe:loading', function(e, form) {})
-
   $(document).bind('iframe:loaded', function(e, data) {
     setTimeout(function() {
       App.checkDisabledState(input, 'submitting ...')
@@ -125,7 +122,7 @@ test('form input[type=submit][data-disable-with] re-enables when `pageshow` even
   // state after going back on firefox after submitting a form.
   //
   // See https://github.com/rails/jquery-ujs/issues/357
-  $.rails.disableFormElements(form)
+  $.rails.disableElement(form)
 
   App.checkDisabledState(input, 'submitting ...')
 
@@ -165,9 +162,6 @@ asyncTest('form[data-remote] input[data-disable-with] is replaced with disabled 
 asyncTest('form input[type=submit][data-disable-with] using "form" attribute disables', 6, function() {
   var form = $('#not_remote'), input = $('input[form=not_remote]')
   App.checkEnabledState(input, 'Form Attr Submit')
-
-  // WEEIRDD: attaching this handler makes the test work in IE7
-  $(document).bind('iframe:loading', function(e, form) {})
 
   $(document).bind('iframe:loaded', function(e, data) {
     setTimeout(function() {

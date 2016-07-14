@@ -13,7 +13,7 @@ import { fire, stopEverything } from './utils/event'
 import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
 import { blankInputs, nonBlankInputs } from './utils/form'
 import { href, ajax } from './utils/ajax'
-import { enableLinkElement, disableLinkElement, enableFormElement, disableFormElement, enableFormElements, disableFormElements } from './features/disable'
+import { enableElement, disableElement } from './features/disable'
 import { setup as setupConfirm } from './features/confirm'
 import { isRemote, handleRemote } from './features/remote'
 import { setup as setupMethod } from './features/method'
@@ -25,7 +25,7 @@ if ( $.rails !== undefined ) {
 }
 
 // For backward compatibility
-$.rails = Object.assign({ disableFormElements, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax }, config)
+$.rails = Object.assign({ disableElement, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax }, config)
 
 // Shorthand to make it a little easier to call public rails functions from within js
 var $document = $(document)
@@ -50,7 +50,7 @@ if (fire($document, 'rails:attachBindings')) {
       var element = $(this)
 
       if (element.data('ujs:disabled')) {
-        enableFormElement(element)
+        enableElement(element)
       }
     })
 
@@ -58,23 +58,23 @@ if (fire($document, 'rails:attachBindings')) {
       var element = $(this)
 
       if (element.data('ujs:disabled')) {
-        enableLinkElement(element)
+        enableElement(element)
       }
     })
   })
 
   $document.delegate(config.linkDisableSelector, 'ajax:complete', function() {
-    enableLinkElement($(this))
+    enableElement($(this))
   })
 
   $document.delegate(config.buttonDisableSelector, 'ajax:complete', function() {
-    enableFormElement($(this))
+    enableElement($(this))
   })
 
   $document.delegate(config.linkClickSelector, 'click.rails', function(e) {
     var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey
 
-    if (!metaClick && link.is(config.linkDisableSelector)) disableLinkElement(link)
+    if (!metaClick) disableElement(link)
 
     if (isRemote(link)) {
       if (metaClick && (!method || method === 'GET') && !data) { return true }
@@ -82,13 +82,12 @@ if (fire($document, 'rails:attachBindings')) {
       var handleResult = handleRemote(link)
       // Response from handleRemote() will either be false or a deferred object promise.
       if (handleResult === false) {
-        enableLinkElement(link)
+        enableElement(link)
       } else {
-        handleResult.fail( function() { enableLinkElement(link) } )
+        handleResult.fail( function() { enableElement(link) } )
       }
       return stopEverything(e)
     }
-    return false
   })
 
   setupMethod(config.linkClickSelector, 'click.rails')
@@ -98,14 +97,14 @@ if (fire($document, 'rails:attachBindings')) {
 
     if (!isRemote(button)) return stopEverything(e)
 
-    if (button.is(config.buttonDisableSelector)) disableFormElement(button)
+    disableElement(button)
 
     var handleResult = handleRemote(button)
     // Response from handleRemote() will either be false or a deferred object promise.
     if (handleResult === false) {
-      enableFormElement(button)
+      enableElement(button)
     } else {
-      handleResult.fail( function() { enableFormElement(button) } )
+      handleResult.fail( function() { enableElement(button) } )
     }
     return false
   })
@@ -143,11 +142,11 @@ if (fire($document, 'rails:attachBindings')) {
       if (nonBlankFileInputs) {
         // Slight timeout so that the submit button gets properly serialized
         // (make it easy for event handler to serialize form without disabled values)
-        setTimeout(function() { disableFormElements(form) }, 13)
+        setTimeout(function() { disableElement(form) }, 13)
         var aborted = fire(form, 'ajax:aborted:file', [nonBlankFileInputs])
 
         // Re-enable form elements if event bindings return false (canceling normal form submission)
-        if (!aborted) { setTimeout(function() { enableFormElements(form) }, 13) }
+        if (!aborted) { setTimeout(function() { enableElement(form) }, 13) }
 
         return aborted
       }
@@ -157,7 +156,7 @@ if (fire($document, 'rails:attachBindings')) {
 
     } else {
       // Slight timeout so that the submit button gets properly serialized
-      setTimeout(function() { disableFormElements(form) }, 13)
+      setTimeout(function() { disableElement(form) }, 13)
     }
   })
 
@@ -181,11 +180,11 @@ if (fire($document, 'rails:attachBindings')) {
   })
 
   $document.delegate(config.formSubmitSelector, 'ajax:send.rails', function(event) {
-    if (this === event.target) disableFormElements($(this))
+    if (this === event.target) disableElement($(this))
   })
 
   $document.delegate(config.formSubmitSelector, 'ajax:complete.rails', function(event) {
-    if (this === event.target) enableFormElements($(this))
+    if (this === event.target) enableElement($(this))
   })
 
   $(function() {
