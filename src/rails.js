@@ -14,9 +14,9 @@ import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils
 import { blankInputs, nonBlankInputs } from './utils/form'
 import { href, ajax } from './utils/ajax'
 import { enableElement, disableElement } from './features/disable'
-import { setup as setupConfirm } from './features/confirm'
+import { handleConfirm } from './features/confirm'
 import { isRemote, handleRemote } from './features/remote'
-import { setup as setupMethod } from './features/method'
+import { handleMethod } from './features/method'
 
 // Cut down on the number of issues from people inadvertently including jquery_ujs twice
 // by detecting and raising an error when it happens.
@@ -34,11 +34,11 @@ if (fire($document, 'rails:attachBindings')) {
 
   $.ajaxPrefilter(function(options, originalOptions, xhr) { if ( !options.crossDomain ) { CSRFProtection(xhr) }})
 
-  setupConfirm(config.linkClickSelector, 'click.rails')
-  setupConfirm(config.buttonClickSelector, 'click.rails')
-  setupConfirm(config.inputChangeSelector, 'change.rails')
-  setupConfirm(config.formSubmitSelector, 'submit.rails')
-  setupConfirm(config.formInputClickSelector, 'click.rails')
+  $document.delegate(config.linkClickSelector, 'click.rails', handleConfirm)
+  $document.delegate(config.buttonClickSelector, 'click.rails', handleConfirm)
+  $document.delegate(config.inputChangeSelector, 'change.rails', handleConfirm)
+  $document.delegate(config.formSubmitSelector, 'submit.rails', handleConfirm)
+  $document.delegate(config.formInputClickSelector, 'click.rails', handleConfirm)
 
   // This event works the same as the load event, except that it fires every
   // time the page is loaded.
@@ -90,7 +90,7 @@ if (fire($document, 'rails:attachBindings')) {
     }
   })
 
-  setupMethod(config.linkClickSelector, 'click.rails')
+  $document.delegate(config.linkClickSelector, 'click.rails', handleMethod)
 
   $document.delegate(config.buttonClickSelector, 'click.rails', function(e) {
     var button = $(this)

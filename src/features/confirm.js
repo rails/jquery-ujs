@@ -1,9 +1,9 @@
 import { fire, stopEverything } from '../utils/event'
 
-export function setup(selector, event) {
-  $(document).delegate(selector, event, e => {
-    if (!allowAction($(e.target))) return stopEverything(e)
-  })
+export function handleConfirm(e) {
+  if (!allowAction($(e.target))) {
+    return stopEverything(e)
+  }
 }
 
 // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
