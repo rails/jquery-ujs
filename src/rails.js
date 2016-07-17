@@ -67,7 +67,15 @@ if (fire($document, 'rails:attachBindings')) {
     enableElement($(this))
   })
 
+  $document.delegate(config.linkDisableSelector, 'ajax:stopped', function() {
+    enableElement($(this))
+  })
+
   $document.delegate(config.buttonDisableSelector, 'ajax:complete', function() {
+    enableElement($(this))
+  })
+
+  $document.delegate(config.buttonDisableSelector, 'ajax:stopped', function() {
     enableElement($(this))
   })
 
@@ -79,13 +87,7 @@ if (fire($document, 'rails:attachBindings')) {
     if (isRemote(link)) {
       if (metaClick && (!method || method === 'GET') && !data) { return true }
 
-      var handleResult = handleRemote(link)
-      // Response from handleRemote() will either be false or a deferred object promise.
-      if (handleResult === false) {
-        enableElement(link)
-      } else {
-        handleResult.fail( function() { enableElement(link) } )
-      }
+      handleRemote(link)
       return stopEverything(e)
     }
   })
@@ -98,14 +100,7 @@ if (fire($document, 'rails:attachBindings')) {
     if (!isRemote(button)) return stopEverything(e)
 
     disableElement(button)
-
-    var handleResult = handleRemote(button)
-    // Response from handleRemote() will either be false or a deferred object promise.
-    if (handleResult === false) {
-      enableElement(button)
-    } else {
-      handleResult.fail( function() { enableElement(button) } )
-    }
+    handleRemote(button)
     return false
   })
 
