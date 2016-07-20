@@ -4,7 +4,7 @@ import { ajax, href, isCrossDomain } from '../utils/ajax'
 import { blankInputs } from '../utils/form'
 
 // Checks "data-remote" if true to handle the request through a XHR request.
-export function isRemote(element) {
+function isRemote(element) {
   return element.data('remote') !== undefined && element.data('remote') !== false
 }
 
