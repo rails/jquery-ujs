@@ -11,6 +11,8 @@ export function isRemote(element) {
 export function handleRemote(element) {
   var method, url, data, withCredentials, dataType, options
 
+  if (!isRemote(element)) return false
+
   if (!fire(element, 'ajax:before')) {
     fire(element, 'ajax:stopped')
     return false

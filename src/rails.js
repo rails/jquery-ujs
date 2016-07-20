@@ -80,14 +80,15 @@ if (fire($document, 'rails:attachBindings')) {
   })
 
   $document.delegate(config.linkClickSelector, 'click.rails', function(e) {
-    var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey
+    var link = $(this),
+        method = link.data('method'),
+        data = link.data('params'),
+        metaClick = e.metaKey || e.ctrlKey
 
-    if (!metaClick) disableElement(link)
+    if (metaClick && (!method || method === 'GET') && !data) { return true }
 
-    if (isRemote(link)) {
-      if (metaClick && (!method || method === 'GET') && !data) { return true }
-
-      handleRemote(link)
+    disableElement(link)
+    if (handleRemote(link)) {
       return stopEverything(e)
     }
   })
@@ -95,21 +96,16 @@ if (fire($document, 'rails:attachBindings')) {
   $document.delegate(config.linkClickSelector, 'click.rails', handleMethod)
 
   $document.delegate(config.buttonClickSelector, 'click.rails', function(e) {
-    var button = $(this)
-
-    if (!isRemote(button)) return stopEverything(e)
+    var button = $(e.target)
 
     disableElement(button)
     handleRemote(button)
-    return false
   })
 
   $document.delegate(config.inputChangeSelector, 'change.rails', function(e) {
-    var link = $(this)
-    if (!isRemote(link)) return stopEverything(e)
+    var link = $(e.target)
 
     handleRemote(link)
-    return false
   })
 
   $document.delegate(config.formSubmitSelector, 'submit.rails', function(e) {
