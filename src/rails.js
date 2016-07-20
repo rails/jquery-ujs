@@ -62,21 +62,10 @@ if (fire($document, 'rails:attachBindings')) {
     })
   })
 
-  $document.delegate(config.linkDisableSelector, 'ajax:complete', function() {
-    enableElement($(this))
-  })
-
-  $document.delegate(config.linkDisableSelector, 'ajax:stopped', function() {
-    enableElement($(this))
-  })
-
-  $document.delegate(config.buttonDisableSelector, 'ajax:complete', function() {
-    enableElement($(this))
-  })
-
-  $document.delegate(config.buttonDisableSelector, 'ajax:stopped', function() {
-    enableElement($(this))
-  })
+  $document.delegate(config.linkDisableSelector, 'ajax:complete', enableElement)
+  $document.delegate(config.linkDisableSelector, 'ajax:stopped', enableElement)
+  $document.delegate(config.buttonDisableSelector, 'ajax:complete', enableElement)
+  $document.delegate(config.buttonDisableSelector, 'ajax:stopped', enableElement)
 
   $document.delegate(config.linkClickSelector, 'click.rails', function(e) {
     var link = $(this),
@@ -84,48 +73,32 @@ if (fire($document, 'rails:attachBindings')) {
         data = link.data('params'),
         metaClick = e.metaKey || e.ctrlKey
 
-    if (metaClick && (!method || method === 'GET') && !data) { return true }
-
-    disableElement(link)
-    return handleRemote(e)
+    if (metaClick && (!method || method === 'GET') && !data) {
+      e.stopImmediatePropagation()
+      return true
+    }
   })
-
+  $document.delegate(config.linkClickSelector, 'click.rails', disableElement)
+  $document.delegate(config.linkClickSelector, 'click.rails', handleRemote)
   $document.delegate(config.linkClickSelector, 'click.rails', handleMethod)
 
-  $document.delegate(config.buttonClickSelector, 'click.rails', function(e) {
-    var button = $(e.target)
+  $document.delegate(config.buttonClickSelector, 'click.rails', disableElement)
+  $document.delegate(config.buttonClickSelector, 'click.rails', handleRemote)
 
-    disableElement(button)
-    return handleRemote(e)
-  })
+  $document.delegate(config.inputChangeSelector, 'change.rails', handleRemote)
 
-  $document.delegate(config.inputChangeSelector, 'change.rails', function(e) {
-    return handleRemote(e)
-  })
-
+  $document.delegate(config.formSubmitSelector, 'submit.rails', validateForm)
+  $document.delegate(config.formSubmitSelector, 'submit.rails', handleRemote)
   $document.delegate(config.formSubmitSelector, 'submit.rails', function(e) {
-    var form = $(this)
-
-    if (validateForm(e) === false) {
-      return false
-    }
-    if (handleRemote(e) === false) {
-      return false
-    }
     // Normal mode submit
     // Slight timeout so that the submit button gets properly serialized
-    setTimeout(function() { disableElement(form) }, 13)
+    setTimeout(function() { disableElement(e) }, 13)
   })
+  $document.delegate(config.formSubmitSelector, 'ajax:send.rails', disableElement)
+  $document.delegate(config.formSubmitSelector, 'ajax:complete.rails', enableElement)
 
   $document.delegate(config.formInputClickSelector, 'click.rails', formSubmitButtonClick)
 
-  $document.delegate(config.formSubmitSelector, 'ajax:send.rails', function(event) {
-    if (this === event.target) disableElement($(this))
-  })
-
-  $document.delegate(config.formSubmitSelector, 'ajax:complete.rails', function(event) {
-    if (this === event.target) enableElement($(this))
-  })
 
   $(function() {
     refreshCSRFTokens()

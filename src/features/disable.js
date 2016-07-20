@@ -3,7 +3,9 @@ import { stopEverything } from '../utils/event'
 import { formElements } from '../utils/form'
 
 // Unified function to enable an element (link, button and form)
-export function enableElement(element) {
+export function enableElement(e) {
+  let element = e.target ? $(e.target) : e
+
   if (element.is(config.linkDisableSelector)) {
     enableLinkElement(element)
   } else if (element.is(config.buttonDisableSelector) || element.is(config.formEnableSelector)) {
@@ -14,7 +16,9 @@ export function enableElement(element) {
 }
 
 // Unified function to disable an element (link, button and form)
-export function disableElement(element) {
+export function disableElement(e) {
+  let element = e.target ? $(e.target) : e
+
   if (element.is(config.linkDisableSelector)) {
     disableLinkElement(element)
   } else if (element.is(config.buttonDisableSelector) || element.is(config.formDisableSelector)) {
