@@ -9,13 +9,12 @@
  */
 
 import config from './config'
-import { fire, stopEverything } from './utils/event'
+import { fire } from './utils/event'
 import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
-import { blankInputs, nonBlankInputs } from './utils/form'
 import { href, ajax } from './utils/ajax'
 import { enableElement, disableElement } from './features/disable'
 import { handleConfirm } from './features/confirm'
-import { isRemote, handleRemote } from './features/remote'
+import { handleRemote, validateForm, formSubmitButtonClick } from './features/remote'
 import { handleMethod } from './features/method'
 
 // Cut down on the number of issues from people inadvertently including jquery_ujs twice
@@ -88,9 +87,7 @@ if (fire($document, 'rails:attachBindings')) {
     if (metaClick && (!method || method === 'GET') && !data) { return true }
 
     disableElement(link)
-    if (handleRemote(link)) {
-      return stopEverything(e)
-    }
+    return handleRemote(e)
   })
 
   $document.delegate(config.linkClickSelector, 'click.rails', handleMethod)
@@ -99,76 +96,28 @@ if (fire($document, 'rails:attachBindings')) {
     var button = $(e.target)
 
     disableElement(button)
-    handleRemote(button)
+    return handleRemote(e)
   })
 
   $document.delegate(config.inputChangeSelector, 'change.rails', function(e) {
-    var link = $(e.target)
-
-    handleRemote(link)
+    return handleRemote(e)
   })
 
   $document.delegate(config.formSubmitSelector, 'submit.rails', function(e) {
-    var form = $(this),
-        remote = isRemote(form),
-        blankRequiredInputs,
-        nonBlankFileInputs
+    var form = $(this)
 
-    // Skip other logic when required values are missing or file upload is present
-    if (form.attr('novalidate') === undefined) {
-      if (form.data('ujs:formnovalidate-button') === undefined) {
-        blankRequiredInputs = blankInputs(form, config.requiredInputSelector, false)
-        if (blankRequiredInputs && fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
-          return stopEverything(e)
-        }
-      } else {
-        // Clear the formnovalidate in case the next button click is not on a formnovalidate button
-        // Not strictly necessary to do here, since it is also reset on each button click, but just to be certain
-        form.data('ujs:formnovalidate-button', undefined)
-      }
-    }
-
-    if (remote) {
-      nonBlankFileInputs = nonBlankInputs(form, config.fileInputSelector)
-      if (nonBlankFileInputs) {
-        // Slight timeout so that the submit button gets properly serialized
-        // (make it easy for event handler to serialize form without disabled values)
-        setTimeout(function() { disableElement(form) }, 13)
-        var aborted = fire(form, 'ajax:aborted:file', [nonBlankFileInputs])
-
-        // Re-enable form elements if event bindings return false (canceling normal form submission)
-        if (!aborted) { setTimeout(function() { enableElement(form) }, 13) }
-
-        return aborted
-      }
-
-      handleRemote(form)
+    if (validateForm(e) === false) {
       return false
-
-    } else {
-      // Slight timeout so that the submit button gets properly serialized
-      setTimeout(function() { disableElement(form) }, 13)
     }
+    if (handleRemote(e) === false) {
+      return false
+    }
+    // Normal mode submit
+    // Slight timeout so that the submit button gets properly serialized
+    setTimeout(function() { disableElement(form) }, 13)
   })
 
-  $document.delegate(config.formInputClickSelector, 'click.rails', function() {
-    var button = $(this)
-
-    // Register the pressed submit button
-    var name = button.attr('name'),
-        data = name ? {name: name, value: button.val()} : null
-
-    var form = button.closest('form')
-    if (form.length === 0) {
-      form = $('#' + button.attr('form'))
-    }
-    form.data('ujs:submit-button', data)
-
-    // Save attributes from button
-    form.data('ujs:formnovalidate-button', button.attr('formnovalidate'))
-    form.data('ujs:submit-button-formaction', button.attr('formaction'))
-    form.data('ujs:submit-button-formmethod', button.attr('formmethod'))
-  })
+  $document.delegate(config.formInputClickSelector, 'click.rails', formSubmitButtonClick)
 
   $document.delegate(config.formSubmitSelector, 'ajax:send.rails', function(event) {
     if (this === event.target) disableElement($(this))

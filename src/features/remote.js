@@ -1,6 +1,7 @@
 import config from '../config'
-import { fire } from '../utils/event'
+import { fire, stopEverything } from '../utils/event'
 import { ajax, href, isCrossDomain } from '../utils/ajax'
+import { blankInputs } from '../utils/form'
 
 // Checks "data-remote" if true to handle the request through a XHR request.
 export function isRemote(element) {
@@ -8,10 +9,10 @@ export function isRemote(element) {
 }
 
 // Submits "remote" forms and links with ajax
-export function handleRemote(element) {
-  var method, url, data, withCredentials, dataType, options
+export function handleRemote(e) {
+  var element = $(e.target), method, url, data, withCredentials, dataType, options
 
-  if (!isRemote(element)) return false
+  if (!isRemote(element)) return true
 
   if (!fire(element, 'ajax:before')) {
     fire(element, 'ajax:stopped')
@@ -88,5 +89,45 @@ export function handleRemote(element) {
     options.url = url
   }
 
-  return ajax(options)
+  ajax(options)
+  return stopEverything(e)
+}
+
+// Check whether any required fields are empty
+// In both ajax mode and normal mode
+export function validateForm(e) {
+  var form = $(e.target), blankRequiredInputs
+
+  // Skip other logic when required values are missing or file upload is present
+  if (form.attr('novalidate') === undefined) {
+    if (form.data('ujs:formnovalidate-button') === undefined) {
+      blankRequiredInputs = blankInputs(form, config.requiredInputSelector, false)
+      if (blankRequiredInputs && fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
+        return stopEverything(e)
+      }
+    } else {
+      // Clear the formnovalidate in case the next button click is not on a formnovalidate button
+      // Not strictly necessary to do here, since it is also reset on each button click, but just to be certain
+      form.data('ujs:formnovalidate-button', undefined)
+    }
+  }
+}
+
+export function formSubmitButtonClick(e) {
+  var button = $(e.target)
+
+  // Register the pressed submit button
+  var name = button.attr('name'),
+      data = name ? {name: name, value: button.val()} : null
+
+  var form = button.closest('form')
+  if (form.length === 0) {
+    form = $('#' + button.attr('form'))
+  }
+  form.data('ujs:submit-button', data)
+
+  // Save attributes from button
+  form.data('ujs:formnovalidate-button', button.attr('formnovalidate'))
+  form.data('ujs:submit-button-formaction', button.attr('formaction'))
+  form.data('ujs:submit-button-formmethod', button.attr('formmethod'))
 }
