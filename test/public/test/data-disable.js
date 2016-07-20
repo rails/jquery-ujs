@@ -75,7 +75,7 @@ asyncTest('form input[type=submit][data-disable] disables', 6, function() {
   App.checkEnabledState(input, 'Submit')
 
   // WEEIRDD: attaching this handler makes the test work in IE7
-  $(document).bind('iframe:loading', function(e, form) {})
+  $(document).bind('iframe:loading', function(e, f) {})
 
   $(document).bind('iframe:loaded', function(e, data) {
     setTimeout(function() {
