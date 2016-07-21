@@ -61,8 +61,8 @@ function enableLinkElement(element) {
   - Sets disabled property to true
 */
 function disableFormElements(form) {
-  formElements(form, config.formDisableSelector).each(function() {
-    disableFormElement(this)
+  formElements(form, config.formDisableSelector).forEach(function(el) {
+    disableFormElement(el)
   })
 }
 
@@ -88,8 +88,8 @@ function disableFormElement(element) {
   - Sets disabled property to false
 */
 function enableFormElements(form) {
-  formElements(form, config.formEnableSelector).each(function() {
-    enableFormElement(this)
+  formElements(form, config.formEnableSelector).forEach(function(el) {
+    enableFormElement(el)
   })
 }
 

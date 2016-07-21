@@ -120,6 +120,7 @@ asyncTest('blank required form input field should abort request and trigger "aja
       ok(false, 'ajax:beforeSend should not run')
     })
     .bind('ajax:aborted:required', function(e, data) {
+      data = $(data)
       ok(data.length == 2, 'ajax:aborted:required event is passed all blank required inputs (jQuery objects)')
       ok(data.first().is('input[name="user_name"]'), 'ajax:aborted:required adds blank required input to data')
       ok(data.last().is('textarea[name="user_bio"]'), 'ajax:aborted:required adds blank required textarea to data')
@@ -237,13 +238,18 @@ asyncTest('unchecked required checkbox should abort form submission', 1, functio
   }, 13)
 })
 
-asyncTest('unchecked required radio should abort form submission', 1, function() {
+asyncTest('unchecked required radio should abort form submission', 3, function() {
   var form = $('form[data-remote]')
     .append($('<input type="radio" name="yes_no_none" required="required" value=1>'))
     .append($('<input type="radio" name="yes_no_none" required="required" value=2>'))
     .removeAttr('data-remote')
     .bind('ujs:everythingStopped', function() {
       ok(true, 'ujs:everythingStopped should run')
+    })
+    .bind('ajax:aborted:required', function(e, data) {
+      data = $(data)
+      equal(data.length, 2, 'blankRequiredInputs should include both radios')
+      ok(data.first().is('input[type=radio][value=1]'), 'blankRequiredInputs[0] should be the first radio')
     })
     .trigger('submit')
 
