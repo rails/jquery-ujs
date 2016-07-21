@@ -1,29 +1,30 @@
 import config from '../config'
 import { stopEverything } from '../utils/event'
 import { formElements } from '../utils/form'
+import { matches, getData, setData } from '../utils/dom'
 
 // Unified function to enable an element (link, button and form)
 export function enableElement(e) {
-  let element = e.target ? $(e.target) : e
+  let element = e.target ? e.target : e
 
-  if (element.is(config.linkDisableSelector)) {
+  if (matches(element, config.linkDisableSelector)) {
     enableLinkElement(element)
-  } else if (element.is(config.buttonDisableSelector) || element.is(config.formEnableSelector)) {
+  } else if (matches(element, config.buttonDisableSelector) || matches(element, config.formEnableSelector)) {
     enableFormElement(element)
-  } else if (element.is(config.formSubmitSelector)) {
+  } else if (matches(element, config.formSubmitSelector)) {
     enableFormElements(element)
   }
 }
 
 // Unified function to disable an element (link, button and form)
 export function disableElement(e) {
-  let element = e.target ? $(e.target) : e
+  let element = e.target ? e.target : e
 
-  if (element.is(config.linkDisableSelector)) {
+  if (matches(element, config.linkDisableSelector)) {
     disableLinkElement(element)
-  } else if (element.is(config.buttonDisableSelector) || element.is(config.formDisableSelector)) {
+  } else if (matches(element, config.buttonDisableSelector) || matches(element, config.formDisableSelector)) {
     disableFormElement(element)
-  } else if (element.is(config.formSubmitSelector)) {
+  } else if (matches(element, config.formSubmitSelector)) {
     disableFormElements(element)
   }
 }
@@ -31,27 +32,27 @@ export function disableElement(e) {
 //  Replace element's html with the 'data-disable-with' after storing original html
 //  and prevent clicking on it
 function disableLinkElement(element) {
-  var replacement = element.data('disable-with')
+  var replacement = element.getAttribute('data-disable-with')
 
-  if (replacement !== undefined) {
-    element.data('ujs:enable-with', element.html()) // store enabled state
-    element.html(replacement)
+  if (replacement != null) {
+    setData(element, 'ujs:enable-with', element.innerHTML) // store enabled state
+    element.innerHTML = replacement
   }
 
-  element.bind('click.railsDisable', function(e) { // prevent further clicking
+  $(element).bind('click.railsDisable', function(e) { // prevent further clicking
     return stopEverything(e)
   })
-  element.data('ujs:disabled', true)
+  setData(element, 'ujs:disabled', true)
 }
 
 // Restore element to its original state which was disabled by 'disableLinkElement' above
 function enableLinkElement(element) {
-  if (element.data('ujs:enable-with') !== undefined) {
-    element.html(element.data('ujs:enable-with')) // set to old enabled state
-    element.removeData('ujs:enable-with') // clean up cache
+  if (getData(element, 'ujs:enable-with') != null) {
+    element.innerHTML = getData(element, 'ujs:enable-with') // set to old enabled state
+    setData(element, 'ujs:enable-with', null) // clean up cache
   }
-  element.unbind('click.railsDisable') // enable element
-  element.removeData('ujs:disabled')
+  $(element).unbind('click.railsDisable') // enable element
+  setData(element, 'ujs:disabled', null)
 }
 
 /* Disables form elements:
@@ -61,23 +62,25 @@ function enableLinkElement(element) {
 */
 function disableFormElements(form) {
   formElements(form, config.formDisableSelector).each(function() {
-    disableFormElement($(this))
+    disableFormElement(this)
   })
 }
 
 function disableFormElement(element) {
-  var method, replacement
+  let replacement = element.getAttribute('data-disable-with')
 
-  method = element.is('button') ? 'html' : 'val'
-  replacement = element.data('disable-with')
-
-  if (replacement !== undefined) {
-    element.data('ujs:enable-with', element[method]())
-    element[method](replacement)
+  if (replacement != null) {
+    if (matches(element, 'button')) {
+      setData(element, 'ujs:enable-with', element.innerHTML)
+      element.innerHTML = replacement
+    } else {
+      setData(element, 'ujs:enable-with', element.value)
+      element.value = replacement
+    }
   }
 
-  element.prop('disabled', true)
-  element.data('ujs:disabled', true)
+  element.disabled = true
+  setData(element, 'ujs:disabled', true)
 }
 
 /* Re-enables disabled form elements:
@@ -86,16 +89,21 @@ function disableFormElement(element) {
 */
 function enableFormElements(form) {
   formElements(form, config.formEnableSelector).each(function() {
-    enableFormElement($(this))
+    enableFormElement(this)
   })
 }
 
 function enableFormElement(element) {
-  var method = element.is('button') ? 'html' : 'val'
-  if (element.data('ujs:enable-with') !== undefined) {
-    element[method](element.data('ujs:enable-with'))
-    element.removeData('ujs:enable-with') // clean up cache
+  let originalText = getData(element, 'ujs:enable-with')
+
+  if (originalText != null) {
+    if (matches(element, 'button')) {
+      element.innerHTML = originalText
+    } else {
+      element.value = originalText
+    }
+    setData(element, 'ujs:enable-with', null) // clean up cache
   }
-  element.prop('disabled', false)
-  element.removeData('ujs:disabled')
+  element.disabled = false
+  setData(element, 'ujs:disabled', null)
 }

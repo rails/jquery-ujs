@@ -1,7 +1,7 @@
 // Triggers an event on an element and returns false if the event result is false
 export function fire(obj, name, data) {
   var event = $.Event(name)
-  obj.trigger(event, data)
+  $(obj).trigger(event, data)
   return event.result !== false
 }
 

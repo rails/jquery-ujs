@@ -10,6 +10,7 @@
 
 import config from './config'
 import { fire } from './utils/event'
+import { getData } from './utils/dom'
 import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
 import { href, ajax } from './utils/ajax'
 import { enableElement, disableElement } from './features/disable'
@@ -24,7 +25,7 @@ if ( $.rails !== undefined ) {
 }
 
 // For backward compatibility
-$.rails = Object.assign({ disableElement, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax }, config)
+$.rails = Object.assign({ disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax }, config)
 
 // Shorthand to make it a little easier to call public rails functions from within js
 var $document = $(document)
@@ -46,18 +47,14 @@ if (fire($document, 'rails:attachBindings')) {
   // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
   $(window).on('pageshow.rails', function() {
     $(config.formEnableSelector).each(function() {
-      var element = $(this)
-
-      if (element.data('ujs:disabled')) {
-        enableElement(element)
+      if (getData(this, 'ujs:disabled')) {
+        enableElement(this)
       }
     })
 
     $(config.linkDisableSelector).each(function() {
-      var element = $(this)
-
-      if (element.data('ujs:disabled')) {
-        enableElement(element)
+      if (getData(this, 'ujs:disabled')) {
+        enableElement(this)
       }
     })
   })

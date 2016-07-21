@@ -2,7 +2,7 @@
 // If form is actually a "form" element this will return associated elements outside the from that have
 // the html form attribute set
 export function formElements(form, selector) {
-  return form.is('form') ? $(form[0].elements).filter(selector) : form.find(selector)
+  return $(form).is('form') ? $(form.elements).filter(selector) : $(form).find(selector)
 }
 
 // Helper function which checks for blank inputs in a form that match the specified CSS selector

@@ -122,7 +122,7 @@ test('form input[type=submit][data-disable-with] re-enables when `pageshow` even
   // state after going back on firefox after submitting a form.
   //
   // See https://github.com/rails/jquery-ujs/issues/357
-  $.rails.disableElement(form)
+  $.rails.disableElement(form[0])
 
   App.checkDisabledState(input, 'submitting ...')
 
