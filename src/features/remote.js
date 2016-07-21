@@ -46,7 +46,7 @@ export function handleRemote(e) {
     if (element.data('params')) data = data + '&' + element.data('params')
   } else {
     method = element.data('method')
-    url = href(element)
+    url = href(element[0])
     data = element.data('params') || null
   }
 

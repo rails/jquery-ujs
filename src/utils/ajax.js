@@ -5,7 +5,7 @@ export function ajax(options) {
 
 // Default way to get an element's href. May be overridden at $.rails.href.
 export function href(element) {
-  return element[0].href
+  return element.href
 }
 
 // Determines if the request is a cross domain request.

@@ -4,13 +4,12 @@ import * as ajax from '../utils/ajax'
 // Handles "data-method" on links such as:
 // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
 export function handleMethod(e) {
-  var link = $(e.target)
+  let link = e.target, method = link.getAttribute('data-method')
 
-  if (!link.data('method')) return
+  if (!method) return
 
-  var href = ajax.href(link),
-      method = link.data('method'),
-      target = link.attr('target'),
+  let href = ajax.href(link),
+      target = link.target,
       csrfToken = csrf.csrfToken(),
       csrfParam = csrf.csrfParam(),
       form = $('<form method="post" action="' + href + '"></form>'),
