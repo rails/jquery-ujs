@@ -7,6 +7,7 @@ export function formElements(form, selector) {
 
 // Helper function which checks for blank inputs in a form that match the specified CSS selector
 export function blankInputs(form, specifiedSelector, nonBlank) {
+  form = $(form)
   var foundInputs = $(),
       input,
       valueToCheck,

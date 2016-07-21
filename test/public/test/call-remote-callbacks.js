@@ -64,8 +64,7 @@ asyncTest('modifying form fields with "ajax:before" sends modified data in reque
 asyncTest('modifying data("type") with "ajax:before" requests new dataType in request', 2, function() {
   $('form[data-remote]').data('type', 'html')
     .bind('ajax:before', function() {
-      var form = $(this)
-      form.data('type', 'xml')
+      this.setAttribute('data-type', 'xml')
     })
 
   submit(function(form) {
@@ -78,8 +77,7 @@ asyncTest('modifying data("type") with "ajax:before" requests new dataType in re
 asyncTest('setting data("with-credentials",true) with "ajax:before" uses new setting in request', 2, function() {
   $('form[data-remote]').data('with-credentials', false)
     .bind('ajax:before', function() {
-      var form = $(this)
-      form.data('with-credentials', true)
+      this.setAttribute('data-with-credentials', true)
     })
 
   submit(function(form) {
