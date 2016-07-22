@@ -19,8 +19,13 @@ export function CSRFProtection(xhr) {
 // Make sure that all forms have actual up-to-date tokens (cached forms contain old ones)
 export function refreshCSRFTokens() {
   let token = csrfToken(),
-      inputs = document.querySelectorAll('form input[name="' + csrfParam() + '"]')
-  Array.prototype.forEach.call(inputs, input => {
-    input.value = token
-  })
+      param = csrfParam()
+
+  if (token && param) {
+    let inputs = document.querySelectorAll('form input[name="' + param + '"]')
+
+    Array.prototype.forEach.call(inputs, input => {
+      input.value = token
+    })
+  }
 }

@@ -9,20 +9,27 @@ export function handleMethod(e) {
   if (!method) return
 
   let href = ajax.href(link),
-      target = link.target,
       csrfToken = csrf.csrfToken(),
       csrfParam = csrf.csrfParam(),
-      form = $('<form method="post" action="' + href + '"></form>'),
-      metadataInput = '<input name="_method" value="' + method + '" type="hidden" />'
+      form = document.createElement('form'),
+      formContent = '<input name="_method" value="' + method + '" type="hidden" />'
 
-  if (csrfParam !== undefined && csrfToken !== undefined && !ajax.isCrossDomain(href)) {
-    metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />'
+  if (csrfParam && csrfToken && !ajax.isCrossDomain(href)) {
+    formContent += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />'
   }
 
-  if (target) { form.attr('target', target) }
+  // Must trigger submit by click on a button, else "submit" event handler won't work!
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit
+  formContent += '<input type="submit" />'
 
-  form.hide().append(metadataInput).appendTo('body')
-  form.submit()
+  form.method = 'post'
+  form.action = href
+  form.target = link.target
+  form.innerHTML = formContent
+  form.style.display = 'none'
+
+  document.body.appendChild(form)
+  form.querySelector('[type="submit"]').click()
 
   return false
 }

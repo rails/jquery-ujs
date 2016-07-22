@@ -47,7 +47,7 @@ $(document).bind('submit', function(e) {
     var form = $(e.target), action = form.attr('action'),
         name = 'form-frame' + jQuery.guid++,
         iframe = $('<iframe name="' + name + '" />'),
-        targetInput = '<input name="_target" value="' + form.attr('target') + '" type="hidden" />'
+        targetInput = '<input name="_target" value="' + (form.attr('target') || '') + '" type="hidden" />'
 
     if (action && action.indexOf('iframe') < 0) form.attr('action', action + '?iframe=true')
     form.attr('target', name).append(targetInput)
