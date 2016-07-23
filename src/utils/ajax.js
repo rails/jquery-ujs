@@ -1,7 +1,6 @@
 import { CSRFProtection } from './csrf'
 import { fire } from './event'
 
-// Default ajax function, may be overridden with custom function in $.rails.ajax
 const AcceptHeaders = {
   '*': '*/*',
   text: 'text/plain',
@@ -16,6 +15,7 @@ export function ajax(options) {
 
   // Prepare options
   options.type = options.type.toUpperCase()
+  // Use current page's url if no url provided
   if (!options.url) {
     // Get current location (the same way jQuery does)
     try {
@@ -35,6 +35,7 @@ export function ajax(options) {
       options.url += '?' + options.data
     }
   }
+  // Use "*" as default dataType
   if (!AcceptHeaders[options.dataType]) {
     options.dataType = '*'
   }
@@ -68,7 +69,7 @@ export function ajax(options) {
   // Call beforeSend hook
   if (options.beforeSend && options.beforeSend(httpRequest, options) === false) {
     httpRequest.abort()
-    fire(document, 'ajaxStop')
+    fire(document, 'ajaxStop') // to be compatible with jQuery.ajax
     return
   }
 
