@@ -12,23 +12,43 @@ const AcceptHeaders = {
 }
 
 export function ajax(options) {
-  let httpRequest = new XMLHttpRequest(),
-      method = options.type.toUpperCase(),
-      accept = options.dataType
+  let httpRequest = new XMLHttpRequest(), accept
 
-  // Append data to url if it's a GET request
-  if (method === 'GET' && options.data) {
-    options.url += '?' + options.data
+  // Prepare options
+  options.type = options.type.toUpperCase()
+  if (!options.url) {
+    // Get current location (the same way jQuery does)
+    try {
+      options.url = location.href
+    } catch(err) {
+      let a = document.createElement( 'a' )
+      a.href = ''
+      options.url = a.href
+    }
   }
-  if (!AcceptHeaders[accept]) {
-    accept = '*'
+  // If it's a GET request
+  // 1. strip query string (even if no content is submit)
+  // 2. append data to url
+  if (options.type === 'GET') {
+    options.url = options.url.replace(/\?.+$/, '')
+    if (options.data) {
+      options.url += '?' + options.data
+    }
+  }
+  if (!AcceptHeaders[options.dataType]) {
+    options.dataType = '*'
+  }
+  accept = AcceptHeaders[options.dataType]
+  if (options.dataType !== '*') {
+    accept += ', */*; q=0.01'
   }
 
-  httpRequest.open(method, options.url, true)
+  // Open and setup httpRequest
+  httpRequest.open(options.type, options.url, true)
 
-  httpRequest.setRequestHeader('Accept', AcceptHeaders[accept] + (accept === '*' ? '' : ', */*; q=0.01'))
+  httpRequest.setRequestHeader('Accept', accept)
   // Set Content-Type only when sending a string
-  // FormData will automatically set Content-Type to multipart/form-data
+  // Sending FormData will automatically set Content-Type to multipart/form-data
   if (typeof options.data === 'string') {
     httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
   }
@@ -61,11 +81,25 @@ function ajaxHandleResponses(httpRequest, success, error, complete) {
   let type = httpRequest.getResponseHeader('Content-Type'),
       response = httpRequest.response
 
-  if (typeof response === 'string' && type.match(/\bjson\b/)) {
-    try {
-      response = JSON.parse(response)
-    } catch (e) {
-      // pass
+  if (typeof response === 'string') {
+    if (type.match(/\bjson\b/)) {
+      try {
+        response = JSON.parse(response)
+      } catch (e) {
+        // pass
+      }
+    } else if (type.match(/\bjavascript\b/)) {
+      let script = document.createElement('script')
+      script.innerHTML = response
+      document.body.appendChild(script)
+    } else if (type.match(/\b(xml|html|svg)\b/)) {
+      let parser = new DOMParser()
+      type = type.replace(/;.+/, '') // remove something like ';charset=utf-8'
+      try {
+        response = parser.parseFromString(response, type)
+      } catch (e) {
+        // pass
+      }
     }
   }
   if (Math.floor(httpRequest.status / 100) === 2) {

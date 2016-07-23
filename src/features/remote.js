@@ -64,7 +64,7 @@ export function handleRemote(e) {
 
   options = {
     type: method || 'GET',
-    url: url || location.href,
+    url: url,
     data: data,
     dataType: dataType,
     // stopping the "ajax:beforeSend" event will cancel the ajax request

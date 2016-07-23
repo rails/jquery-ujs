@@ -91,6 +91,26 @@ asyncTest('prefer JS, but accept any format', 1, function() {
   })
 })
 
+asyncTest('JS code should be executed', 1, function() {
+  buildForm({ method: 'post', 'data-type': 'script' })
+
+  $('form').append('<input type="text" name="content_type" value="text/javascript">')
+  $('form').append('<input type="text" name="content" value="ok(true, \'remote code should be run\')">')
+
+  submit()
+})
+
+asyncTest('XML document should be parsed', 1, function() {
+  buildForm({ method: 'post', 'data-type': 'html' })
+
+  $('form').append('<input type="text" name="content_type" value="application/xml">')
+  $('form').append('<input type="text" name="content" value="<p>hello</p>">')
+
+  submit(function(e, data, status, xhr) {
+    ok(data instanceof Document, 'returned data should be a XML document')
+  })
+})
+
 asyncTest('accept application/json if "data-type" is json', 1, function() {
   buildForm({ method: 'post', 'data-type': 'json' })
 

@@ -57,7 +57,10 @@ end
   send(method, '/echo') {
     data = { :params => params }.update(request.env)
 
-    if request.xhr?
+    if params[:content_type] and params[:content]
+      content_type params[:content_type]
+      params[:content]
+    elsif request.xhr?
       content_type 'application/json'
       data.to_json
     elsif params[:iframe]
