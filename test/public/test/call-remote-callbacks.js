@@ -82,7 +82,7 @@ asyncTest('setting data("with-credentials",true) with "ajax:before" uses new set
 
   submit(function(form) {
     form.bind('ajax:beforeSend', function(e, xhr, settings) {
-      equal(settings.xhrFields && settings.xhrFields.withCredentials, true, 'setting modified in ajax:before should have forced withCredentials request')
+      equal(settings.withCredentials, true, 'setting modified in ajax:before should have forced withCredentials request')
     })
   })
 })
@@ -404,12 +404,12 @@ asyncTest('"ajax:beforeSend", "ajax:send", "ajax:success" and "ajax:complete" ar
     })
     form.bind('ajax:success', function(e, data, status, xhr) {
       ok(data.REQUEST_METHOD, 'first argument to ajax:success should be a data object')
-      equal(status, 'success', 'second argument to ajax:success should be a status string')
+      equal(status, 'OK', 'second argument to ajax:success should be a status string')
       ok(xhr.getResponseHeader, 'third argument to "ajax:success" should be an XHR object')
     })
     form.bind('ajax:complete', function(e, xhr, status) {
       ok(xhr.getResponseHeader, 'first argument to "ajax:complete" should be an XHR object')
-      equal(status, 'success', 'second argument to ajax:complete should be a status string')
+      equal(status, 'OK', 'second argument to ajax:complete should be a status string')
     })
   })
 })

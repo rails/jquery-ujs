@@ -87,7 +87,7 @@ asyncTest('prefer JS, but accept any format', 1, function() {
 
   submit(function(e, data, status, xhr) {
     var accept = data.HTTP_ACCEPT
-    ok(accept.indexOf('*/*;q=0.5, text/javascript, application/javascript') === 0, 'Accept: ' + accept)
+    ok(accept.match(/text\/javascript.+\*\/\*/), 'Accept: ' + accept)
   })
 })
 
@@ -117,7 +117,7 @@ asyncTest('allow empty form "action"', 1, function() {
       // Get current location (the same way jQuery does)
       try {
         currentLocation = location.href
-      } catch(e) {
+      } catch(err) {
         currentLocation = document.createElement( 'a' )
         currentLocation.href = ''
         currentLocation = currentLocation.href
@@ -155,7 +155,7 @@ asyncTest('intelligently guesses crossDomain behavior when target URL has a diff
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />')
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(e, xhr, settings) {
+    .bind('ajax:beforeSend', function(evt, req, settings) {
 
       equal(settings.crossDomain, true, 'crossDomain should be set to true')
 
@@ -174,7 +174,7 @@ asyncTest('intelligently guesses crossDomain behavior when target URL consists o
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />')
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(e, xhr, settings) {
+    .bind('ajax:beforeSend', function(evt, req, settings) {
 
       equal(settings.crossDomain, false, 'crossDomain should be set to false')
 

@@ -12,7 +12,7 @@ function isRemote(element) {
 
 // Submits "remote" forms and links with ajax
 export function handleRemote(e) {
-  var element = e.target, method, url, data, withCredentials, dataType, options
+  let element = e.target, method, url, data, withCredentials, dataType, options
 
   if (!isRemote(element)) return true
 
@@ -22,18 +22,28 @@ export function handleRemote(e) {
   }
 
   withCredentials = element.getAttribute('data-with-credentials')
-  dataType = element.getAttribute('data-type') || ($.ajaxSettings && $.ajaxSettings.dataType)
+  dataType = element.getAttribute('data-type') || 'script'
 
   if (matches(element, config.formSubmitSelector)) {
+    // memoized value from clicked submit button
+    let button = getData(element, 'ujs:submit-button')
+
     method = getData(element, 'ujs:submit-button-formmethod') || element.method
     url = getData(element, 'ujs:submit-button-formaction') || element.getAttribute('action')
-    data = $(element).serializeArray()
-    // memoized value from clicked submit button
-    var button = getData(element, 'ujs:submit-button')
-    if (button) {
-      data.push(button)
-      setData(element, 'ujs:submit-button', null)
+
+    if (element.enctype === 'multipart/form-data') {
+      data = new FormData(element)
+      if (button) {
+        data.append(button.name, button.value)
+      }
+    } else {
+      data = $(element).serializeArray()
+      if (button) {
+        data.push(button)
+      }
+      data = $.param(data)
     }
+    setData(element, 'ujs:submit-button', null)
     setData(element, 'ujs:submit-button-formmethod', null)
     setData(element, 'ujs:submit-button-formaction', null)
   } else if (matches(element, config.inputChangeSelector)) {
@@ -53,12 +63,12 @@ export function handleRemote(e) {
   }
 
   options = {
-    type: method || 'GET', data: data, dataType: dataType,
+    type: method || 'GET',
+    url: url || location.href,
+    data: data,
+    dataType: dataType,
     // stopping the "ajax:beforeSend" event will cancel the ajax request
     beforeSend: function(xhr, settings) {
-      if (settings.dataType === undefined) {
-        xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script)
-      }
       if (fire(element, 'ajax:beforeSend', [xhr, settings])) {
         fire(element, 'ajax:send', xhr)
       } else {
@@ -75,20 +85,8 @@ export function handleRemote(e) {
     error: function(...args) {
       fire(element, 'ajax:error', args)
     },
-    crossDomain: isCrossDomain(url)
-  }
-
-  // There is no withCredentials for IE6-8 when
-  // "Enable native XMLHTTP support" is disabled
-  if (withCredentials && withCredentials !== 'false') {
-    options.xhrFields = {
-      withCredentials: true
-    }
-  }
-
-  // Only pass url to `ajax` options if not blank
-  if (url) {
-    options.url = url
+    crossDomain: isCrossDomain(url),
+    withCredentials: withCredentials && withCredentials !== 'false'
   }
 
   ajax(options)
