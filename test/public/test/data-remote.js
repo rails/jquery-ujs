@@ -359,3 +359,29 @@ asyncTest('changing a select option with falsy "data-remote" attribute', 0, func
 
   setTimeout(function() { start() }, 20)
 })
+
+asyncTest('form should be serialized correctly', 6, function() {
+  $('form')
+    .append('<textarea name="textarea">textarea</textarea>')
+    .append('<input type="checkbox" name="checkbox[]" value="0" />')
+    .append('<input type="checkbox" checked="checked" name="checkbox[]" value="1" />')
+    .append('<input type="radio" checked="checked" name="radio" value="0" />')
+    .append('<input type="radio" name="radio" value="1" />')
+    .append('<select multiple="multiple" name="select[]">\
+      <option value="1" selected>1</option>\
+      <option value="2" selected>2</option>\
+      <option value="3">3</option>\
+      <option selected>4</option>\
+    </select>')
+    .bind('ajax:success', function(e, data, status, xhr) {
+      equal(data.params.checkbox.length, 1)
+      equal(data.params.checkbox[0], '1')
+      equal(data.params.radio, '0')
+      equal(data.params.select.length, 3)
+      equal(data.params.select[2], '4')
+      equal(data.params.textarea, 'textarea')
+
+      start()
+    })
+    .submit()
+})

@@ -107,7 +107,7 @@ asyncTest('XML document should be parsed', 1, function() {
   $('form').append('<input type="text" name="content" value="<p>hello</p>">')
 
   submit(function(e, data, status, xhr) {
-    ok(data instanceof Document, 'returned data should be a XML document')
+    ok(data instanceof Document, 'returned data should be an XML document')
   })
 })
 
@@ -168,7 +168,7 @@ asyncTest('sends CSRF token in custom header', 1, function() {
   })
 })
 
-asyncTest('intelligently guesses crossDomain behavior when target URL has a different protocol and/or hostname', 1, function(e, xhr) {
+asyncTest('intelligently guesses crossDomain behavior when target URL has a different protocol and/or hostname', 1, function() {
 
   // Don't set data-cross-domain here, just set action to be a different domain than localhost
   buildForm({ action: 'http://www.alfajango.com' })
@@ -187,7 +187,7 @@ asyncTest('intelligently guesses crossDomain behavior when target URL has a diff
   setTimeout(function() { start() }, 13)
 })
 
-asyncTest('intelligently guesses crossDomain behavior when target URL consists of only a path', 1, function(e, xhr) {
+asyncTest('intelligently guesses crossDomain behavior when target URL consists of only a path', 1, function() {
 
   // Don't set data-cross-domain here, just set action to be a different domain than localhost
   buildForm({ action: '/just/a/path' })
@@ -205,4 +205,5 @@ asyncTest('intelligently guesses crossDomain behavior when target URL consists o
 
   setTimeout(function() { start() }, 13)
 })
+
 })()
