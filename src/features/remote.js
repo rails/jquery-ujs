@@ -1,7 +1,7 @@
 import config from '../config'
 import { fire, stopEverything } from '../utils/event'
 import { ajax, href, isCrossDomain } from '../utils/ajax'
-import { blankInputs } from '../utils/form'
+import { blankInputs, serializeElement } from '../utils/form'
 import { matches, getData, setData } from '../utils/dom'
 
 // Checks "data-remote" if true to handle the request through a XHR request.
@@ -37,25 +37,15 @@ export function handleRemote(e) {
         data.append(button.name, button.value)
       }
     } else {
-      data = $(element).serializeArray()
-      if (button) {
-        data.push(button)
-      }
-      data = $.param(data)
+      data = serializeElement(element, button)
     }
     setData(element, 'ujs:submit-button', null)
     setData(element, 'ujs:submit-button-formmethod', null)
     setData(element, 'ujs:submit-button-formaction', null)
-  } else if (matches(element, config.inputChangeSelector)) {
+  } else if (matches(element, config.buttonClickSelector) || matches(element, config.inputChangeSelector)) {
     method = element.getAttribute('data-method')
     url = element.getAttribute('data-url')
-    data = $(element).serialize()
-    if (element.getAttribute('data-params')) data = data + '&' + element.getAttribute('data-params')
-  } else if (matches(element, config.buttonClickSelector)) {
-    method = element.getAttribute('data-method')
-    url = element.getAttribute('data-url')
-    data = $(element).serialize()
-    if (element.getAttribute('data-params')) data = data + '&' + element.getAttribute('data-params')
+    data = serializeElement(element, element.getAttribute('data-params'))
   } else {
     method = element.getAttribute('data-method')
     url = href(element)

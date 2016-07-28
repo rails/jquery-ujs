@@ -1,23 +1,60 @@
 import { matches } from './dom'
 
+const toArray = e => Array.prototype.slice.call(e)
+
+export function serializeElement(element, additionalParam) {
+  let inputs = [element]
+  let params = []
+
+  if (matches(element, 'form')) {
+    inputs = toArray(element.elements)
+  }
+
+  inputs.forEach(input => {
+    if (!input.name) return
+
+    if (matches(input, 'select')) {
+      toArray(input.options).forEach(option => {
+        if (option.selected) {
+          params.push({ name: input.name, value: option.value })
+        }
+      })
+    } else if ((input.type !== 'radio' && input.type !== 'checkbox') || input.checked) {
+      params.push({ name: input.name, value: input.value })
+    }
+  })
+
+  if (additionalParam) {
+    params.push(additionalParam)
+  }
+
+  return params.map(param => {
+    if (param.name) {
+      return `${encodeURIComponent(param.name)}=${encodeURIComponent(param.value)}`
+    } else {
+      return param
+    }
+  }).join('&')
+}
+
 // Helper function that returns form elements that match the specified CSS selector
 // If form is actually a "form" element this will return associated elements outside the from that have
 // the html form attribute set
 export function formElements(form, selector) {
   if (matches(form, 'form')) {
-    return Array.prototype.filter.call(form.elements, el => matches(el, selector))
+    return toArray(form.elements).filter(el => matches(el, selector))
   } else {
-    return Array.prototype.slice.call(form.querySelectorAll(selector))
+    return toArray(form.querySelectorAll(selector))
   }
 }
 
 // Helper function which checks for blank inputs in a form that match the specified CSS selector
 export function blankInputs(form, selector, nonBlank) {
   var foundInputs = [],
-      requiredInputs = form.querySelectorAll(selector || 'input, textarea'),
+      requiredInputs = toArray(form.querySelectorAll(selector || 'input, textarea')),
       checkedRadioButtonNames = {}
 
-  Array.prototype.forEach.call(requiredInputs, input => {
+  requiredInputs.forEach(input => {
     if (input.type === 'radio') {
 
       // Don't count unchecked required radio as blank if other radio with same name is checked,
@@ -31,7 +68,7 @@ export function blankInputs(form, selector, nonBlank) {
         // If none checked
         if (form.querySelectorAll('input[type=radio][name="' + radioName + '"]:checked').length === 0) {
           let radios = form.querySelectorAll('input[type=radio][name="' + radioName + '"]')
-          foundInputs = foundInputs.concat(Array.prototype.slice.call(radios))
+          foundInputs = foundInputs.concat(toArray(radios))
         }
 
         // We only need to check each name once.
