@@ -97,7 +97,5 @@ if (fire($document, 'rails:attachBindings')) {
   $document.delegate(config.formInputClickSelector, 'click.rails', formSubmitButtonClick)
 
 
-  $(function() {
-    refreshCSRFTokens()
-  })
+  $document.addEventListener('DOMContentLoaded', () => refreshCSRFTokens())
 }
