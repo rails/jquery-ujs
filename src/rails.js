@@ -46,15 +46,15 @@ if (fire($document, 'rails:attachBindings')) {
   // See https://github.com/rails/jquery-ujs/issues/357
   // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
   $(window).on('pageshow.rails', function() {
-    $(config.formEnableSelector).each(function() {
-      if (getData(this, 'ujs:disabled')) {
-        enableElement(this)
+    Array.prototype.forEach.call(document.querySelectorAll(config.formEnableSelector), el => {
+      if (getData(el, 'ujs:disabled')) {
+        enableElement(el)
       }
     })
 
-    $(config.linkDisableSelector).each(function() {
-      if (getData(this, 'ujs:disabled')) {
-        enableElement(this)
+    Array.prototype.forEach.call(document.querySelectorAll(config.linkDisableSelector), el => {
+      if (getData(el, 'ujs:disabled')) {
+        enableElement(el)
       }
     })
   })
@@ -65,9 +65,9 @@ if (fire($document, 'rails:attachBindings')) {
   $document.delegate(config.buttonDisableSelector, 'ajax:stopped', enableElement)
 
   $document.delegate(config.linkClickSelector, 'click.rails', function(e) {
-    var link = $(this),
-        method = link.data('method'),
-        data = link.data('params'),
+    var link = e.target,
+        method = link.getAttribute('data-method'),
+        data = link.getAttribute('data-params'),
         metaClick = e.metaKey || e.ctrlKey
 
     if (metaClick && (!method || method === 'GET') && !data) {
