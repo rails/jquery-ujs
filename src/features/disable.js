@@ -39,9 +39,7 @@ function disableLinkElement(element) {
     element.innerHTML = replacement
   }
 
-  $(element).bind('click.railsDisable', function(e) { // prevent further clicking
-    return stopEverything(e)
-  })
+  element.addEventListener('click', stopEverything) // prevent further clicking
   setData(element, 'ujs:disabled', true)
 }
 
@@ -51,7 +49,7 @@ function enableLinkElement(element) {
     element.innerHTML = getData(element, 'ujs:enable-with') // set to old enabled state
     setData(element, 'ujs:enable-with', null) // clean up cache
   }
-  $(element).unbind('click.railsDisable') // enable element
+  element.removeEventListener('click', stopEverything) // enable element
   setData(element, 'ujs:disabled', null)
 }
 

@@ -60,7 +60,7 @@ export function handleRemote(e) {
     // stopping the "ajax:beforeSend" event will cancel the ajax request
     beforeSend: function(xhr, settings) {
       if (fire(element, 'ajax:beforeSend', [xhr, settings])) {
-        fire(element, 'ajax:send', xhr)
+        fire(element, 'ajax:send', [xhr])
       } else {
         fire(element, 'ajax:stopped')
         return false

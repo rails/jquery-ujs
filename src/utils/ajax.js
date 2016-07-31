@@ -30,7 +30,7 @@ export function ajax(options) {
   // 1. strip query string (even if no content is submit)
   // 2. append data to url
   if (options.type === 'GET') {
-    options.url = options.url.replace(/\?.+$/, '')
+    options.url = options.url.replace(/\?.*$/, '')
     if (options.data) {
       options.url += '?' + options.data
     }

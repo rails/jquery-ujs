@@ -11,9 +11,9 @@ module('call-remote')
 
 function submit(fn) {
   $('form')
-    .bind('ajax:success', fn)
-    .bind('ajax:complete', function() { start() })
-    .trigger('submit')
+    .bindNative('ajax:success', fn)
+    .bindNative('ajax:complete', function() { start() })
+    .triggerNative('submit')
 }
 
 asyncTest('form method is read from "method" and not from "data-method"', 1, function() {
@@ -37,12 +37,12 @@ asyncTest('form method is read from submit button "formmethod" if submit is trig
   buildForm({ method: 'post' })
 
   $('#qunit-fixture').find('form').append(submitButton)
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .bindNative('ajax:success', function(e, data, status, xhr) {
       App.assertGetRequest(data)
     })
-    .bind('ajax:complete', function() { start() })
+    .bindNative('ajax:complete', function() { start() })
 
-  submitButton.trigger('click')
+  submitButton.triggerNative('click')
 })
 
 asyncTest('form default method is GET', 1, function() {
@@ -74,12 +74,12 @@ asyncTest('form url is read from submit button "formaction" if submit is trigger
   buildForm({ method: 'post', href: '/echo2' })
 
   $('#qunit-fixture').find('form').append(submitButton)
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .bindNative('ajax:success', function(e, data, status, xhr) {
       App.assertRequestPath(data, '/echo')
     })
-    .bind('ajax:complete', function() { start() })
+    .bindNative('ajax:complete', function() { start() })
 
-  submitButton.trigger('click')
+  submitButton.triggerNative('click')
 })
 
 asyncTest('prefer JS, but accept any format', 1, function() {
@@ -127,13 +127,51 @@ asyncTest('allow empty "data-remote" attribute', 1, function() {
   })
 })
 
+asyncTest('query string in form action should be stripped in a GET request in normal submit', 1, function() {
+  buildForm({ action: '/echo?param1=abc', 'data-remote': 'false' })
+
+  $(document).one('iframe:loaded', function(e, data) {
+    equal(data.params.param1, undefined, '"param1" should not be passed to server')
+    start()
+  })
+
+  $('#qunit-fixture form').triggerNative('submit')
+})
+
+asyncTest('query string in form action should be stripped in a GET request in ajax submit', 1, function() {
+  buildForm({ action: '/echo?param1=abc' })
+
+  submit(function(e, data, status, xhr) {
+    equal(data.params.param1, undefined, '"param1" should not be passed to server')
+  })
+})
+
+asyncTest('query string in form action should not be stripped in a POST request in normal submit', 1, function() {
+  buildForm({ action: '/echo?param1=abc', method: 'post', 'data-remote': 'false' })
+
+  $(document).one('iframe:loaded', function(e, data) {
+    equal(data.params.param1, 'abc', '"param1" should be passed to server')
+    start()
+  })
+
+  $('#qunit-fixture form').triggerNative('submit')
+})
+
+asyncTest('query string in form action should not be stripped in a POST request in ajax submit', 1, function() {
+  buildForm({ action: '/echo?param1=abc', method: 'post' })
+
+  submit(function(e, data, status, xhr) {
+    equal(data.params.param1, 'abc', '"param1" should be passed to server')
+  })
+})
+
 asyncTest('allow empty form "action"', 1, function() {
   var currentLocation, ajaxLocation
 
   buildForm({ action: '' })
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(e, xhr, settings) {
+    .bindNative('ajax:beforeSend', function(e, xhr, settings) {
       // Get current location (the same way jQuery does)
       try {
         currentLocation = location.href
@@ -142,7 +180,7 @@ asyncTest('allow empty form "action"', 1, function() {
         currentLocation.href = ''
         currentLocation = currentLocation.href
       }
-      currentLocation = currentLocation.replace(/\?$/, '')
+      currentLocation = currentLocation.replace(/\?.*$/, '')
 
       // Actual location (strip out settings.data that jQuery serializes and appends)
       // HACK: can no longer use settings.data below to see what was appended to URL, as of
@@ -154,7 +192,7 @@ asyncTest('allow empty form "action"', 1, function() {
       // causing an error.
       return false
     })
-    .trigger('submit')
+    .triggerNative('submit')
 
   setTimeout(function() { start() }, 13)
 })
@@ -175,14 +213,14 @@ asyncTest('intelligently guesses crossDomain behavior when target URL has a diff
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />')
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(evt, req, settings) {
+    .bindNative('ajax:beforeSend', function(evt, req, settings) {
 
       equal(settings.crossDomain, true, 'crossDomain should be set to true')
 
       // prevent request from actually getting sent off-domain
       return false
     })
-    .trigger('submit')
+    .triggerNative('submit')
 
   setTimeout(function() { start() }, 13)
 })
@@ -194,14 +232,14 @@ asyncTest('intelligently guesses crossDomain behavior when target URL consists o
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />')
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(evt, req, settings) {
+    .bindNative('ajax:beforeSend', function(evt, req, settings) {
 
       equal(settings.crossDomain, false, 'crossDomain should be set to false')
 
       // prevent request from actually getting sent off-domain
       return false
     })
-    .trigger('submit')
+    .triggerNative('submit')
 
   setTimeout(function() { start() }, 13)
 })

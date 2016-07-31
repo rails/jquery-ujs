@@ -18,7 +18,7 @@ function submit(fn, options) {
   })
 
   $('#qunit-fixture').find('a')
-    .trigger('click')
+    .triggerNative('click')
 }
 
 asyncTest('link with "data-method" set to "delete"', 3, function() {
@@ -65,7 +65,7 @@ asyncTest('link with "data-method" and cross origin', 1, function() {
 
   link.attr('href', 'http://www.alfajango.com')
 
-  link.trigger('click')
+  link.triggerNative('click')
 
   start()
 

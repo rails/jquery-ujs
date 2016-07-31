@@ -47,11 +47,57 @@ $(document).bind('submit', function(e) {
     var form = $(e.target), action = form.attr('action'),
         name = 'form-frame' + jQuery.guid++,
         iframe = $('<iframe name="' + name + '" />'),
+        iframeInput = '<input name="iframe" value="true" type="hidden" />'
         targetInput = '<input name="_target" value="' + (form.attr('target') || '') + '" type="hidden" />'
 
-    if (action && action.indexOf('iframe') < 0) form.attr('action', action + '?iframe=true')
-    form.attr('target', name).append(targetInput)
+    if (action && action.indexOf('iframe') < 0) {
+      if (action.indexOf('?') < 0) {
+        form.attr('action', action + '?iframe=true')
+      } else {
+        form.attr('action', action + '&iframe=true')
+      }
+    }
+    form.attr('target', name).append(iframeInput, targetInput)
     $('#qunit-fixture').append(iframe)
     $.event.trigger('iframe:loading', form)
+  }
+})
+
+$.fn.extend({
+  // trigger an native click event
+  triggerNative: function(type, options) {
+    var el = this[0],
+        event,
+        Evt = {
+          'click': MouseEvent,
+          'change': Event,
+          'submit': Event
+        }[type]
+
+    options = options || {}
+    options.bubbles = true
+    options.cancelable = true
+
+    event = new Evt(type, options)
+
+    el.dispatchEvent(event)
+
+    if (type === 'submit' && !event.defaultPrevented) {
+      el.submit()
+    }
+    return this
+  },
+  bindNative: function(event, handler) {
+    if (!handler) return this
+
+    this.bind(event, function(e) {
+      var args = []
+      if (e.originalEvent.detail) {
+        args = e.originalEvent.detail.slice()
+      }
+      args.unshift(e)
+      return handler.apply(this, args)
+    })
+    return this
   }
 })

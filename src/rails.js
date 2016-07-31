@@ -9,7 +9,7 @@
  */
 
 import config from './config'
-import { fire } from './utils/event'
+import { fire, delegate } from './utils/event'
 import { getData } from './utils/dom'
 import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
 import { href, ajax } from './utils/ajax'
@@ -25,20 +25,11 @@ if ( $.rails !== undefined ) {
 }
 
 // For backward compatibility
-$.rails = Object.assign({ disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax }, config)
+$.rails = Object.assign({ disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax, delegate }, config)
 
-// Shorthand to make it a little easier to call public rails functions from within js
-var $document = $(document)
-
-if (fire($document, 'rails:attachBindings')) {
+if (fire(document, 'rails:attachBindings')) {
 
   $.ajaxPrefilter(function(options, originalOptions, xhr) { if ( !options.crossDomain ) { CSRFProtection(xhr) }})
-
-  $document.delegate(config.linkClickSelector, 'click.rails', handleConfirm)
-  $document.delegate(config.buttonClickSelector, 'click.rails', handleConfirm)
-  $document.delegate(config.inputChangeSelector, 'change.rails', handleConfirm)
-  $document.delegate(config.formSubmitSelector, 'submit.rails', handleConfirm)
-  $document.delegate(config.formInputClickSelector, 'click.rails', handleConfirm)
 
   // This event works the same as the load event, except that it fires every
   // time the page is loaded.
@@ -59,12 +50,13 @@ if (fire($document, 'rails:attachBindings')) {
     })
   })
 
-  $document.delegate(config.linkDisableSelector, 'ajax:complete', enableElement)
-  $document.delegate(config.linkDisableSelector, 'ajax:stopped', enableElement)
-  $document.delegate(config.buttonDisableSelector, 'ajax:complete', enableElement)
-  $document.delegate(config.buttonDisableSelector, 'ajax:stopped', enableElement)
+  delegate(document, config.linkDisableSelector, 'ajax:complete', enableElement)
+  delegate(document, config.linkDisableSelector, 'ajax:stopped', enableElement)
+  delegate(document, config.buttonDisableSelector, 'ajax:complete', enableElement)
+  delegate(document, config.buttonDisableSelector, 'ajax:stopped', enableElement)
 
-  $document.delegate(config.linkClickSelector, 'click.rails', function(e) {
+  delegate(document, config.linkClickSelector, 'click', handleConfirm)
+  delegate(document, config.linkClickSelector, 'click', e => {
     var link = e.target,
         method = link.getAttribute('data-method'),
         data = link.getAttribute('data-params'),
@@ -72,30 +64,30 @@ if (fire($document, 'rails:attachBindings')) {
 
     if (metaClick && (!method || method === 'GET') && !data) {
       e.stopImmediatePropagation()
-      return true
     }
   })
-  $document.delegate(config.linkClickSelector, 'click.rails', disableElement)
-  $document.delegate(config.linkClickSelector, 'click.rails', handleRemote)
-  $document.delegate(config.linkClickSelector, 'click.rails', handleMethod)
+  delegate(document, config.linkClickSelector, 'click', disableElement)
+  delegate(document, config.linkClickSelector, 'click', handleRemote)
+  delegate(document, config.linkClickSelector, 'click', handleMethod)
 
-  $document.delegate(config.buttonClickSelector, 'click.rails', disableElement)
-  $document.delegate(config.buttonClickSelector, 'click.rails', handleRemote)
+  delegate(document, config.buttonClickSelector, 'click', handleConfirm)
+  delegate(document, config.buttonClickSelector, 'click', disableElement)
+  delegate(document, config.buttonClickSelector, 'click', handleRemote)
 
-  $document.delegate(config.inputChangeSelector, 'change.rails', handleRemote)
+  delegate(document, config.inputChangeSelector, 'change', handleConfirm)
+  delegate(document, config.inputChangeSelector, 'change', handleRemote)
 
-  $document.delegate(config.formSubmitSelector, 'submit.rails', validateForm)
-  $document.delegate(config.formSubmitSelector, 'submit.rails', handleRemote)
-  $document.delegate(config.formSubmitSelector, 'submit.rails', function(e) {
-    // Normal mode submit
-    // Slight timeout so that the submit button gets properly serialized
-    setTimeout(function() { disableElement(e) }, 13)
-  })
-  $document.delegate(config.formSubmitSelector, 'ajax:send.rails', disableElement)
-  $document.delegate(config.formSubmitSelector, 'ajax:complete.rails', enableElement)
+  delegate(document, config.formSubmitSelector, 'submit', handleConfirm)
+  delegate(document, config.formSubmitSelector, 'submit', validateForm)
+  delegate(document, config.formSubmitSelector, 'submit', handleRemote)
+  // Normal mode submit
+  // Slight timeout so that the submit button gets properly serialized
+  delegate(document, config.formSubmitSelector, 'submit', e => setTimeout(() => disableElement(e), 13))
+  delegate(document, config.formSubmitSelector, 'ajax:send', disableElement)
+  delegate(document, config.formSubmitSelector, 'ajax:complete', enableElement)
 
-  $document.delegate(config.formInputClickSelector, 'click.rails', formSubmitButtonClick)
+  delegate(document, config.formInputClickSelector, 'click', handleConfirm)
+  delegate(document, config.formInputClickSelector, 'click', formSubmitButtonClick)
 
-
-  $document.addEventListener('DOMContentLoaded', () => refreshCSRFTokens())
+  document.addEventListener('DOMContentLoaded', () => refreshCSRFTokens())
 }
