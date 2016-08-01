@@ -50,7 +50,7 @@ export function formElements(form, selector) {
 
 // Helper function which checks for blank inputs in a form that match the specified CSS selector
 export function blankInputs(form, selector, nonBlank) {
-  var foundInputs = [],
+  let foundInputs = [],
       requiredInputs = toArray(form.querySelectorAll(selector || 'input, textarea')),
       checkedRadioButtonNames = {}
 

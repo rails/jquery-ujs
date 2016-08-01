@@ -40,7 +40,7 @@ if (fire(document, 'rails:attachBindings')) {
   //
   // See https://github.com/rails/jquery-ujs/issues/357
   // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
-  window.addEventListener('pageshow', function() {
+  window.addEventListener('pageshow', () => {
     $(config.formEnableSelector).forEach(el => {
       if (getData(el, 'ujs:disabled')) {
         enableElement(el)
@@ -61,7 +61,7 @@ if (fire(document, 'rails:attachBindings')) {
 
   delegate(document, config.linkClickSelector, 'click', handleConfirm)
   delegate(document, config.linkClickSelector, 'click', e => {
-    var link = e.target,
+    let link = e.target,
         method = link.getAttribute('data-method'),
         data = link.getAttribute('data-params'),
         metaClick = e.metaKey || e.ctrlKey

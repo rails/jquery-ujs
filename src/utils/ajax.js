@@ -108,9 +108,9 @@ export function href(element) {
 
 // Determines if the request is a cross domain request.
 export function isCrossDomain(url) {
-  var originAnchor = document.createElement('a')
+  let originAnchor = document.createElement('a')
   originAnchor.href = location.href
-  var urlAnchor = document.createElement('a')
+  let urlAnchor = document.createElement('a')
 
   try {
     urlAnchor.href = url

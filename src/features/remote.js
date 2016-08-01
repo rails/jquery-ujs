@@ -73,7 +73,7 @@ export function handleRemote(e) {
     data: data,
     dataType: dataType,
     // stopping the "ajax:beforeSend" event will cancel the ajax request
-    beforeSend: function(xhr, settings) {
+    beforeSend(xhr, settings) {
       if (fire(element, 'ajax:beforeSend', [xhr, settings])) {
         fire(element, 'ajax:send', [xhr])
       } else {
@@ -81,13 +81,13 @@ export function handleRemote(e) {
         return false
       }
     },
-    success: function(...args) {
+    success(...args) {
       fire(element, 'ajax:success', args)
     },
-    complete: function(...args) {
+    complete(...args) {
       fire(element, 'ajax:complete', args)
     },
-    error: function(...args) {
+    error(...args) {
       fire(element, 'ajax:error', args)
     },
     crossDomain: isCrossDomain(url),
@@ -101,7 +101,7 @@ export function handleRemote(e) {
 // Check whether any required fields are empty
 // In both ajax mode and normal mode
 export function validateForm(e) {
-  var form = e.target, blankRequiredInputs
+  let form = e.target, blankRequiredInputs
 
   // Skip other logic when required values are missing or file upload is present
   if (!form.noValidate) {
@@ -119,10 +119,10 @@ export function validateForm(e) {
 }
 
 export function formSubmitButtonClick(e) {
-  var button = e.target
+  let button = e.target
 
   // Register the pressed submit button
-  var form = button.form,
+  let form = button.form,
       name = button.name,
       data = name ? { name: name, value: button.value } : null
 

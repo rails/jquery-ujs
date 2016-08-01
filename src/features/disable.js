@@ -32,7 +32,7 @@ export function disableElement(e) {
 //  Replace element's html with the 'data-disable-with' after storing original html
 //  and prevent clicking on it
 function disableLinkElement(element) {
-  var replacement = element.getAttribute('data-disable-with')
+  let replacement = element.getAttribute('data-disable-with')
 
   if (replacement != null) {
     setData(element, 'ujs:enable-with', element.innerHTML) // store enabled state
@@ -59,7 +59,7 @@ function enableLinkElement(element) {
   - Sets disabled property to true
 */
 function disableFormElements(form) {
-  formElements(form, config.formDisableSelector).forEach(function(el) {
+  formElements(form, config.formDisableSelector).forEach(el => {
     disableFormElement(el)
   })
 }
@@ -86,7 +86,7 @@ function disableFormElement(element) {
   - Sets disabled property to false
 */
 function enableFormElements(form) {
-  formElements(form, config.formEnableSelector).forEach(function(el) {
+  formElements(form, config.formEnableSelector).forEach(el => {
     enableFormElement(el)
   })
 }

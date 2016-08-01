@@ -22,7 +22,7 @@ function confirm(message) {
    return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
 */
 function allowAction(element) {
-  var message = element.getAttribute('data-confirm'),
+  let message = element.getAttribute('data-confirm'),
       answer = false, callback
   if (!message) { return true }
 
