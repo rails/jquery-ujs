@@ -15,24 +15,14 @@ export function ajax(options) {
 
   // Prepare options
   options.type = options.type.toUpperCase()
-  // Use current page's url if no url provided
-  if (!options.url) {
-    // Get current location (the same way jQuery does)
-    try {
-      options.url = location.href
-    } catch(err) {
-      let a = document.createElement( 'a' )
-      a.href = ''
-      options.url = a.href
-    }
-  }
-  // If it's a GET request
-  // 1. strip query string (even if no content is submit)
-  // 2. append data to url
+  // append data to url if it's a GET request
   if (options.type === 'GET') {
-    options.url = options.url.replace(/\?.*$/, '')
     if (options.data) {
-      options.url += '?' + options.data
+      if (options.url.indexOf('?') < 0) {
+        options.url += '?' + options.data
+      } else {
+        options.url += '&' + options.data
+      }
     }
   }
   // Use "*" as default dataType

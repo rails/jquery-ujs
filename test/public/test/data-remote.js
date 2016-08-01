@@ -81,6 +81,30 @@ asyncTest('clicking on a link with data-remote attribute', 5, function() {
     .triggerNative('click')
 })
 
+asyncTest('clicking on a link with both query string in href and data-params', 3, function() {
+  $('a[data-remote]')
+    .attr('href', '/echo?data3=value3')
+    .bindNative('ajax:success', function(e, data, status, xhr) {
+      equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value')
+      equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value')
+      equal(data.params.data3, 'value3', 'query string in url should be passed to server with right value')
+    })
+    .bindNative('ajax:complete', function() { start() })
+    .triggerNative('click')
+})
+
+asyncTest('clicking on a link with both query string in href and data-params with POST method', 3, function() {
+  $('a[data-remote]')
+    .attr('href', '/echo?data3=value3')
+    .bindNative('ajax:success', function(e, data, status, xhr) {
+      equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value')
+      equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value')
+      equal(data.params.data3, 'value3', 'query string in url should be passed to server with right value')
+    })
+    .bindNative('ajax:complete', function() { start() })
+    .triggerNative('click')
+})
+
 asyncTest('clicking on a link with disabled attribute', 0, function() {
   $('a[disabled]')
   .bindNative('ajax:before', function(e, data, status, xhr) {

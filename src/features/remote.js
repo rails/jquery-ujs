@@ -31,6 +31,21 @@ export function handleRemote(e) {
     method = getData(element, 'ujs:submit-button-formmethod') || element.method
     url = getData(element, 'ujs:submit-button-formaction') || element.getAttribute('action')
 
+    // Use current page's url if no url provided
+    if (!url) {
+      // Get current location (the same way jQuery does)
+      try {
+        url = location.href
+      } catch(err) {
+        let a = document.createElement( 'a' )
+        a.href = ''
+        url = a.href
+      }
+    }
+    // strip query string if it's a GET request
+    if (method.toUpperCase() === 'GET') {
+      url = url.replace(/\?.*$/, '')
+    }
     if (element.enctype === 'multipart/form-data') {
       data = new FormData(element)
       if (button) {
