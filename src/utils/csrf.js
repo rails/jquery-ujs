@@ -1,3 +1,5 @@
+import { $ } from './dom'
+
 // Up-to-date Cross-Site Request Forgery token
 export function csrfToken() {
   let meta = document.querySelector('meta[name=csrf-token]')
@@ -22,9 +24,7 @@ export function refreshCSRFTokens() {
       param = csrfParam()
 
   if (token && param) {
-    let inputs = document.querySelectorAll('form input[name="' + param + '"]')
-
-    Array.prototype.forEach.call(inputs, input => {
+    $('form input[name="' + param + '"]').forEach(input => {
       input.value = token
     })
   }

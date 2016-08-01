@@ -10,7 +10,7 @@
 
 import config from './config'
 import { fire, delegate } from './utils/event'
-import { getData } from './utils/dom'
+import { getData, $ } from './utils/dom'
 import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
 import { href, ajax } from './utils/ajax'
 import { enableElement, disableElement } from './features/disable'
@@ -41,13 +41,13 @@ if (fire(document, 'rails:attachBindings')) {
   // See https://github.com/rails/jquery-ujs/issues/357
   // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
   window.addEventListener('pageshow', function() {
-    Array.prototype.forEach.call(document.querySelectorAll(config.formEnableSelector), el => {
+    $(config.formEnableSelector).forEach(el => {
       if (getData(el, 'ujs:disabled')) {
         enableElement(el)
       }
     })
 
-    Array.prototype.forEach.call(document.querySelectorAll(config.linkDisableSelector), el => {
+    $(config.linkDisableSelector).forEach(el => {
       if (getData(el, 'ujs:disabled')) {
         enableElement(el)
       }

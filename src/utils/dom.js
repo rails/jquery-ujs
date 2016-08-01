@@ -21,3 +21,9 @@ export function setData(element, key, value) {
   }
   element[expando][key] = value
 }
+
+// a wrapper for document.querySelectorAll
+// returns an Array
+export function $(selector) {
+  return Array.prototype.slice.call(document.querySelectorAll(selector))
+}
