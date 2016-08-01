@@ -126,7 +126,7 @@ test('form input[type=submit][data-disable-with] re-enables when `pageshow` even
 
   App.checkDisabledState(input, 'submitting ...')
 
-  $(window).trigger('pageshow')
+  $(window).triggerNative('pageshow')
 
   App.checkEnabledState(input, 'Submit')
 })
@@ -210,7 +210,7 @@ test('a[data-disable-with] re-enables when `pageshow` event is triggered', funct
   link.triggerNative('click')
   App.checkDisabledState(link, 'clicking...')
 
-  $(window).trigger('pageshow')
+  $(window).triggerNative('pageshow')
   App.checkEnabledState(link, 'Click me')
 })
 

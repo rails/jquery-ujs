@@ -20,23 +20,27 @@ import { handleMethod } from './features/method'
 
 // Cut down on the number of issues from people inadvertently including jquery_ujs twice
 // by detecting and raising an error when it happens.
-if ( $.rails !== undefined ) {
-  $.error('jquery-ujs has already been loaded!')
+if ( window.rails !== undefined ) {
+  throw new Error('jquery-ujs has already been loaded!')
 }
 
 // For backward compatibility
-$.rails = Object.assign({ disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax, delegate }, config)
+window.rails = Object.assign({ disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax, delegate }, config)
+if (window.jQuery) {
+  window.jQuery.rails = window.rails
+  window.jQuery.ajaxPrefilter((options, originalOptions, xhr) => {
+    if (!options.crossDomain) CSRFProtection(xhr)
+  })
+}
 
 if (fire(document, 'rails:attachBindings')) {
-
-  $.ajaxPrefilter(function(options, originalOptions, xhr) { if ( !options.crossDomain ) { CSRFProtection(xhr) }})
 
   // This event works the same as the load event, except that it fires every
   // time the page is loaded.
   //
   // See https://github.com/rails/jquery-ujs/issues/357
   // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
-  $(window).on('pageshow.rails', function() {
+  window.addEventListener('pageshow', function() {
     Array.prototype.forEach.call(document.querySelectorAll(config.formEnableSelector), el => {
       if (getData(el, 'ujs:disabled')) {
         enableElement(el)

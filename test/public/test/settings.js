@@ -71,6 +71,7 @@ $.fn.extend({
         Evt = {
           'click': MouseEvent,
           'change': Event,
+          'pageshow': PageTransitionEvent,
           'submit': Event
         }[type]
 
