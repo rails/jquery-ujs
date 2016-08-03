@@ -25,7 +25,7 @@ if ( window.rails !== undefined ) {
 }
 
 // For backward compatibility
-window.rails = Object.assign({ disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax, delegate }, config)
+window.rails = { disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax, delegate }
 if (window.jQuery) {
   window.jQuery.rails = window.rails
   window.jQuery.ajaxPrefilter((options, originalOptions, xhr) => {
