@@ -4,11 +4,11 @@ port=4567
 
 start_server() {
   mkdir -p log
-  bundle exec ruby test/server.rb > log/test.log 2>&1 &
+  bundle exec rake test:server > log/test.log 2>&1 &
 }
 
 run_tests() {
-  jshint src/*.js && phantomjs script/runner.js http://localhost:$port/
+  npm run lint && phantomjs script/runner.js http://localhost:$port/
 }
 
 server_started() {
@@ -31,6 +31,7 @@ wait_for_server() {
   done
 }
 
+npm run build
 start_server
 server_pid=$!
 wait_for_server 5 $port

@@ -63,6 +63,18 @@ $(document).bind('submit', function(e) {
   }
 })
 
+var MouseEvent
+
+try {
+  new MouseEvent()
+} catch (e) {
+  MouseEvent = function(type, options) {
+    var evt = document.createEvent('MouseEvents')
+    evt.initMouseEvent(type, options.bubbles, options.cancelable, window, options.detail, 0, 0, 80, 20, options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, 0, null)
+    return evt
+  }
+}
+
 $.fn.extend({
   // trigger an native click event
   triggerNative: function(type, options) {
