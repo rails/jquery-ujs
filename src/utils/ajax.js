@@ -72,7 +72,7 @@ function ajaxHandleResponses(httpRequest, success, error, complete) {
   let type = httpRequest.getResponseHeader('Content-Type'),
       response = httpRequest.response
 
-  if (typeof response === 'string') {
+  if (typeof response === 'string' && typeof type === 'string') {
     if (type.match(/\bjson\b/)) {
       try {
         response = JSON.parse(response)
