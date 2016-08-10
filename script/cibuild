@@ -4,7 +4,7 @@ port=4567
 
 start_server() {
   mkdir -p log
-  bundle exec rake test:server > log/test.log 2>&1 &
+  bundle exec ruby test/server.rb > log/test.log 2>&1 &
 }
 
 run_tests() {
