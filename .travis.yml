@@ -5,6 +5,7 @@ cache:
   directories:
     - $HOME/.npm
     - node_modules
+    - travis_phantomjs
 script: ./script/cibuild
 before_install:
   - npm install
