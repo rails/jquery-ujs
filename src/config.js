@@ -3,7 +3,10 @@ export default {
   linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote]:not([disabled]), a[data-disable-with], a[data-disable]',
 
   // Button elements bound by jquery-ujs
-  buttonClickSelector: 'button[data-remote]:not([form]):not(form button), button[data-confirm]:not([form]):not(form button)',
+  buttonClickSelector: {
+    selector: 'button[data-remote]:not([form]), button[data-confirm]:not([form])',
+    exclude: 'form button'
+  },
 
   // Select elements bound by jquery-ujs
   inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',

@@ -129,8 +129,8 @@ export function formSubmitButtonClick(e) {
   if (form) {
     setData(form, 'ujs:submit-button', data)
     // Save attributes from button
-    setData(form, 'ujs:formnovalidate-button', button.formNoValidate)
-    setData(form, 'ujs:submit-button-formaction', button.formAction)
-    setData(form, 'ujs:submit-button-formmethod', button.formMethod)
+    setData(form, 'ujs:formnovalidate-button', button.getAttribute('formnovalidate'))
+    setData(form, 'ujs:submit-button-formaction', button.getAttribute('formaction'))
+    setData(form, 'ujs:submit-button-formmethod', button.getAttribute('formmethod'))
   }
 }

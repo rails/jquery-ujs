@@ -8,7 +8,11 @@ let m = Element.prototype.matches ||
 const expando = '_ujsData'
 
 export function matches(element, selector) {
-  return m.call(element, selector)
+  if (selector.exclude) {
+    return m.call(element, selector.selector) && !m.call(element, selector.exclude)
+  } else {
+    return m.call(element, selector)
+  }
 }
 
 export function getData(element, key) {
