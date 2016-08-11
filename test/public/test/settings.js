@@ -63,7 +63,7 @@ $(document).bind('submit', function(e) {
   }
 })
 
-var MouseEvent
+var MouseEvent = window.MouseEvent
 
 try {
   new MouseEvent()
