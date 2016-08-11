@@ -9,7 +9,7 @@
   "scripts": {
     "test": "rake",
     "dev": "webpack -d --watch",
-    "lint": "eslint src",
+    "lint": "eslint src test/public/test",
     "build": "webpack -p"
   },
   "repository": {
