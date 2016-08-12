@@ -42,7 +42,6 @@ wait_for_server() {
 }
 
 install_phantomjs
-npm run build
 start_server
 server_pid=$!
 wait_for_server 5 $port

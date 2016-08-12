@@ -1,9 +1,14 @@
 require 'sinatra'
 require 'json'
+require 'blade'
 
 JQUERY_VERSIONS = %w[ 1.8.0 1.8.1 1.8.2 1.8.3 1.9.0 1.9.1 1.10.0 1.10.1 1.10.2 1.11.0 2.0.0 2.1.0].freeze
 
-use Rack::Static, :urls => ["/dist"], :root => File.expand_path('..', settings.root)
+Blade.initialize!
+
+get '/rails.js' do
+  Blade::Assets.environment.call(env)
+end
 
 helpers do
   def jquery_link version
@@ -62,9 +67,9 @@ end
       params[:content]
     elsif request.xhr?
       content_type 'application/json'
-      data.to_json
+      JSON.generate(data)
     elsif params[:iframe]
-      payload = data.to_json.gsub('<', '&lt;').gsub('>', '&gt;')
+      payload = JSON.generate(data).gsub('<', '&lt;').gsub('>', '&gt;')
       <<-HTML
         <script>
           if (window.top && window.top !== window)

@@ -7,10 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "rake",
-    "dev": "webpack -d --watch",
-    "lint": "eslint src test/public/test",
-    "build": "webpack -p"
+    "lint": "eslint src test/public/test"
   },
   "repository": {
     "type": "git",
@@ -26,10 +23,8 @@
   },
   "homepage": "https://github.com/liudangyi/jquery-ujs#readme",
   "devDependencies": {
-    "babel-core": "^6.10.4",
-    "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
-    "eslint": "^2.13.1",
-    "webpack": "^1.13.1"
+    "babel-core": "^6.13.2",
+    "babel-preset-es2015": "^6.13.2",
+    "eslint": "^2.13.1"
   }
 }
