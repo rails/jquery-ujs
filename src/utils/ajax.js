@@ -1,5 +1,7 @@
-import { CSRFProtection } from './csrf'
-import { fire } from './event'
+//= require ./csrf
+//= require ./event
+
+const { CSRFProtection, fire } = Rails
 
 const AcceptHeaders = {
   '*': '*/*',
@@ -10,7 +12,7 @@ const AcceptHeaders = {
   script: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript'
 }
 
-export function ajax(options) {
+Rails.ajax = function(options) {
   let httpRequest = new XMLHttpRequest(), accept
 
   // Prepare options
@@ -102,7 +104,7 @@ function ajaxHandleResponses(httpRequest, success, error, complete) {
 }
 
 // Determines if the request is a cross domain request.
-export function isCrossDomain(url) {
+Rails.isCrossDomain = function(url) {
   let originAnchor = document.createElement('a')
   originAnchor.href = location.href
   let urlAnchor = document.createElement('a')

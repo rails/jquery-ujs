@@ -1,8 +1,10 @@
-import { matches } from './dom'
+//= require ./dom
+
+const { matches } = Rails
 
 const toArray = e => Array.prototype.slice.call(e)
 
-export function serializeElement(element, additionalParam) {
+Rails.serializeElement = function(element, additionalParam) {
   let inputs = [element]
   let params = []
 
@@ -40,7 +42,7 @@ export function serializeElement(element, additionalParam) {
 // Helper function that returns form elements that match the specified CSS selector
 // If form is actually a "form" element this will return associated elements outside the from that have
 // the html form attribute set
-export function formElements(form, selector) {
+Rails.formElements = function(form, selector) {
   if (matches(form, 'form')) {
     return toArray(form.elements).filter(el => matches(el, selector))
   } else {
@@ -49,7 +51,7 @@ export function formElements(form, selector) {
 }
 
 // Helper function which checks for blank inputs in a form that match the specified CSS selector
-export function blankInputs(form, selector, nonBlank) {
+Rails.blankInputs = function(form, selector, nonBlank) {
   let foundInputs = [],
       requiredInputs = toArray(form.querySelectorAll(selector || 'input, textarea')),
       checkedRadioButtonNames = {}

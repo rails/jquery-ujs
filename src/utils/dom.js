@@ -7,7 +7,7 @@ let m = Element.prototype.matches ||
 
 const expando = '_ujsData'
 
-export function matches(element, selector) {
+Rails.matches = function(element, selector) {
   if (selector.exclude) {
     return m.call(element, selector.selector) && !m.call(element, selector.exclude)
   } else {
@@ -15,11 +15,11 @@ export function matches(element, selector) {
   }
 }
 
-export function getData(element, key) {
+Rails.getData = function(element, key) {
   return element[expando] && element[expando][key]
 }
 
-export function setData(element, key, value) {
+Rails.setData = function(element, key, value) {
   if (!element[expando]) {
     element[expando] = {}
   }
@@ -28,6 +28,6 @@ export function setData(element, key, value) {
 
 // a wrapper for document.querySelectorAll
 // returns an Array
-export function $(selector) {
+Rails.$ = function(selector) {
   return Array.prototype.slice.call(document.querySelectorAll(selector))
 }

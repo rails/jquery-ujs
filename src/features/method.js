@@ -1,20 +1,19 @@
-import * as csrf from '../utils/csrf'
-import * as ajax from '../utils/ajax'
+//= require_tree ../utils
 
 // Handles "data-method" on links such as:
 // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
-export function handleMethod(e) {
+Rails.handleMethod = function(e) {
   let link = e.target, method = link.getAttribute('data-method')
 
   if (!method) return
 
   let href = link.href,
-      csrfToken = csrf.csrfToken(),
-      csrfParam = csrf.csrfParam(),
+      csrfToken = Rails.csrfToken(),
+      csrfParam = Rails.csrfParam(),
       form = document.createElement('form'),
       formContent = '<input name="_method" value="' + method + '" type="hidden" />'
 
-  if (csrfParam && csrfToken && !ajax.isCrossDomain(href)) {
+  if (csrfParam && csrfToken && !Rails.isCrossDomain(href)) {
     formContent += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />'
   }
 

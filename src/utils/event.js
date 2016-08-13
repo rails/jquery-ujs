@@ -1,4 +1,6 @@
-import { matches } from './dom'
+//= require ./dom
+
+const { matches } = Rails
 
 // Polyfill for CustomEvent in IE9+
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
@@ -14,7 +16,7 @@ if (typeof CustomEvent === 'function') {
 }
 
 // Triggers an event on an element and returns false if the event result is false
-export function fire(obj, name, data) {
+let fire = Rails.fire = function(obj, name, data) {
   let event = new CustomEvent(name, {
     bubbles: true,
     cancelable: true,
@@ -25,14 +27,14 @@ export function fire(obj, name, data) {
 }
 
 // Helper function, needed to provide consistent behavior in IE
-export function stopEverything(e) {
+Rails.stopEverything = function(e) {
   fire(e.target, 'ujs:everythingStopped')
   e.preventDefault()
   e.stopPropagation()
   e.stopImmediatePropagation()
 }
 
-export function delegate(element, selector, eventType, handler) {
+Rails.delegate = function(element, selector, eventType, handler) {
   element.addEventListener(eventType, e => {
     if (matches(e.target, selector)) {
       if (handler.call(e.target, e) === false) {

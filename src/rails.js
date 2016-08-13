@@ -1,3 +1,7 @@
+//= require ./config
+//= require_tree ./utils
+//= require_tree ./features
+
 /**
  * Unobtrusive scripting adapter for jQuery
  * https://github.com/rails/jquery-ujs
@@ -8,15 +12,15 @@
  *
  */
 
-import config from './config'
-import { fire, delegate } from './utils/event'
-import { getData, $ } from './utils/dom'
-import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
-import { ajax } from './utils/ajax'
-import { enableElement, disableElement } from './features/disable'
-import { handleConfirm } from './features/confirm'
-import { handleRemote, validateForm, formSubmitButtonClick } from './features/remote'
-import { handleMethod } from './features/method'
+const {
+  fire, delegate,
+  getData, $,
+  refreshCSRFTokens, CSRFProtection,
+  enableElement, disableElement,
+  handleConfirm,
+  handleRemote, validateForm, formSubmitButtonClick,
+  handleMethod
+} = Rails
 
 // Cut down on the number of issues from people inadvertently including jquery_ujs twice
 // by detecting and raising an error when it happens.
@@ -25,9 +29,8 @@ if ( window.rails !== undefined ) {
 }
 
 // For backward compatibility
-window.rails = { disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, ajax, delegate }
 if (window.jQuery) {
-  window.jQuery.rails = window.rails
+  window.jQuery.rails = Rails
   window.jQuery.ajaxPrefilter((options, originalOptions, xhr) => {
     if (!options.crossDomain) CSRFProtection(xhr)
   })
@@ -41,26 +44,26 @@ if (fire(document, 'rails:attachBindings')) {
   // See https://github.com/rails/jquery-ujs/issues/357
   // See https://developer.mozilla.org/en-US/docs/Using_Firefox_1.5_caching
   window.addEventListener('pageshow', () => {
-    $(config.formEnableSelector).forEach(el => {
+    $(Rails.formEnableSelector).forEach(el => {
       if (getData(el, 'ujs:disabled')) {
         enableElement(el)
       }
     })
 
-    $(config.linkDisableSelector).forEach(el => {
+    $(Rails.linkDisableSelector).forEach(el => {
       if (getData(el, 'ujs:disabled')) {
         enableElement(el)
       }
     })
   })
 
-  delegate(document, config.linkDisableSelector, 'ajax:complete', enableElement)
-  delegate(document, config.linkDisableSelector, 'ajax:stopped', enableElement)
-  delegate(document, config.buttonDisableSelector, 'ajax:complete', enableElement)
-  delegate(document, config.buttonDisableSelector, 'ajax:stopped', enableElement)
+  delegate(document, Rails.linkDisableSelector, 'ajax:complete', enableElement)
+  delegate(document, Rails.linkDisableSelector, 'ajax:stopped', enableElement)
+  delegate(document, Rails.buttonDisableSelector, 'ajax:complete', enableElement)
+  delegate(document, Rails.buttonDisableSelector, 'ajax:stopped', enableElement)
 
-  delegate(document, config.linkClickSelector, 'click', handleConfirm)
-  delegate(document, config.linkClickSelector, 'click', e => {
+  delegate(document, Rails.linkClickSelector, 'click', handleConfirm)
+  delegate(document, Rails.linkClickSelector, 'click', e => {
     let link = e.target,
         method = link.getAttribute('data-method'),
         data = link.getAttribute('data-params'),
@@ -70,28 +73,28 @@ if (fire(document, 'rails:attachBindings')) {
       e.stopImmediatePropagation()
     }
   })
-  delegate(document, config.linkClickSelector, 'click', disableElement)
-  delegate(document, config.linkClickSelector, 'click', handleRemote)
-  delegate(document, config.linkClickSelector, 'click', handleMethod)
+  delegate(document, Rails.linkClickSelector, 'click', disableElement)
+  delegate(document, Rails.linkClickSelector, 'click', handleRemote)
+  delegate(document, Rails.linkClickSelector, 'click', handleMethod)
 
-  delegate(document, config.buttonClickSelector, 'click', handleConfirm)
-  delegate(document, config.buttonClickSelector, 'click', disableElement)
-  delegate(document, config.buttonClickSelector, 'click', handleRemote)
+  delegate(document, Rails.buttonClickSelector, 'click', handleConfirm)
+  delegate(document, Rails.buttonClickSelector, 'click', disableElement)
+  delegate(document, Rails.buttonClickSelector, 'click', handleRemote)
 
-  delegate(document, config.inputChangeSelector, 'change', handleConfirm)
-  delegate(document, config.inputChangeSelector, 'change', handleRemote)
+  delegate(document, Rails.inputChangeSelector, 'change', handleConfirm)
+  delegate(document, Rails.inputChangeSelector, 'change', handleRemote)
 
-  delegate(document, config.formSubmitSelector, 'submit', handleConfirm)
-  delegate(document, config.formSubmitSelector, 'submit', validateForm)
-  delegate(document, config.formSubmitSelector, 'submit', handleRemote)
+  delegate(document, Rails.formSubmitSelector, 'submit', handleConfirm)
+  delegate(document, Rails.formSubmitSelector, 'submit', validateForm)
+  delegate(document, Rails.formSubmitSelector, 'submit', handleRemote)
   // Normal mode submit
   // Slight timeout so that the submit button gets properly serialized
-  delegate(document, config.formSubmitSelector, 'submit', e => setTimeout(() => disableElement(e), 13))
-  delegate(document, config.formSubmitSelector, 'ajax:send', disableElement)
-  delegate(document, config.formSubmitSelector, 'ajax:complete', enableElement)
+  delegate(document, Rails.formSubmitSelector, 'submit', e => setTimeout(() => disableElement(e), 13))
+  delegate(document, Rails.formSubmitSelector, 'ajax:send', disableElement)
+  delegate(document, Rails.formSubmitSelector, 'ajax:complete', enableElement)
 
-  delegate(document, config.formInputClickSelector, 'click', handleConfirm)
-  delegate(document, config.formInputClickSelector, 'click', formSubmitButtonClick)
+  delegate(document, Rails.formInputClickSelector, 'click', handleConfirm)
+  delegate(document, Rails.formInputClickSelector, 'click', formSubmitButtonClick)
 
-  document.addEventListener('DOMContentLoaded', () => refreshCSRFTokens())
+  document.addEventListener('DOMContentLoaded', refreshCSRFTokens)
 }

@@ -1,30 +1,29 @@
-import config from '../config'
-import { stopEverything } from '../utils/event'
-import { formElements } from '../utils/form'
-import { matches, getData, setData } from '../utils/dom'
+//= require_tree ../utils
+
+const { matches, getData, setData, stopEverything, formElements } = Rails
 
 // Unified function to enable an element (link, button and form)
-export function enableElement(e) {
+Rails.enableElement = function(e) {
   let element = e.target ? e.target : e
 
-  if (matches(element, config.linkDisableSelector)) {
+  if (matches(element, Rails.linkDisableSelector)) {
     enableLinkElement(element)
-  } else if (matches(element, config.buttonDisableSelector) || matches(element, config.formEnableSelector)) {
+  } else if (matches(element, Rails.buttonDisableSelector) || matches(element, Rails.formEnableSelector)) {
     enableFormElement(element)
-  } else if (matches(element, config.formSubmitSelector)) {
+  } else if (matches(element, Rails.formSubmitSelector)) {
     enableFormElements(element)
   }
 }
 
 // Unified function to disable an element (link, button and form)
-export function disableElement(e) {
+Rails.disableElement = function(e) {
   let element = e.target ? e.target : e
 
-  if (matches(element, config.linkDisableSelector)) {
+  if (matches(element, Rails.linkDisableSelector)) {
     disableLinkElement(element)
-  } else if (matches(element, config.buttonDisableSelector) || matches(element, config.formDisableSelector)) {
+  } else if (matches(element, Rails.buttonDisableSelector) || matches(element, Rails.formDisableSelector)) {
     disableFormElement(element)
-  } else if (matches(element, config.formSubmitSelector)) {
+  } else if (matches(element, Rails.formSubmitSelector)) {
     disableFormElements(element)
   }
 }
@@ -59,7 +58,7 @@ function enableLinkElement(element) {
   - Sets disabled property to true
 */
 function disableFormElements(form) {
-  formElements(form, config.formDisableSelector).forEach(el => {
+  formElements(form, Rails.formDisableSelector).forEach(el => {
     disableFormElement(el)
   })
 }
@@ -86,7 +85,7 @@ function disableFormElement(element) {
   - Sets disabled property to false
 */
 function enableFormElements(form) {
-  formElements(form, config.formEnableSelector).forEach(el => {
+  formElements(form, Rails.formEnableSelector).forEach(el => {
     enableFormElement(el)
   })
 }

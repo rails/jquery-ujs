@@ -1,4 +1,4 @@
-export default {
+window.Rails = {
   // Link elements bound by jquery-ujs
   linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote]:not([disabled]), a[data-disable-with], a[data-disable]',
 

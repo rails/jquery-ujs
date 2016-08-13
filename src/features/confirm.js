@@ -1,6 +1,8 @@
-import { fire, stopEverything } from '../utils/event'
+//= require_tree ../utils
 
-export function handleConfirm(e) {
+const { fire, stopEverything } = Rails
+
+Rails.handleConfirm = function(e) {
   if (!allowAction(e.target)) {
     return stopEverything(e)
   }

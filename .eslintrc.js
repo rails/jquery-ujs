@@ -25,4 +25,7 @@ module.exports = {
     'comma-dangle': 'off',
     'eol-last': 'error'
   },
+  globals: {
+    Rails: true
+  }
 }

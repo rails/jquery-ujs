@@ -1,8 +1,11 @@
-import config from '../config'
-import { fire, stopEverything } from '../utils/event'
-import { ajax, isCrossDomain } from '../utils/ajax'
-import { blankInputs, serializeElement } from '../utils/form'
-import { matches, getData, setData } from '../utils/dom'
+//= require_tree ../utils
+
+const {
+  matches, getData, setData,
+  fire, stopEverything,
+  ajax, isCrossDomain,
+  blankInputs, serializeElement
+} = Rails
 
 // Checks "data-remote" if true to handle the request through a XHR request.
 function isRemote(element) {
@@ -11,7 +14,7 @@ function isRemote(element) {
 }
 
 // Submits "remote" forms and links with ajax
-export function handleRemote(e) {
+Rails.handleRemote = function(e) {
   let element = e.target, method, url, data, withCredentials, dataType, options
 
   if (!isRemote(element)) return true
@@ -24,7 +27,7 @@ export function handleRemote(e) {
   withCredentials = element.getAttribute('data-with-credentials')
   dataType = element.getAttribute('data-type') || 'script'
 
-  if (matches(element, config.formSubmitSelector)) {
+  if (matches(element, Rails.formSubmitSelector)) {
     // memoized value from clicked submit button
     let button = getData(element, 'ujs:submit-button')
 
@@ -57,7 +60,7 @@ export function handleRemote(e) {
     setData(element, 'ujs:submit-button', null)
     setData(element, 'ujs:submit-button-formmethod', null)
     setData(element, 'ujs:submit-button-formaction', null)
-  } else if (matches(element, config.buttonClickSelector) || matches(element, config.inputChangeSelector)) {
+  } else if (matches(element, Rails.buttonClickSelector) || matches(element, Rails.inputChangeSelector)) {
     method = element.getAttribute('data-method')
     url = element.getAttribute('data-url')
     data = serializeElement(element, element.getAttribute('data-params'))
@@ -100,13 +103,13 @@ export function handleRemote(e) {
 
 // Check whether any required fields are empty
 // In both ajax mode and normal mode
-export function validateForm(e) {
+Rails.validateForm = function(e) {
   let form = e.target, blankRequiredInputs
 
   // Skip other logic when required values are missing or file upload is present
   if (!form.noValidate) {
     if (getData(form, 'ujs:formnovalidate-button') === undefined) {
-      blankRequiredInputs = blankInputs(form, config.requiredInputSelector, false)
+      blankRequiredInputs = blankInputs(form, Rails.requiredInputSelector, false)
       if (blankRequiredInputs && fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
         return stopEverything(e)
       }
@@ -118,7 +121,7 @@ export function validateForm(e) {
   }
 }
 
-export function formSubmitButtonClick(e) {
+Rails.formSubmitButtonClick = function(e) {
   let button = e.target
 
   // Register the pressed submit button
