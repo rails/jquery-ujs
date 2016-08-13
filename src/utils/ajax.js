@@ -101,11 +101,6 @@ function ajaxHandleResponses(httpRequest, success, error, complete) {
   complete(httpRequest, httpRequest.statusText)
 }
 
-// Default way to get an element's href. May be overridden at $.rails.href.
-export function href(element) {
-  return element.href
-}
-
 // Determines if the request is a cross domain request.
 export function isCrossDomain(url) {
   let originAnchor = document.createElement('a')

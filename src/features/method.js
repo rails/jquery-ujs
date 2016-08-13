@@ -8,7 +8,7 @@ export function handleMethod(e) {
 
   if (!method) return
 
-  let href = ajax.href(link),
+  let href = link.href,
       csrfToken = csrf.csrfToken(),
       csrfParam = csrf.csrfParam(),
       form = document.createElement('form'),

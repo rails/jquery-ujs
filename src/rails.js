@@ -12,7 +12,7 @@ import config from './config'
 import { fire, delegate } from './utils/event'
 import { getData, $ } from './utils/dom'
 import { refreshCSRFTokens, CSRFProtection, csrfToken, csrfParam } from './utils/csrf'
-import { href, ajax } from './utils/ajax'
+import { ajax } from './utils/ajax'
 import { enableElement, disableElement } from './features/disable'
 import { handleConfirm } from './features/confirm'
 import { handleRemote, validateForm, formSubmitButtonClick } from './features/remote'
@@ -25,7 +25,7 @@ if ( window.rails !== undefined ) {
 }
 
 // For backward compatibility
-window.rails = { disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, href, ajax, delegate }
+window.rails = { disableElement, getData, handleRemote, refreshCSRFTokens, csrfToken, csrfParam, ajax, delegate }
 if (window.jQuery) {
   window.jQuery.rails = window.rails
   window.jQuery.ajaxPrefilter((options, originalOptions, xhr) => {

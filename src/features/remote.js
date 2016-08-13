@@ -1,6 +1,6 @@
 import config from '../config'
 import { fire, stopEverything } from '../utils/event'
-import { ajax, href, isCrossDomain } from '../utils/ajax'
+import { ajax, isCrossDomain } from '../utils/ajax'
 import { blankInputs, serializeElement } from '../utils/form'
 import { matches, getData, setData } from '../utils/dom'
 
@@ -63,8 +63,8 @@ export function handleRemote(e) {
     data = serializeElement(element, element.getAttribute('data-params'))
   } else {
     method = element.getAttribute('data-method')
-    url = href(element)
-    data = element.getAttribute('data-params') || null
+    url = element.href
+    data = element.getAttribute('data-params')
   }
 
   options = {
