@@ -1,5 +1,5 @@
 #
-# Unobtrusive scripting adapter for jQuery
+# Unobtrusive JavaScript
 # https://github.com/rails/jquery-ujs
 #
 # Released under the MIT license
@@ -19,12 +19,15 @@
 } = Rails
 
 # For backward compatibility
-if window.jQuery
-  window.jQuery.rails = Rails
-  window.jQuery.ajaxPrefilter (options, originalOptions, xhr) ->
+if jQuery? and not jQuery.rails
+  jQuery.rails = Rails
+  jQuery.ajaxPrefilter (options, originalOptions, xhr) ->
     CSRFProtection(xhr) unless options.crossDomain
 
-if fire(document, 'rails:attachBindings')
+Rails.start = ->
+  # Cut down on the number of issues from people inadvertently including jquery_ujs twice
+  # by detecting and raising an error when it happens.
+  throw new Error('jquery-ujs has already been loaded!') if window._rails_loaded
 
   # This event works the same as the load event, except that it fires every
   # time the page is loaded.
@@ -67,3 +70,7 @@ if fire(document, 'rails:attachBindings')
   delegate document, Rails.formInputClickSelector, 'click', formSubmitButtonClick
 
   document.addEventListener('DOMContentLoaded', refreshCSRFTokens)
+  window._rails_loaded = true
+
+if window.Rails is Rails and fire(document, 'rails:attachBindings')
+  Rails.start()
