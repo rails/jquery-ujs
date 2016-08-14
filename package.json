@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "lint": "eslint src test/public/test"
+    "lint": "coffeelint src && eslint test/public/test"
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,7 @@
   },
   "homepage": "https://github.com/rails/jquery-ujs#readme",
   "devDependencies": {
-    "babel-core": "^6.13.2",
-    "babel-preset-es2015": "^6.13.2",
+    "coffeelint": "^1.15.7",
     "eslint": "^2.13.1"
   }
 }
