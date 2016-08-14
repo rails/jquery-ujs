@@ -9,9 +9,9 @@ script: ./script/cibuild
 before_install:
   - nvm install node
   - node --version
+  - export PATH=$PWD/node_modules/.bin:$PATH
   - npm install
   - npm install phantomjs-prebuilt
-  - export PATH=$PWD/node_modules/.bin:$PATH
   - phantomjs --version
 env:
   - JQUERY_VERSION: 1.8.0
