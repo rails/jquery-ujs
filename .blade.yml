@@ -9,6 +9,3 @@ build:
     - rails.js
   path: dist
   js_compressor: uglifier
-
-plugins:
-  sprockets_commoner: true
