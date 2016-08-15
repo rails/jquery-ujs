@@ -57,12 +57,12 @@ Rails.handleRemote = (e) ->
     data: data
     dataType: dataType
     # stopping the "ajax:beforeSend" event will cancel the ajax request
-    beforeSend: (args...) ->
-      if fire(element, 'ajax:beforeSend', args)
-        fire(element, 'ajax:send', args)
+    beforeSend: (xhr, options) ->
+      if fire(element, 'ajax:beforeSend', [xhr, options])
+        fire(element, 'ajax:send', [xhr])
       else
         fire(element, 'ajax:stopped')
-        false
+        xhr.abort()
     success: (args...) -> fire(element, 'ajax:success', args)
     error: (args...) -> fire(element, 'ajax:error', args)
     complete: (args...) -> fire(element, 'ajax:complete', args)

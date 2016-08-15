@@ -13,14 +13,20 @@ AcceptHeaders =
 
 Rails.ajax = (options) ->
   options = prepareOptions(options)
-  xhr = createXHR(options)
+  xhr = createXHR options, ->
+    response = processResponse(xhr.response, xhr.getResponseHeader('Content-Type'))
+    if xhr.status // 100 == 2
+      options.success?(response, xhr.statusText, xhr)
+    else
+      options.error?(response, xhr.statusText, xhr)
+    options.complete?(xhr, xhr.statusText)
   # Call beforeSend hook
-  if options.beforeSend? and options.beforeSend(xhr, options) is false
-    xhr.abort()
-    fire(document, 'ajaxStop') # to be compatible with jQuery.ajax
+  options.beforeSend?(xhr, options)
+  # Send the request
+  if xhr.readyState is XMLHttpRequest.OPENED
+    xhr.send(options.data)
   else
-    # Send the request
-    xhr.send(options.data) if xhr.readyState is XMLHttpRequest.OPENED
+    fire(document, 'ajaxStop') # to be compatible with jQuery.ajax
 
 prepareOptions = (options) ->
   options.type = options.type.toUpperCase()
@@ -36,7 +42,7 @@ prepareOptions = (options) ->
   options.accept += ', */*; q=0.01' if options.dataType isnt '*'
   options
 
-createXHR = (options) ->
+createXHR = (options, done) ->
   xhr = new XMLHttpRequest()
   # Open and setup xhr
   xhr.open(options.type, options.url, true)
@@ -50,14 +56,10 @@ createXHR = (options) ->
   CSRFProtection(xhr)
   xhr.withCredentials = !!options.withCredentials
   xhr.onreadystatechange = ->
-    if xhr.readyState is XMLHttpRequest.DONE
-      ajaxHandleResponses(xhr, options.success, options.error, options.complete)
+    done(xhr) if xhr.readyState is XMLHttpRequest.DONE
   xhr
 
-ajaxHandleResponses = (xhr, success, error, complete) ->
-  type = xhr.getResponseHeader('Content-Type')
-  response = xhr.response
-
+processResponse = (response, type) ->
   if typeof response is 'string' and typeof type is 'string'
     if type.match(/\bjson\b/)
       try response = JSON.parse(response)
@@ -69,12 +71,7 @@ ajaxHandleResponses = (xhr, success, error, complete) ->
       parser = new DOMParser()
       type = type.replace(/;.+/, '') # remove something like ';charset=utf-8'
       try response = parser.parseFromString(response, type)
-
-  if xhr.status // 100 == 2
-    success(response, xhr.statusText, xhr)
-  else
-    error(response, xhr.statusText, xhr)
-  complete(xhr, xhr.statusText)
+  response
 
 
 # Determines if the request is a cross domain request.
