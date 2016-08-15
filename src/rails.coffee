@@ -62,7 +62,7 @@ Rails.start = ->
   delegate document, Rails.formSubmitSelector, 'submit', handleRemote
   # Normal mode submit
   # Slight timeout so that the submit button gets properly serialized
-  delegate document, Rails.formSubmitSelector, 'submit', (e) -> setTimeout (-> disableElement e), 13
+  delegate document, Rails.formSubmitSelector, 'submit', (e) -> setTimeout((-> disableElement(e)), 13)
   delegate document, Rails.formSubmitSelector, 'ajax:send', disableElement
   delegate document, Rails.formSubmitSelector, 'ajax:complete', enableElement
 

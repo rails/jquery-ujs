@@ -3,7 +3,7 @@
 { fire, stopEverything } = Rails
 
 Rails.handleConfirm = (e) ->
-  stopEverything e unless allowAction e.target
+  stopEverything(e) unless allowAction(e.target)
 
 # For 'data-confirm' attribute:
 # - Fires `confirm` event
@@ -15,12 +15,12 @@ Rails.handleConfirm = (e) ->
 # Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
 # return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
 allowAction = (element) ->
-  message = element.getAttribute 'data-confirm'
+  message = element.getAttribute('data-confirm')
   return true unless message
 
   answer = false
-  if fire element, 'confirm'
-    try answer = confirm message
-    callback = fire element, 'confirm:complete', [answer]
+  if fire(element, 'confirm')
+    try answer = confirm(message)
+    callback = fire(element, 'confirm:complete', [answer])
 
-  answer && callback
+  answer and callback

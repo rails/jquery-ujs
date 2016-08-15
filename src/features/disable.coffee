@@ -6,21 +6,21 @@
 Rails.enableElement = (e) ->
   element = if e instanceof Event then e.target else e
   if matches(element, Rails.linkDisableSelector)
-    enableLinkElement element
-  else if matches(element, Rails.buttonDisableSelector) || matches(element, Rails.formEnableSelector)
-    enableFormElement element
+    enableLinkElement(element)
+  else if matches(element, Rails.buttonDisableSelector) or matches(element, Rails.formEnableSelector)
+    enableFormElement(element)
   else if matches(element, Rails.formSubmitSelector)
-    enableFormElements element
+    enableFormElements(element)
 
 # Unified function to disable an element (link, button and form)
 Rails.disableElement = (e) ->
   element = if e instanceof Event then e.target else e
   if matches(element, Rails.linkDisableSelector)
-    disableLinkElement element
-  else if matches(element, Rails.buttonDisableSelector) || matches(element, Rails.formDisableSelector)
-    disableFormElement element
+    disableLinkElement(element)
+  else if matches(element, Rails.buttonDisableSelector) or matches(element, Rails.formDisableSelector)
+    disableFormElement(element)
   else if matches(element, Rails.formSubmitSelector)
-    disableFormElements element
+    disableFormElements(element)
 
 #  Replace element's html with the 'data-disable-with' after storing original html
 #  and prevent clicking on it
