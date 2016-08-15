@@ -1,0 +1,29 @@
+{
+  "name": "rails-ujs",
+  "version": "0.0.1",
+  "description": "Unobtrusive JavaScript used in Rails",
+  "main": "dist/rails.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "lint": "coffeelint src && eslint test/public/test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rails/jquery-ujs.git"
+  },
+  "author": {
+    "name": "All contributors",
+    "url": "https://github.com/rails/jquery-ujs/graphs/contributors"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rails/jquery-ujs/issues"
+  },
+  "homepage": "https://github.com/rails/jquery-ujs#readme",
+  "devDependencies": {
+    "coffeelint": "^1.15.7",
+    "eslint": "^2.13.1"
+  }
+}

@@ -1,0 +1,11 @@
+load_paths:
+  - src
+
+logical_paths:
+  - rails.js
+
+build:
+  logical_paths:
+    - rails.js
+  path: dist
+  js_compressor: uglifier
