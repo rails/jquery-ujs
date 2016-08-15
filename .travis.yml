@@ -5,14 +5,13 @@ cache:
   bundler: true
   directories:
     - node_modules
+    - $HOME/.nvm
 script: ./script/cibuild
 before_install:
   - nvm install node
   - node --version
-  - export PATH=$PWD/node_modules/.bin:$PATH
   - npm install
-  - npm install phantomjs-prebuilt
-  - phantomjs --version
+  - "[[ $(phantomjs --version) > '2' ]] || npm install -g phantomjs-prebuilt"
 env:
   - JQUERY_VERSION: 1.8.0
   - JQUERY_VERSION: 2.2.0
