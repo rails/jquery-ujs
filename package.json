@@ -1,6 +1,6 @@
 {
   "name": "jquery-ujs",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Unobtrusive scripting adapter for jQuery",
   "main": "src/rails.js",
   "scripts": {
