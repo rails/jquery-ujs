@@ -3,9 +3,6 @@
   "version": "1.2.1",
   "description": "Unobtrusive scripting adapter for jQuery",
   "main": "src/rails.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "echo \"See the wiki: https://github.com/rails/jquery-ujs/wiki/Running-Tests-and-Contributing\" && exit 1",
     "postversion": "git push && git push --tags && npm publish"
