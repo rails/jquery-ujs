@@ -110,7 +110,7 @@ asyncTest('stopping the "ajax:beforeSend" event aborts the request', 1, function
   });
 });
 
-asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 5, function() {
+asyncTest('blank required form input field should abort request and trigger "ajax:aborted:required" event', 6, function() {
   $(document).bind('iframe:loading', function() {
     ok(false, 'form should not get submitted');
   });
@@ -118,19 +118,21 @@ asyncTest('blank required form input field should abort request and trigger "aja
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required">'))
     .append($('<textarea name="user_bio" required="required"></textarea>'))
+    .append($('<select name="dropdown_test" required="required"><option value="">-</option><option value="Tyler">Tyler</option></textarea>'))
     .bind('ajax:beforeSend', function() {
       ok(false, 'ajax:beforeSend should not run');
     })
     .bind('ajax:aborted:required', function(e,data){
-      ok(data.length == 2, 'ajax:aborted:required event is passed all blank required inputs (jQuery objects)');
+      ok(data.length == 3, 'ajax:aborted:required event is passed all blank required inputs (jQuery objects)');
       ok(data.first().is('input[name="user_name"]') , 'ajax:aborted:required adds blank required input to data');
-      ok(data.last().is('textarea[name="user_bio"]'), 'ajax:aborted:required adds blank required textarea to data');
+      ok(data.eq(1).is('textarea[name="user_bio"]'), 'ajax:aborted:required adds blank required textarea to data');
+      ok(data.last().is('select[name="dropdown_test"]'), 'ajax:aborted:required adds blank required textarea to data');
       ok(true, 'ajax:aborted:required should run');
     })
     .trigger('submit');
 
   setTimeout(function() {
-    form.find('input[required],textarea[required]').val('Tyler');
+    form.find('input[required],textarea[required],select[required]').val('Tyler');
     form.unbind('ajax:beforeSend');
     submit();
   }, 13);
@@ -170,6 +172,7 @@ asyncTest('disabled fields should not be included in blank required check', 2, f
   var form = $('form[data-remote]')
     .append($('<input type="text" name="user_name" required="required" disabled="disabled">'))
     .append($('<textarea name="user_bio" required="required" disabled="disabled"></textarea>'))
+    .append($('<select name="dropdown_test" required="required" disabled="disabled"><option value="">-</option><option value="Tyler">Tyler</option></textarea>'))
     .bind('ajax:beforeSend', function() {
       ok(true, 'ajax:beforeSend should run');
     })
