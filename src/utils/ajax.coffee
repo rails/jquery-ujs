@@ -73,6 +73,8 @@ processResponse = (response, type) ->
       try response = parser.parseFromString(response, type)
   response
 
+# Default way to get an element's href. May be overridden at Rails.href.
+Rails.href = (element) -> element.href
 
 # Determines if the request is a cross domain request.
 Rails.isCrossDomain = (url) ->

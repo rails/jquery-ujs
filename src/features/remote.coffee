@@ -48,7 +48,7 @@ Rails.handleRemote = (e) ->
     data = serializeElement(element, element.getAttribute('data-params'))
   else
     method = element.getAttribute('data-method')
-    url = element.href
+    url = Rails.href(element)
     data = element.getAttribute('data-params')
 
   ajax(

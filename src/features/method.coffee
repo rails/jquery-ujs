@@ -9,7 +9,7 @@ Rails.handleMethod = (e) ->
   method = link.getAttribute('data-method')
   return unless method
 
-  href = link.href
+  href = Rails.href(link)
   csrfToken = Rails.csrfToken()
   csrfParam = Rails.csrfParam()
   form = document.createElement('form')
