@@ -47,11 +47,8 @@ asyncTest('the event selector strings are overridable', 1, function() {
 })
 
 asyncTest('including jquery-ujs multiple times throws error', 1, function() {
-  var script = document.createElement('script')
-  script.type = 'text/javascript'
-  script.src = '/rails.js'
   throws(function() {
-    $('#qunit-fixture').append(script)
+    Rails.start()
   }, 'appending rails.js again throws error')
   setTimeout(function() { start() }, 50)
 })
