@@ -8,4 +8,3 @@ build:
   logical_paths:
     - rails.js
   path: dist
-  js_compressor: uglifier
