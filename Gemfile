@@ -6,5 +6,3 @@ gem 'shotgun', :group => :reloadable
 gem 'thin', :group => :reloadable
 gem 'rake'
 gem 'blade'
-gem 'uglifier'
-gem 'sprockets-commoner'
