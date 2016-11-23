@@ -1,0 +1,26 @@
+{
+  "name": "simple-module",
+  "version": "2.0.6",
+  "homepage": "https://github.com/mycolorway/simple-module",
+  "authors": [
+    "farthinker <farthinker@gmail.com>"
+  ],
+  "description": "A abstract class for module and UI widget.",
+  "main": "lib/module.js",
+  "keywords": [
+    "module"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "spec",
+    "node_modules",
+    "vendor",
+    "Gruntfile.coffee",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "jquery": "2.x"
+  }
+}

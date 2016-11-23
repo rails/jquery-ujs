@@ -1,12 +1,16 @@
 {
   "name": "jquery-ujs",
   "homepage": "https://github.com/rails/jquery-ujs",
-  "authors": ["Stephen St. Martin", "Steve Schwartz"],
+  "authors": [
+    "Stephen St. Martin",
+    "Steve Schwartz"
+  ],
   "description": "Ruby on Rails unobtrusive scripting adapter for jQuery",
   "main": "src/rails.js",
   "license": "MIT",
   "dependencies": {
-    "jquery": ">1.8.*"
+    "jquery": ">1.8.*",
+    "simple-dialog": "^1.1.12"
   },
   "ignore": [
     "**/.*",

@@ -1,0 +1,117 @@
+body.simple-dialog-scrollable {
+  overflow-y: hidden !important;
+}
+
+.simple-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  min-height: 1em;
+  z-index: 100;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+.simple-dialog.simple-dialog-message, .simple-dialog.simple-dialog-confirm {
+  z-index: 400;
+}
+.simple-dialog .simple-dialog-wrapper {
+  padding: 20px;
+  position: relative;
+}
+.simple-dialog .simple-dialog-wrapper .content-top-shadow,
+.simple-dialog .simple-dialog-wrapper .content-bottom-shadow {
+  display: block;
+  height: 10px;
+  width: 100%;
+  position: absolute;
+  box-shadow: inset 0 0 0 transparent;
+  -webkit-box-shadow: inset 0 0 0 transparent;
+  transition: 100ms box-shadow;
+  -webkit-transition: 100ms box-shadow;
+}
+.simple-dialog .simple-dialog-wrapper .content-top-shadow {
+  top: 0;
+  left: 0;
+}
+.simple-dialog .simple-dialog-wrapper .content-bottom-shadow {
+  bottom: 0;
+  left: 0;
+}
+.simple-dialog .simple-dialog-wrapper.top-scrolling .content-top-shadow {
+  box-shadow: inset 0 6px 8px -6px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 6px 8px -6px rgba(0, 0, 0, 0.2);
+}
+.simple-dialog .simple-dialog-wrapper.bottom-scrolling .content-bottom-shadow {
+  box-shadow: inset 0 -6px 8px -6px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 -6px 8px -6px rgba(0, 0, 0, 0.2);
+}
+.simple-dialog .simple-dialog-content .simple-dialog-title {
+  font-size: 1.5em;
+  margin: 0 0 0.5em 0;
+}
+.simple-dialog .simple-dialog-buttons {
+  padding: 20px 0 0 0;
+}
+.simple-dialog .simple-dialog-buttons:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.simple-dialog .simple-dialog-buttons .btn {
+  float: left;
+  margin: 0 10px 0 0;
+  cursor: pointer;
+}
+.simple-dialog .simple-dialog-buttons .btn:last-child {
+  margin-right: 0;
+}
+.simple-dialog .simple-dialog-buttons .btn.btn-link {
+  border: none;
+  background: none;
+  color: #666666;
+}
+.simple-dialog .simple-dialog-buttons .btn.btn-link:hover {
+  text-decoration: underline;
+}
+.simple-dialog .simple-dialog-remove {
+  position: absolute;
+  text-decoration: none;
+  padding: 3px 6px;
+  top: 8px;
+  right: 8px;
+  color: #777;
+}
+.simple-dialog .simple-dialog-remove:hover {
+  color: #333;
+}
+.simple-dialog .simple-dialog-remove > i span {
+  font-style: normal;
+}
+
+.simple-dialog-modal {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 99;
+  background-color: #000;
+  opacity: 0.36;
+  cursor: pointer;
+}
+
+.simple-dialog-fullscreen {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  overflow: auto;
+}

@@ -50,6 +50,7 @@ asyncTest('form input field with "data-disable-with" attribute', 7, function() {
   App.checkEnabledState(input, 'john');
 
   form.bind('ajax:success', function(e, data) {
+    App.checkDisabledState(input, 'processing ...');
     setTimeout(function() {
       App.checkEnabledState(input, 'john');
       equal(data.params.user_name, 'john');
@@ -58,7 +59,6 @@ asyncTest('form input field with "data-disable-with" attribute', 7, function() {
   });
   form.trigger('submit');
 
-  App.checkDisabledState(input, 'processing ...');
 });
 
 asyncTest('blank form input field with "data-disable-with" attribute', 7, function() {
@@ -68,6 +68,7 @@ asyncTest('blank form input field with "data-disable-with" attribute', 7, functi
   App.checkEnabledState(input, '');
 
   form.bind('ajax:success', function(e, data) {
+    App.checkDisabledState(input, 'processing ...');
     setTimeout(function() {
       App.checkEnabledState(input, '');
       equal(data.params.user_name, '');
@@ -76,7 +77,6 @@ asyncTest('blank form input field with "data-disable-with" attribute', 7, functi
   });
   form.trigger('submit');
 
-  App.checkDisabledState(input, 'processing ...');
 });
 
 asyncTest('form button with "data-disable-with" attribute', 6, function() {
@@ -86,6 +86,7 @@ asyncTest('form button with "data-disable-with" attribute', 6, function() {
   App.checkEnabledState(button, 'Submit');
 
   form.bind('ajax:success', function(e, data) {
+    App.checkDisabledState(button, 'submitting ...');
     setTimeout(function() {
       App.checkEnabledState(button, 'Submit');
       start();
@@ -93,7 +94,6 @@ asyncTest('form button with "data-disable-with" attribute', 6, function() {
   });
   form.trigger('submit');
 
-  App.checkDisabledState(button, 'submitting ...');
 });
 
 asyncTest('form input[type=submit][data-disable-with] disables', 6, function(){
@@ -205,7 +205,9 @@ asyncTest('a[data-disable-with] disables', 4, function() {
   App.checkEnabledState(link, 'Click me');
 
   link.trigger('click');
-  App.checkDisabledState(link, 'clicking...');
+  setTimeout(function() {
+    App.checkDisabledState(link, 'clicking...');
+  }, 13)
   start();
 });
 
@@ -215,7 +217,10 @@ test('a[data-disable-with] re-enables when `pageshow` event is triggered', funct
   App.checkEnabledState(link, 'Click me');
 
   link.trigger('click');
-  App.checkDisabledState(link, 'clicking...');
+
+  setTimeout(function() {
+    App.checkDisabledState(link, 'clicking...');
+  }, 13)
 
   $(window).trigger('pageshow');
   App.checkEnabledState(link, 'Click me');
