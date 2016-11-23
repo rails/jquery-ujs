@@ -163,10 +163,20 @@ asyncTest('submitting form with data-remote attribute should include inputs in a
       equal(data.params.items.length, 1, 'ajax arguments should only have the item once')
       App.assertPostRequest(data);
     })
-    .bind('ajax:complete', function() {
-      $('form[data-remote], fieldset').remove()
-      start()
+    .bind('ajax:complete', function() { start() })
+    .trigger('submit');
+});
+
+asyncTest('form fields from disabled fieldsets will not be included', 4, function() {
+  $('form[data-remote]')
+    .append('<fieldset disabled="disabled"><input required name="not_here" value="wont_show_up" /></fieldset>')
+    .bind('ajax:success', function(e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      App.assertRequestPath(data, '/echo');
+      equal(data.params.not_here, undefined, 'form fields in a disabled fieldset should not be submitted');
+      App.assertPostRequest(data);
     })
+    .bind('ajax:complete', function() { start() })
     .trigger('submit');
 });
 

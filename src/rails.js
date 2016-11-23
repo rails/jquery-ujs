@@ -115,7 +115,10 @@
         if (element.is('form')) {
           method = element.data('ujs:submit-button-formmethod') || element.attr('method');
           url = element.data('ujs:submit-button-formaction') || element.attr('action');
-          data = $(element[0]).serializeArray();
+          data = $(element[0].elements)
+            .not('fieldset') // We reject the fieldset itself to prevent double entries in data
+            .not('fieldset[disabled] > *') // Reject children of disabled fieldsets
+            .serializeArray()
           // memoized value from clicked submit button
           var button = element.data('ujs:submit-button');
           if (button) {
