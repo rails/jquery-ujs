@@ -117,6 +117,18 @@ asyncTest('clicking on a button with data-remote attribute', 5, function() {
     .trigger('click');
 });
 
+test('triggering ajax:beforeSend on a link with data-remote attribute nested inside a form should not trigger ajax:beforeSend on that form', function() {
+  var form = $('<form />')
+    .append('<a />', {
+      href: '/echo',
+      'data-remote': 'true'
+    })
+    .bind('ajax:beforeSend', function() {
+      ok(false, 'this event should never trigger');
+    })
+    .find('a').trigger('ajax:beforeSend');
+});
+
 asyncTest('changing a select option with data-remote attribute', 5, function() {
   $('form')
     .append(
