@@ -7,11 +7,11 @@ module('call-remote-callbacks', {
     }));
   },
   teardown: function() {
-    $(document).undelegate('form[data-remote]', 'ajax:beforeSend');
-    $(document).undelegate('form[data-remote]', 'ajax:before');
-    $(document).undelegate('form[data-remote]', 'ajax:send');
-    $(document).undelegate('form[data-remote]', 'ajax:complete');
-    $(document).undelegate('form[data-remote]', 'ajax:success');
+    $(document).off('ajax:beforeSend', 'form[data-remote]');
+    $(document).off('ajax:before', 'form[data-remote]');
+    $(document).off('ajax:send', 'form[data-remote]');
+    $(document).off('ajax:complete', 'form[data-remote]');
+    $(document).off('ajax:success', 'form[data-remote]');
     $(document).off('ajaxStop');
     $(document).off('iframe:loading');
   }
@@ -371,7 +371,7 @@ function skipIt() {
 }
 
 asyncTest('"ajax:beforeSend" can be observed and stopped with event delegation', 1, function() {
-  $(document).delegate('form[data-remote]', 'ajax:beforeSend', function() {
+  $(document).on('ajax:beforeSend', 'form[data-remote]', function() {
     ok(true, 'ajax:beforeSend observed with event delegation');
     return false;
   });
@@ -429,18 +429,18 @@ if(window.phantom !== undefined) {
 }
 
 // IF THIS TEST IS FAILING, TRY INCREASING THE TIMEOUT AT THE BOTTOM TO > 100
-asyncTest('binding to ajax callbacks via .delegate() triggers handlers properly', 4, function() {
+asyncTest('binding to ajax callbacks via .on() triggers handlers properly', 4, function() {
   $(document)
-    .delegate('form[data-remote]', 'ajax:beforeSend', function() {
+    .on('ajax:beforeSend', 'form[data-remote]', function() {
       ok(true, 'ajax:beforeSend handler is triggered');
     })
-    .delegate('form[data-remote]', 'ajax:send', function() {
+    .on('ajax:send', 'form[data-remote]', function() {
       ok(true, 'ajax:send handler is triggered');
     })
-    .delegate('form[data-remote]', 'ajax:complete', function() {
+    .on('ajax:complete', 'form[data-remote]', function() {
       ok(true, 'ajax:complete handler is triggered');
     })
-    .delegate('form[data-remote]', 'ajax:success', function() {
+    .on('ajax:success', 'form[data-remote]', function() {
       ok(true, 'ajax:success handler is triggered');
     });
   $('form[data-remote]').trigger('submit');
@@ -452,7 +452,7 @@ asyncTest('binding to ajax callbacks via .delegate() triggers handlers properly'
 
 asyncTest('binding to ajax:send event to call jquery methods on ajax object', 2, function() {
   $('form[data-remote]')
-    .on('ajax:send', function(e, xhr) {
+    .bind('ajax:send', function(e, xhr) {
       ok(true, 'event should fire');
       equal(typeof(xhr.abort), 'function', 'event should pass jqXHR object');
       xhr.abort();
