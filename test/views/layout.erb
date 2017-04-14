@@ -23,7 +23,7 @@
     <script>
       // This is for test in override.js.
       // Must go after jQuery is loaded, but before jquery-ujs.
-      $(document).bind('rails:attachBindings', function() {
+      $(document).on('rails:attachBindings', function() {
         $.rails.linkClickSelector += ', a[data-custom-remote-link]';
       });
     </script>

@@ -7,12 +7,12 @@ module('data-method', {
     }));
   },
   teardown: function() {
-    $(document).unbind('iframe:loaded');
+    $(document).off('iframe:loaded');
   }
 });
 
 function submit(fn, options) {
-  $(document).bind('iframe:loaded', function(e, data) {
+  $(document).on('iframe:loaded', function(e, data) {
     fn(data);
     start();
   });

@@ -372,7 +372,7 @@
         element.html(replacement);
       }
 
-      element.bind('click.railsDisable', function(e) { // prevent further clicking
+      element.on('click.railsDisable', function(e) { // prevent further clicking
         return rails.stopEverything(e);
       });
       element.data('ujs:disabled', true);
@@ -384,7 +384,7 @@
         element.html(element.data('ujs:enable-with')); // set to old enabled state
         element.removeData('ujs:enable-with'); // clean up cache
       }
-      element.unbind('click.railsDisable'); // enable element
+      element.off('click.railsDisable'); // enable element
       element.removeData('ujs:disabled');
     }
   };
