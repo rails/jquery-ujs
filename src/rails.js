@@ -96,7 +96,7 @@
 
     // Default way to get an element's href. May be overridden at $.rails.href.
     href: function(element) {
-      return element[0].href;
+      return element.attr("href");
     },
 
     // Checks "data-remote" if true to handle the request through a XHR request.
