@@ -39,7 +39,7 @@ asyncTest('ctrl-clicking on a link does not fire ajaxyness', 0, function() {
   // follow links using `trigger('click')`, it only fires bindings.
   link
     .removeAttr('data-params')
-    .bind('ajax:beforeSend', function() {
+    .on('ajax:beforeSend', function() {
       ok(false, 'ajax should not be triggered');
     });
 
@@ -62,7 +62,7 @@ asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for li
   link
     .removeAttr('data-params')
     .attr('data-method', 'POST')
-    .bind('ajax:beforeSend', function() {
+    .on('ajax:beforeSend', function() {
       ok(true, 'ajax should be triggered');
     })
     .trigger(e);
@@ -80,23 +80,23 @@ asyncTest('ctrl-clicking on a link still fires ajax for non-GET links and for li
 
 asyncTest('clicking on a link with data-remote attribute', 5, function() {
   $('a[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
       equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
       App.assertGetRequest(data);
     })
-    .bind('ajax:complete', function() { start() })
+    .on('ajax:complete', function() { start() })
     .trigger('click');
 });
 
 asyncTest('clicking on a link with disabled attribute', 0, function() {
   $('a[disabled]')
-  .bind("ajax:before", function(e, data, status, xhr) {
+  .on("ajax:before", function(e, data, status, xhr) {
     App.assertCallbackNotInvoked('ajax:success')
   })
-  .bind('ajax:complete', function() { start() })
+  .on('ajax:complete', function() { start() })
   .trigger('click')
 
   setTimeout(function() {
@@ -106,14 +106,14 @@ asyncTest('clicking on a link with disabled attribute', 0, function() {
 
 asyncTest('clicking on a button with data-remote attribute', 5, function() {
   $('button[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
       equal(data.params.data2, 'value2', 'ajax arguments should have key data2 with right value');
       App.assertGetRequest(data);
     })
-    .bind('ajax:complete', function() { start() })
+    .on('ajax:complete', function() { start() })
     .trigger('click');
 });
 
@@ -131,39 +131,39 @@ asyncTest('changing a select option with data-remote attribute', 5, function() {
     );
 
   $('select[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       equal(data.params.user_data, 'optionValue2', 'ajax arguments should have key term with right value');
       equal(data.params.data1, 'value1', 'ajax arguments should have key data1 with right value');
       App.assertGetRequest(data);
     })
-    .bind('ajax:complete', function() { start() })
+    .on('ajax:complete', function() { start() })
     .val('optionValue2')
     .trigger('change');
 });
 
 asyncTest('submitting form with data-remote attribute', 4, function() {
   $('form[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
       App.assertPostRequest(data);
     })
-    .bind('ajax:complete', function() { start() })
+    .on('ajax:complete', function() { start() })
     .trigger('submit');
 });
 
 asyncTest('submitting form with data-remote attribute should include inputs in a fieldset only once', 3, function() {
   $('form[data-remote]')
     .append('<fieldset><input name="items[]" value="Item" /></fieldset>')
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       equal(data.params.items.length, 1, 'ajax arguments should only have the item once')
       App.assertPostRequest(data);
     })
-    .bind('ajax:complete', function() {
+    .on('ajax:complete', function() {
       $('form[data-remote], fieldset').remove()
       start()
     })
@@ -175,27 +175,27 @@ asyncTest('submitting form with data-remote attribute submits input with matchin
     .append($('<input type="text" name="user_data" value="value1" form="my-remote-form">'));
 
   $('form[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
       equal(data.params.user_data, 'value1', 'ajax arguments should have key user_data with right value');
       App.assertPostRequest(data);
     })
-    .bind('ajax:complete', function() { start() })
+    .on('ajax:complete', function() { start() })
     .trigger('submit');
 });
 
 asyncTest('submitting form with data-remote attribute by clicking button with matching [form] attribute', 5, function() {
   $('form[data-remote]')
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertCallbackInvoked('ajax:success');
       App.assertRequestPath(data, '/echo');
       equal(data.params.user_name, 'john', 'ajax arguments should have key user_name with right value');
       equal(data.params.user_data, 'value2', 'ajax arguments should have key user_data with right value');
       App.assertPostRequest(data);
     })
-    .bind('ajax:complete', function() { start() });
+    .on('ajax:complete', function() { start() });
 
   $('<button />', {
         type: "submit",
@@ -222,16 +222,16 @@ asyncTest('form\'s submit bindings in browsers that don\'t support submit bubbli
 
   form
     .append($('<input type="submit" />'))
-    .bind('submit', function(event){
+    .on('submit', function(event){
       ok(event.type == 'submit', 'submit event handlers are called with submit event');
       ok(true, 'binding handler is called');
       directBindingCalled = true;
     })
-    .bind('ajax:beforeSend', function(){
+    .on('ajax:beforeSend', function(){
       ok(true, 'form being submitted via ajax');
       ok(directBindingCalled, 'binding handler already called');
     })
-    .bind('ajax:complete', function(){
+    .on('ajax:complete', function(){
       start();
     });
 
@@ -249,11 +249,11 @@ asyncTest('returning false in form\'s submit bindings in non-submit-bubbling bro
 
   form
     .append($('<input type="submit" />'))
-    .bind('submit', function(){
+    .on('submit', function(){
       ok(true, 'binding handler is called');
       return false;
     })
-    .bind('ajax:beforeSend', function(){
+    .on('ajax:beforeSend', function(){
       ok(false, 'form should not be submitted');
     });
 
@@ -270,10 +270,10 @@ asyncTest('returning false in form\'s submit bindings in non-submit-bubbling bro
 asyncTest('clicking on a link with falsy "data-remote" attribute does not fire ajaxyness', 0, function() {
   $('a[data-remote]')
     .attr('data-remote', 'false')
-    .bind('ajax:beforeSend', function() {
+    .on('ajax:beforeSend', function() {
       ok(false, 'ajax should not be triggered');
     })
-    .bind('click', function() {
+    .on('click', function() {
       return false;
     })
     .trigger('click');
@@ -290,10 +290,10 @@ asyncTest('ctrl-clicking on a link with falsy "data-remote" attribute does not f
     .removeAttr('data-params')
     .attr('data-remote', 'false')
     .attr('data-method', 'POST')
-    .bind('ajax:beforeSend', function() {
+    .on('ajax:beforeSend', function() {
       ok(false, 'ajax should not be triggered');
     })
-    .bind('click', function() {
+    .on('click', function() {
       return false;
     })
     .trigger(e);
@@ -312,10 +312,10 @@ asyncTest('ctrl-clicking on a link with falsy "data-remote" attribute does not f
 asyncTest('clicking on a button with falsy "data-remote" attribute', 0, function() {
   $('button[data-remote]:first')
     .attr('data-remote', 'false')
-    .bind('ajax:beforeSend', function() {
+    .on('ajax:beforeSend', function() {
       ok(false, 'ajax should not be triggered');
     })
-    .bind('click', function() {
+    .on('click', function() {
       return false;
     })
     .trigger('click');
@@ -326,10 +326,10 @@ asyncTest('clicking on a button with falsy "data-remote" attribute', 0, function
 asyncTest('submitting a form with falsy "data-remote" attribute', 0, function() {
   $('form[data-remote]:first')
     .attr('data-remote', 'false')
-    .bind('ajax:beforeSend', function() {
+    .on('ajax:beforeSend', function() {
       ok(false, 'ajax should not be triggered');
     })
-    .bind('submit', function() {
+    .on('submit', function() {
       return false;
     })
     .trigger('submit');
@@ -351,7 +351,7 @@ asyncTest('changing a select option with falsy "data-remote" attribute', 0, func
     );
 
   $('select[data-remote=false]:first')
-    .bind('ajax:beforeSend', function() {
+    .on('ajax:beforeSend', function() {
       ok(false, 'ajax should not be triggered');
     })
     .val('optionValue2')

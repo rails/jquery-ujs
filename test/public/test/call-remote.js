@@ -11,8 +11,8 @@ module('call-remote');
 
 function submit(fn) {
   $('form')
-    .bind('ajax:success', fn)
-    .bind('ajax:complete', function() { start() })
+    .on('ajax:success', fn)
+    .on('ajax:complete', function() { start() })
     .trigger('submit');
 }
 
@@ -37,10 +37,10 @@ asyncTest('form method is read from submit button "formmethod" if submit is trig
   buildForm({ method: 'post' });
 
   $('#qunit-fixture').find('form').append(submitButton)
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertGetRequest(data);
     })
-    .bind('ajax:complete', function() { start() });
+    .on('ajax:complete', function() { start() });
 
   submitButton.trigger('click');
 });
@@ -74,10 +74,10 @@ asyncTest('form url is read from submit button "formaction" if submit is trigger
   buildForm({ method: 'post', href: '/echo2' });
 
   $('#qunit-fixture').find('form').append(submitButton)
-    .bind('ajax:success', function(e, data, status, xhr) {
+    .on('ajax:success', function(e, data, status, xhr) {
       App.assertRequestPath(data, '/echo');
     })
-    .bind('ajax:complete', function() { start() });
+    .on('ajax:complete', function() { start() });
 
   submitButton.trigger('click');
 });
@@ -113,7 +113,7 @@ asyncTest('allow empty form "action"', 1, function() {
   buildForm({ action: '' });
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(e, xhr, settings) {
+    .on('ajax:beforeSend', function(e, xhr, settings) {
       // Get current location (the same way jQuery does)
       try {
         currentLocation = location.href;
@@ -155,7 +155,7 @@ asyncTest('intelligently guesses crossDomain behavior when target URL has a diff
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(e, xhr, settings) {
+    .on('ajax:beforeSend', function(e, xhr, settings) {
 
       equal(settings.crossDomain, true, 'crossDomain should be set to true');
 
@@ -174,7 +174,7 @@ asyncTest('intelligently guesses crossDomain behavior when target URL consists o
   $('#qunit-fixture').append('<meta name="csrf-token" content="cf50faa3fe97702ca1ae" />');
 
   $('#qunit-fixture').find('form')
-    .bind('ajax:beforeSend', function(e, xhr, settings) {
+    .on('ajax:beforeSend', function(e, xhr, settings) {
 
       equal(settings.crossDomain, false, 'crossDomain should be set to false');
 
