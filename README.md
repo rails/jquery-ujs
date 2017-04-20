@@ -59,7 +59,7 @@ Require both `jquery` and `jquery-ujs` into your application.js manifest.
 
 ```javascript
 //= require jquery
-//= require jquery-ujs
+//= require jquery_ujs
 ```
 
 How to run tests
