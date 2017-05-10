@@ -1,0 +1,44 @@
+= jquery-ujs
+
+Unobtrusive jQuery with Rails 3
+
+== Installation
+
+jQuery 1.4, 1.4.1 and 1.4.2 can be used. However because of http://jsbin.com/uboxu3/7/ issue it is
+recommended to use jQuery 1.4.1.
+
+=== Step 1
+
+Download jQuery from http://docs.jquery.com/Downloading_jQuery and put the file in public/javascripts - for example, the file might be:
+
+  public/javascripts/jquery-1.4.1.min.js 
+  
+=== Step 2
+
+Copy rails.js from http://github.com/rails/jquery-ujs/raw/master/src/rails.js into public/javascripts - overwriting the prototype one (you can also delete the other prototype files if you don't need them for anything else.)
+  
+=== Step 3 (optional)
+
+Create an initializer to switch the javascript_include_tag :defaults to use jquery instead of the default prototype helpers.
+
+file config/initializers/jquery.rb
+
+  module ActionView::Helpers::AssetTagHelper
+    remove_const :JAVASCRIPT_DEFAULT_SOURCES
+    JAVASCRIPT_DEFAULT_SOURCES = %w(jquery.js rails.js)
+
+    reset_javascript_include_default
+  end
+
+= Testing
+  
+== Installation
+
+  $ gem install bundler
+  $ bundle install
+
+== Running tests
+
+  $ bundle exec ruby test/server.rb
+
+Visit http://localhost:4567 and all the tests should pass. If you want to change any settings then change the settings at the top of test/public/test/settings.js
