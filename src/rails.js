@@ -85,8 +85,8 @@
     },
 
     // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
-    confirm: function(message) {
-      return confirm(message);
+    confirm: function(message, element, callback) {
+      callback(confirm(message));
     },
 
     // Default ajax function, may be overridden with custom function in $.rails.ajax
@@ -286,25 +286,29 @@
       - Shows the confirmation dialog
       - Fires the `confirm:complete` event
 
-      Returns `true` if no function stops the chain and user chose yes; `false` otherwise.
+      Callback function gets `true` if no function stops the chain and user chose yes; `false` otherwise.
       Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog.
-      Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
-      return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
+      Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes callback function
+      gets false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
    */
-    allowAction: function(element) {
-      var message = element.data('confirm'),
-          answer = false, callback;
-      if (!message) { return true; }
-
-      if (rails.fire(element, 'confirm')) {
+    allowAction: function(element, callback) {
+      var message = element.data('confirm');
+      if (!message) {
+        callback(true);
+      } else if (rails.fire(element, 'confirm')) {
+        var confirmCallback = function(answer) {
+          var completeResult = rails.fire(element, 'confirm:complete', [answer]);
+          callback(answer && completeResult);
+        };
         try {
-          answer = rails.confirm(message);
+          rails.confirm(message, element, confirmCallback);
         } catch (e) {
           (console.error || console.log).call(console, e.stack || e);
+          confirmCallback(false);
         }
-        callback = rails.fire(element, 'confirm:complete', [answer]);
+      } else {
+        callback(false);
       }
-      return answer && callback;
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
@@ -426,50 +430,60 @@
 
     $document.on('click.rails', rails.linkClickSelector, function(e) {
       var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey;
-      if (!rails.allowAction(link)) return rails.stopEverything(e);
+      rails.allowAction(link, function(answer) {
+        if (answer) {
+          if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
 
-      if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
+          if (rails.isRemote(link)) {
+            if (metaClick && (!method || method === 'GET') && !data) { return true; }
 
-      if (rails.isRemote(link)) {
-        if (metaClick && (!method || method === 'GET') && !data) { return true; }
-
-        var handleRemote = rails.handleRemote(link);
-        // Response from rails.handleRemote() will either be false or a deferred object promise.
-        if (handleRemote === false) {
-          rails.enableElement(link);
+            var handleRemote = rails.handleRemote(link);
+            // Response from rails.handleRemote() will either be false or a deferred object promise.
+            if (handleRemote === false) {
+              rails.enableElement(link);
+            } else {
+              handleRemote.fail( function() { rails.enableElement(link); } );
+            }
+          } else if (method) {
+            rails.handleMethod(link);
+          }
         } else {
-          handleRemote.fail( function() { rails.enableElement(link); } );
+          rails.stopEverything(e);
         }
-        return false;
-
-      } else if (method) {
-        rails.handleMethod(link);
-        return false;
-      }
+      });
+      return false;
     });
 
     $document.on('click.rails', rails.buttonClickSelector, function(e) {
       var button = $(this);
 
-      if (!rails.allowAction(button) || !rails.isRemote(button)) return rails.stopEverything(e);
+      rails.allowAction(button, function(answer) {
+        if (!answer || !rails.isRemote(button)) {
+          rails.stopEverything(e);
+        } else {
+          if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
 
-      if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
-
-      var handleRemote = rails.handleRemote(button);
-      // Response from rails.handleRemote() will either be false or a deferred object promise.
-      if (handleRemote === false) {
-        rails.enableFormElement(button);
-      } else {
-        handleRemote.fail( function() { rails.enableFormElement(button); } );
-      }
+          var handleRemote = rails.handleRemote(button);
+          // Response from rails.handleRemote() will either be false or a deferred object promise.
+          if (handleRemote === false) {
+            rails.enableFormElement(button);
+          } else {
+            handleRemote.fail( function() { rails.enableFormElement(button); } );
+          }
+        }
+      });
       return false;
     });
 
     $document.on('change.rails', rails.inputChangeSelector, function(e) {
       var link = $(this);
-      if (!rails.allowAction(link) || !rails.isRemote(link)) return rails.stopEverything(e);
-
-      rails.handleRemote(link);
+      rails.allowAction(link, function(answer) {
+        if (!answer || !rails.isRemote(link)) {
+          rails.stopEverything(e);
+        } else {
+          rails.handleRemote(link);
+        }
+      });
       return false;
     });
 
@@ -479,64 +493,87 @@
         blankRequiredInputs,
         nonBlankFileInputs;
 
-      if (!rails.allowAction(form)) return rails.stopEverything(e);
+      if (form.data('ujs:skip-event')) {
+        form.data('ujs:skip-event', undefined);
+        return;
+      }
 
-      // Skip other logic when required values are missing or file upload is present
-      if (form.attr('novalidate') === undefined) {
-        if (form.data('ujs:formnovalidate-button') === undefined) {
-          blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector, false);
-          if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
-            return rails.stopEverything(e);
-          }
+      rails.allowAction(form, function(answer) {
+        if (!answer) {
+          rails.stopEverything(e);
         } else {
-          // Clear the formnovalidate in case the next button click is not on a formnovalidate button
-          // Not strictly necessary to do here, since it is also reset on each button click, but just to be certain
-          form.data('ujs:formnovalidate-button', undefined);
+          // Skip other logic when required values are missing or file upload is present
+          if (form.attr('novalidate') === undefined) {
+            if (form.data('ujs:formnovalidate-button') === undefined) {
+              blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector, false);
+              if (blankRequiredInputs && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
+                return rails.stopEverything(e);
+              }
+            } else {
+              // Clear the formnovalidate in case the next button click is not on a formnovalidate button
+              // Not strictly necessary to do here, since it is also reset on each button click, but just to be certain
+              form.data('ujs:formnovalidate-button', undefined);
+            }
+          }
+
+          if (remote) {
+            nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
+            if (nonBlankFileInputs) {
+              // Slight timeout so that the submit button gets properly serialized
+              // (make it easy for event handler to serialize form without disabled values)
+              setTimeout(function(){ rails.disableFormElements(form); }, 13);
+              var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
+
+              if (aborted) {
+                form.data('ujs:skip-event', true).submit();
+              } else {
+                // Re-enable form elements if event bindings return false (canceling normal form submission)
+                setTimeout(function(){ rails.enableFormElements(form); }, 13);
+              }
+            } else {
+              rails.handleRemote(form);
+            }
+          } else {
+            // Slight timeout so that the submit button gets properly serialized
+            setTimeout(function(){ rails.disableFormElements(form); }, 13);
+            form.data('ujs:skip-event', true).submit();
+          }
         }
-      }
+      });
 
-      if (remote) {
-        nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
-        if (nonBlankFileInputs) {
-          // Slight timeout so that the submit button gets properly serialized
-          // (make it easy for event handler to serialize form without disabled values)
-          setTimeout(function(){ rails.disableFormElements(form); }, 13);
-          var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
-
-          // Re-enable form elements if event bindings return false (canceling normal form submission)
-          if (!aborted) { setTimeout(function(){ rails.enableFormElements(form); }, 13); }
-
-          return aborted;
-        }
-
-        rails.handleRemote(form);
-        return false;
-
-      } else {
-        // Slight timeout so that the submit button gets properly serialized
-        setTimeout(function(){ rails.disableFormElements(form); }, 13);
-      }
+      return false;
     });
 
     $document.on('click.rails', rails.formInputClickSelector, function(event) {
       var button = $(this);
-
-      if (!rails.allowAction(button)) return rails.stopEverything(event);
-
-      // Register the pressed submit button
-      var name = button.attr('name'),
-        data = name ? {name:name, value:button.val()} : null;
-
-      var form = button.closest('form');
-      if (form.length === 0) {
-        form = $('#' + button.attr('form'));
+      if (button.data('ujs:skip-event')) {
+        button.data('ujs:skip-event', undefined);
+        return;
       }
-      form.data('ujs:submit-button', data);
 
-      // Save attributes from button
-      form.data('ujs:formnovalidate-button', button.attr('formnovalidate'));
-      form.data('ujs:submit-button-formaction', button.attr('formaction'));
-      form.data('ujs:submit-button-formmethod', button.attr('formmethod'));
+      rails.allowAction(button, function(answer) {
+        if (answer) {
+          // Register the pressed submit button
+          var name = button.attr('name'),
+            data = name ? {name:name, value:button.val()} : null;
+
+          var form = button.closest('form');
+          if (form.length === 0) {
+            form = $('#' + button.attr('form'));
+          }
+          form.data('ujs:submit-button', data);
+
+          // Save attributes from button
+          form.data('ujs:formnovalidate-button', button.attr('formnovalidate'));
+          form.data('ujs:submit-button-formaction', button.attr('formaction'));
+          form.data('ujs:submit-button-formmethod', button.attr('formmethod'));
+          button.data('ujs:skip-event', true).click();
+        } else {
+          rails.stopEverything(event);
+        }
+      });
+
+      return false;
     });
 
     $document.on('ajax:send.rails', rails.formSubmitSelector, function(event) {
