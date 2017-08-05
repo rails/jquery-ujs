@@ -47,6 +47,21 @@ Installation using npm.
 
 Run `npm install --save jquery-ujs` to install the jquery-ujs package.
 
+Installation using Rails and Webpacker
+------------
+
+If you're using [webpacker](https://github.com/rails/webpacker) (introduced in [Rails 5.1](http://edgeguides.rubyonrails.org/5_1_release_notes.html#optional-webpack-support)) to manage JavaScript assets, then you can add the jquery-ujs npm package to your project using the [yarn](https://yarnpkg.com/en/) CLI.
+
+```
+$ yarn add jquery-ujs
+```
+
+Then, from any of your included files (e.g. `app/javascript/packs/application.js`, or from a JavaScript file imported by such a pack), you need only import the package for jquery-ujs to be initialized:
+
+```js
+import {} from 'jquery-ujs'
+```
+
 Installation using Bower
 ------------
 
