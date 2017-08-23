@@ -106,7 +106,7 @@
 
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
-      var method, url, data, withCredentials, dataType, options;
+      var method, url, data, withCredentials, dataType, options, contentType, processData;
 
       if (rails.fire(element, 'ajax:before')) {
         withCredentials = element.data('with-credentials') || null;
@@ -117,8 +117,8 @@
           url = element.data('ujs:submit-button-formaction') || element.attr('action');
           if (typeof window.FormData !== 'undefined' && element.find(rails.fileInputSelector).length) {
             data = new FormData(element[0]);
-            var contentType = false;
-            var processData = false;
+            contentType = false;
+            processData = false;
           } else {
             data = $(element[0]).serializeArray();
           }
@@ -137,8 +137,8 @@
           formData.append(element.attr('name'), element[0].files[0]);
           formData.append(rails.csrfParam(), $('input[name="' + rails.csrfParam() + '"]').val());
           data = formData;
-          var contentType = false;
-          var processData = false;
+          contentType = false;
+          processData = false;
         } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
           url = element.data('url');
@@ -180,10 +180,10 @@
           crossDomain: rails.isCrossDomain(url)
         };
 
-        if (typeof contentType !== "undefined" && contentType !== null) {
+        if (contentType !== null) {
           options.contentType = contentType;
         }
-        if (typeof processData !== "undefined" && processData !== null) {
+        if (processData !== null) {
           options.processData = processData;
         }
 
