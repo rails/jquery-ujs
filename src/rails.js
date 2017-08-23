@@ -115,7 +115,13 @@
         if (element.is('form')) {
           method = element.data('ujs:submit-button-formmethod') || element.attr('method');
           url = element.data('ujs:submit-button-formaction') || element.attr('action');
-          data = $(element[0]).serializeArray();
+          if (typeof window.FormData !== 'undefined' && element.find(rails.fileInputSelector).length) {
+            data = new FormData(element[0]);
+            var contentType = false;
+            var processData = false;
+          } else {
+            data = $(element[0]).serializeArray();
+          }
           // memoized value from clicked submit button
           var button = element.data('ujs:submit-button');
           if (button) {
@@ -124,6 +130,15 @@
           }
           element.data('ujs:submit-button-formmethod', null);
           element.data('ujs:submit-button-formaction', null);
+        } else if (typeof window.FormData !== 'undefined' && element.is(rails.fileInputSelector)) {
+          method = element.data('method') || 'get';
+          url = element.data('url');
+          var formData = new FormData();
+          formData.append(element.attr('name'), element[0].files[0]);
+          formData.append(rails.csrfParam(), $('input[name="' + rails.csrfParam() + '"]').val());
+          data = formData;
+          var contentType = false;
+          var processData = false;
         } else if (element.is(rails.inputChangeSelector)) {
           method = element.data('method');
           url = element.data('url');
@@ -164,6 +179,13 @@
           },
           crossDomain: rails.isCrossDomain(url)
         };
+
+        if (typeof contentType !== "undefined" && contentType !== null) {
+          options.contentType = contentType;
+        }
+        if (typeof processData !== "undefined" && processData !== null) {
+          options.processData = processData;
+        }
 
         // There is no withCredentials for IE6-8 when
         // "Enable native XMLHTTP support" is disabled
@@ -496,8 +518,9 @@
       }
 
       if (remote) {
+        // Disable this feature for modern web browsers
         nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
-        if (nonBlankFileInputs) {
+        if (typeof window.FormData === 'undefined' && nonBlankFileInputs) {
           // Slight timeout so that the submit button gets properly serialized
           // (make it easy for event handler to serialize form without disabled values)
           setTimeout(function(){ rails.disableFormElements(form); }, 13);
