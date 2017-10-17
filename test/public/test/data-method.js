@@ -2,9 +2,16 @@
 
 module('data-method', {
   setup: function() {
-    $('#qunit-fixture').append($('<a />', {
-      href: '/echo', 'data-method': 'delete', text: 'destroy!'
-    }));
+    $('#qunit-fixture')
+      .append($('<a />', {
+        href: '/echo', 'data-method': 'delete', text: 'destroy!'
+      }))
+      .append($('<a />', {
+        href: '/echo',
+        'data-method': 'post',
+        'disabled': 'disabled',
+        text: 'Disabled link'
+      }));
   },
   teardown: function() {
     $(document).off('iframe:loaded');
@@ -70,6 +77,19 @@ asyncTest('link with "data-method" and cross origin', 1, function() {
   start();
 
   notEqual(data.authenticity_token, 'cf50faa3fe97702ca1ae');
+});
+
+asyncTest('clicking on a link with disabled attribute', 0, function() {
+  $('a[disabled]')
+  .on("ajax:before", function(e, data, status, xhr) {
+    App.assertCallbackNotInvoked('ajax:success')
+  })
+  .on('ajax:complete', function() { start() })
+  .trigger('click')
+
+  setTimeout(function() {
+    start();
+  }, 13);
 });
 
 })();
