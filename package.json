@@ -20,7 +20,7 @@
     "url": "https://github.com/rails/jquery-ujs/issues"
   },
   "homepage": "https://github.com/rails/jquery-ujs#readme",
-  "dependencies": {
+  "peerDependencies": {
     "jquery": ">=1.8.0"
   }
 }
