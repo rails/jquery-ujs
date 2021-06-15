@@ -218,8 +218,10 @@
         target = link.attr('target'),
         csrfToken = rails.csrfToken(),
         csrfParam = rails.csrfParam(),
-        form = $('<form method="post" action="' + href + '"></form>'),
+        form = $('<form method="post"></form>'),
         metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
+
+      form.attr('action', href);
 
       if (csrfParam !== undefined && csrfToken !== undefined && !rails.isCrossDomain(href)) {
         metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
