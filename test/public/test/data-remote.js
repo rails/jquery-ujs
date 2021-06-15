@@ -143,6 +143,34 @@ asyncTest('changing a select option with data-remote attribute', 5, function() {
     .trigger('change');
 });
 
+asyncTest('submitting an unchecked checkbox with data-remote attribute submits input with value 0', 3, function () {
+  $('#qunit-fixture')
+    .append($('<input type="checkbox" name="user[active]" value="1" data-remote="true" data-url="/echo">'));
+
+  $('input[type="checkbox"][data-remote]')
+    .on('ajax:success', function (e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      App.assertRequestPath(data, '/echo');
+      equal(data.params.user.active, '0', 'ajax arguments should have key active with value 0');
+    })
+    .on('ajax:complete', function () { start() })
+    .trigger('change');
+})
+
+asyncTest('submitting an unchecked radio button with data-remote attribute submits input with value 0', 3, function () {
+  $('#qunit-fixture')
+    .append($('<input type="radio" name="user[active]" value="1" data-remote="true" data-url="/echo">'));
+
+  $('input[type="radio"][data-remote]')
+    .on('ajax:success', function (e, data, status, xhr) {
+      App.assertCallbackInvoked('ajax:success');
+      App.assertRequestPath(data, '/echo');
+      equal(data.params.user.active, '0', 'ajax arguments should have key active with value 0');
+    })
+    .on('ajax:complete', function () { start() })
+    .trigger('change');
+})
+
 asyncTest('submitting form with data-remote attribute', 4, function() {
   $('form[data-remote]')
     .on('ajax:success', function(e, data, status, xhr) {

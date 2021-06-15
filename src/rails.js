@@ -131,6 +131,9 @@
           method = element.data('method');
           url = element.data('url');
           data = element.serialize();
+          if (element.is('input[type=checkbox],input[type=radio]')) {
+            data = element.attr('name') + '=0&' + data;
+          }
           if (element.data('params')) data = data + '&' + element.data('params');
         } else if (element.is(rails.buttonClickSelector)) {
           method = element.data('method') || 'get';
