@@ -6,19 +6,19 @@ JQUERY_VERSIONS = %w[ 1.8.0 1.8.1 1.8.2 1.8.3 1.9.0 1.9.1 1.10.0 1.10.1 1.10.2 1
 use Rack::Static, :urls => ["/src"], :root => File.expand_path('..', settings.root)
 
 helpers do
-  def jquery_link version
+  def jquery_link(version, path="/")
     if params[:version] == version
       "[#{version}]"
     else
-      "<a href='/?version=#{version}&cdn=#{params[:cdn]}'>#{version}</a>"
+      "<a href='#{path}?version=#{version}&cdn=#{params[:cdn]}'>#{version}</a>"
     end
   end
 
-  def cdn_link cdn
+  def cdn_link(cdn, path="/")
     if params[:cdn] == cdn
       "[#{cdn}]"
     else
-      "<a href='/?version=#{params[:version]}&cdn=#{cdn}'>#{cdn}</a>"
+      "<a href='#{path}?version=#{params[:version]}&cdn=#{cdn}'>#{cdn}</a>"
     end
   end
 
@@ -52,6 +52,16 @@ get '/' do
   params[:cdn] ||= 'jquery'
   erb :index
 end
+
+get '/manual' do
+  params[:version] ||= '1.11.0'
+  params[:cdn] ||= 'jquery'
+  params[:sleep] ||= 0
+  sleep params[:sleep].to_i
+  @extra_params = "version=#{params[:version]}&cdn=#{params[:cdn]}"
+  erb :manual
+end
+
 
 [:get, :post, :put, :delete].each do |method|
   send(method, '/echo') {
