@@ -434,7 +434,7 @@
       if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
 
       if (rails.isRemote(link)) {
-        if (metaClick && (!method || method === 'GET') && !data) { return true; }
+        if (metaClick && (!method || method.toUpperCase() === 'GET') && !data) { return true; }
 
         var handleRemote = rails.handleRemote(link);
         // Response from rails.handleRemote() will either be false or a deferred object promise.
