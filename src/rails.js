@@ -88,7 +88,7 @@
     },
 
     // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
-    confirm: function(message) {
+    confirm: function(message, element) {
       return confirm(message);
     },
 
@@ -301,7 +301,7 @@
 
       if (rails.fire(element, 'confirm')) {
         try {
-          answer = rails.confirm(message);
+          answer = rails.confirm(message, element);
         } catch (e) {
           (console.error || console.log).call(console, e.stack || e);
         }
