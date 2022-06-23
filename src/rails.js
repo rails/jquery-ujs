@@ -88,7 +88,7 @@
     },
 
     // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
-    confirm: function(message, element) {
+    confirm: function(message, element, event) {
       return confirm(message);
     },
 
@@ -294,14 +294,14 @@
       Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
       return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
    */
-    allowAction: function(element) {
+    allowAction: function(element, event) {
       var message = element.data('confirm'),
           answer = false, callback;
       if (!message) { return true; }
 
       if (rails.fire(element, 'confirm')) {
         try {
-          answer = rails.confirm(message, element);
+          answer = rails.confirm(message, element, event);
         } catch (e) {
           (console.error || console.log).call(console, e.stack || e);
         }
@@ -429,7 +429,7 @@
 
     $document.on('click.rails', rails.linkClickSelector, function(e) {
       var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey;
-      if (!rails.allowAction(link)) return rails.stopEverything(e);
+      if (!rails.allowAction(link, e)) return rails.stopEverything(e);
 
       if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
 
@@ -454,7 +454,7 @@
     $document.on('click.rails', rails.buttonClickSelector, function(e) {
       var button = $(this);
 
-      if (!rails.allowAction(button) || !rails.isRemote(button)) return rails.stopEverything(e);
+      if (!rails.allowAction(button, e) || !rails.isRemote(button)) return rails.stopEverything(e);
 
       if (button.is(rails.buttonDisableSelector)) rails.disableFormElement(button);
 
@@ -470,7 +470,7 @@
 
     $document.on('change.rails', rails.inputChangeSelector, function(e) {
       var link = $(this);
-      if (!rails.allowAction(link) || !rails.isRemote(link)) return rails.stopEverything(e);
+      if (!rails.allowAction(link, e) || !rails.isRemote(link)) return rails.stopEverything(e);
 
       rails.handleRemote(link);
       return false;
@@ -482,7 +482,7 @@
         blankRequiredInputs,
         nonBlankFileInputs;
 
-      if (!rails.allowAction(form)) return rails.stopEverything(e);
+      if (!rails.allowAction(form, e)) return rails.stopEverything(e);
 
       // Skip other logic when required values are missing or file upload is present
       if (form.attr('novalidate') === undefined) {
@@ -524,7 +524,7 @@
     $document.on('click.rails', rails.formInputClickSelector, function(event) {
       var button = $(this);
 
-      if (!rails.allowAction(button)) return rails.stopEverything(event);
+      if (!rails.allowAction(button, event)) return rails.stopEverything(event);
 
       // Register the pressed submit button
       var name = button.attr('name'),
